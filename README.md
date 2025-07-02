@@ -6,7 +6,7 @@
 > **Ultimate Privacy Protection Tool** | Zero Data Transmission | Complete Digital Cleanup
 
 ## 🚀 Demo
-**[🔗 Try it Live](https://YOUR_USERNAME.github.io/digital-footprint-eraser)**
+**[🔗 Try it Live](https://bharathk2498.github.io/digital-footprint-eraser)**
 
 ![Digital Footprint Eraser Demo](assets/images/demo.gif)
 
