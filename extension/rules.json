@@ -6,7 +6,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://google-analytics.com/*",
+      "urlFilter": "*google-analytics.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -17,7 +17,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://googletagmanager.com/*",
+      "urlFilter": "*googletagmanager.com*",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -28,8 +28,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://doubleclick.net/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+      "urlFilter": "*doubleclick.net*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -39,7 +39,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://googlesyndication.com/*",
+      "urlFilter": "*googlesyndication.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -50,7 +50,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://facebook.com/tr/*",
+      "urlFilter": "*facebook.com/tr/*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -61,7 +61,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://connect.facebook.net/*",
+      "urlFilter": "*connect.facebook.net*",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -72,7 +72,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://twitter.com/i/adsct*",
+      "urlFilter": "*twitter.com/i/adsct*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -83,7 +83,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://analytics.twitter.com/*",
+      "urlFilter": "*linkedin.com/insight*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -94,7 +94,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://linkedin.com/insight/*",
+      "urlFilter": "*outbrain.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -105,8 +105,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://outbrain.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+      "urlFilter": "*taboola.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -116,8 +116,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://taboola.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+      "urlFilter": "*criteo.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -127,7 +127,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://criteo.com/*",
+      "urlFilter": "*amazon-adsystem.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -138,8 +138,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://amazon-adsystem.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+      "urlFilter": "*quantserve.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -149,7 +149,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://quantserve.com/*",
+      "urlFilter": "*scorecardresearch.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -160,7 +160,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://scorecardresearch.com/*",
+      "urlFilter": "*adsystem.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -171,8 +171,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://hotjar.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*ads.yahoo.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -182,8 +182,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://fullstory.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*bing.com/maps/overlaybfpr*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -193,7 +193,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://mixpanel.com/*",
+      "urlFilter": "*yandex.ru/metrica*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -204,8 +204,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://segment.io/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*baidu.com/analytics*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -215,8 +215,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://amplitude.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*addthis.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -226,8 +226,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://mouseflow.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*sharethis.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -237,8 +237,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://crazyegg.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*hotjar.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -248,8 +248,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://optimizely.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*mouseflow.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -259,8 +259,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://salesforce.com/sfdc/js/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*crazyegg.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -270,7 +270,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://pardot.com/*",
+      "urlFilter": "*fullstory.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -281,7 +281,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://marketo.com/*",
+      "urlFilter": "*segment.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -292,9 +292,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://hubspot.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["hubspot.com"]
+      "urlFilter": "*mixpanel.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -304,9 +303,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://intercom.io/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["intercom.io", "intercom.com"]
+      "urlFilter": "*amplitude.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -316,8 +314,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://zendesk.com/embeddable_framework/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*kissmetrics.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -327,7 +325,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://zdassets.com/*",
+      "urlFilter": "*intercom.io*",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -338,8 +336,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://tiktok.com/events/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "*zendesk.com/embeddable*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -349,8 +347,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://snapchat.com/web-sdk/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*optimizely.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -360,8 +358,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://pinterest.com/v3/pidgets/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*googleoptimize.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -371,8 +369,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://reddit.com/api/info.json*",
-      "resourceTypes": ["xmlhttprequest"]
+      "urlFilter": "*vwo.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -382,43 +380,43 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://addthis.com/*",
+      "urlFilter": "*chartbeat.com*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
     "id": 36,
-    "priority": 1,
+    "priority": 2,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://sharethis.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "*track*",
+      "resourceTypes": ["image"],
+      "domains": ["google-analytics.com", "facebook.com", "twitter.com", "linkedin.com"]
     }
   },
   {
     "id": 37,
-    "priority": 1,
+    "priority": 2,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://disqus.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["disqus.com"]
+      "urlFilter": "*pixel*",
+      "resourceTypes": ["image"],
+      "domains": ["facebook.com", "twitter.com", "linkedin.com", "pinterest.com"]
     }
   },
   {
     "id": 38,
-    "priority": 1,
+    "priority": 2,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://livechatinc.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["livechatinc.com"]
+      "urlFilter": "*beacon*",
+      "resourceTypes": ["image", "xmlhttprequest"]
     }
   },
   {
@@ -428,9 +426,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://drift.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["drift.com"]
+      "urlFilter": "*coinhive.com*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -440,9 +437,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://freshchat.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["freshchat.com", "freshworks.com"]
+      "urlFilter": "*jsecoin.com*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -452,8 +448,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://yandex.ru/metrica/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "*crypto-loot.com*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -463,9 +459,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://baidu.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"],
-      "excludedInitiatorDomains": ["baidu.com"]
+      "urlFilter": "*mineralt.io*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -475,8 +470,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://bing.com/analytics/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "*coinerra.com*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -486,8 +481,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://yahoo.com/analytics/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "*webminepool.com*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -497,7 +492,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://clarity.ms/*",
+      "urlFilter": "*authedmine.com*",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -508,9 +503,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://newrelic.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["newrelic.com"]
+      "urlFilter": "*cnhv.co*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -520,9 +514,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://bugsnag.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["bugsnag.com"]
+      "urlFilter": "*coin-hive.com*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -532,9 +525,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://sentry.io/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["sentry.io"]
+      "urlFilter": "*2mdn.net*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -544,9 +536,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://logrocket.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedInitiatorDomains": ["logrocket.com"]
+      "urlFilter": "*adsense.google.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -556,9 +547,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*://tracking*",
-      "resourceTypes": ["image"],
-      "urlFilter": "*pixel*"
+      "urlFilter": "*pagead2.googlesyndication.com*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   }
 ]
