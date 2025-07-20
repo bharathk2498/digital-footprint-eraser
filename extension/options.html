@@ -16,12 +16,12 @@
                     <i class="fas fa-eraser"></i>
                     <h1>Digital Footprint Eraser</h1>
                 </div>
-                <div class="version">v1.0.0</div>
+                <div class="version">Version 1.0.0</div>
             </div>
-            <nav class="options-nav">
+            <nav class="settings-nav">
                 <button class="nav-tab active" data-tab="general">General</button>
-                <button class="nav-tab" data-tab="protection">Protection</button>
-                <button class="nav-tab" data-tab="privacy">Privacy</button>
+                <button class="nav-tab" data-tab="privacy">Privacy Protection</button>
+                <button class="nav-tab" data-tab="cleanup">Auto Cleanup</button>
                 <button class="nav-tab" data-tab="advanced">Advanced</button>
                 <button class="nav-tab" data-tab="about">About</button>
             </nav>
@@ -30,371 +30,482 @@
         <!-- Main Content -->
         <main class="options-main">
             
-            <!-- General Settings Tab -->
-            <section class="tab-content active" id="general">
-                <div class="settings-section">
-                    <h2>General Settings</h2>
-                    <p class="section-description">Configure basic functionality and behavior</p>
+            <!-- General Settings -->
+            <section class="settings-section active" id="general">
+                <h2>General Settings</h2>
+                
+                <div class="setting-group">
+                    <h3>Extension Behavior</h3>
                     
-                    <div class="setting-group">
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Privacy Protection</h3>
-                                <p>Enable automatic privacy protection on all websites</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="privacyProtectionEnabled" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="privacyProtectionEnabled">Privacy Protection</label>
+                            <p>Enable automatic privacy protection on all websites</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Auto Cleanup</h3>
-                                <p>Automatically perform privacy cleanup at regular intervals</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="autoCleanupEnabled" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="privacyProtectionEnabled" class="toggle-input">
+                            <label for="privacyProtectionEnabled" class="toggle-label"></label>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Cleanup Interval</h3>
-                                <p>How often to perform automatic cleanup (in minutes)</p>
-                            </div>
-                            <div class="setting-control">
-                                <select id="cleanupInterval">
-                                    <option value="15">15 minutes</option>
-                                    <option value="30" selected>30 minutes</option>
-                                    <option value="60">1 hour</option>
-                                    <option value="120">2 hours</option>
-                                    <option value="240">4 hours</option>
-                                </select>
-                            </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="notificationsEnabled">Show Notifications</label>
+                            <p>Display notifications for blocked trackers and cleanup results</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Notifications</h3>
-                                <p>Show notifications for privacy events and cleanup results</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="notificationsEnabled" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="notificationsEnabled" class="toggle-input">
+                            <label for="notificationsEnabled" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="contextMenuEnabled">Context Menu</label>
+                            <p>Show Digital Footprint Eraser options in right-click menu</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="contextMenuEnabled" class="toggle-input">
+                            <label for="contextMenuEnabled" class="toggle-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Interface</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="badgeCounter">Badge Counter</label>
+                            <p>Show number of blocked trackers on extension icon</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="badgeCounter" class="toggle-input">
+                            <label for="badgeCounter" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="popupStatsEnabled">Detailed Statistics</label>
+                            <p>Show detailed statistics in popup instead of simplified view</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="popupStatsEnabled" class="toggle-input">
+                            <label for="popupStatsEnabled" class="toggle-label"></label>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Protection Settings Tab -->
-            <section class="tab-content" id="protection">
-                <div class="settings-section">
-                    <h2>Protection Settings</h2>
-                    <p class="section-description">Configure specific privacy protection features</p>
+            <!-- Privacy Protection Settings -->
+            <section class="settings-section" id="privacy">
+                <h2>Privacy Protection</h2>
+                
+                <div class="setting-group">
+                    <h3>Tracking Protection</h3>
                     
-                    <div class="setting-group">
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Tracking Protection Level</h3>
-                                <p>Choose the level of tracking protection</p>
-                            </div>
-                            <div class="setting-control">
-                                <select id="trackingProtectionLevel">
-                                    <option value="basic">Basic - Block obvious trackers</option>
-                                    <option value="strict" selected>Strict - Block all known trackers</option>
-                                    <option value="custom">Custom - User-defined rules</option>
-                                </select>
-                            </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="trackingProtectionLevel">Protection Level</label>
+                            <p>Choose how aggressively to block tracking</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Block Social Trackers</h3>
-                                <p>Remove social media widgets and tracking buttons</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="blockSocialTrackers" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <div class="setting-control">
+                            <select id="trackingProtectionLevel" class="select-input">
+                                <option value="basic">Basic - Block known trackers</option>
+                                <option value="standard">Standard - Block most trackers</option>
+                                <option value="strict">Strict - Block all trackers (may break sites)</option>
+                                <option value="custom">Custom - Configure manually</option>
+                            </select>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Fingerprinting Protection</h3>
-                                <p>Prevent browser fingerprinting attempts</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="preventFingerprinting" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="blockSocialTrackers">Social Media Trackers</label>
+                            <p>Block tracking from social media platforms</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Auto-Delete Tracking Cookies</h3>
-                                <p>Automatically remove cookies from known tracking domains</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="autoDeleteCookies" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="blockSocialTrackers" class="toggle-input">
+                            <label for="blockSocialTrackers" class="toggle-label"></label>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Block Tracking Pixels</h3>
-                                <p>Remove 1x1 tracking pixels and beacons</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="blockTrackingPixels" checked>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="blockTrackingPixels">Tracking Pixels</label>
+                            <p>Remove invisible 1x1 tracking images</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="blockTrackingPixels" class="toggle-input">
+                            <label for="blockTrackingPixels" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="removeSocialWidgets">Social Widgets</label>
+                            <p>Remove social media like/share buttons and widgets</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="removeSocialWidgets" class="toggle-input">
+                            <label for="removeSocialWidgets" class="toggle-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Fingerprinting Protection</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="preventFingerprinting">Anti-Fingerprinting</label>
+                            <p>Protect against browser fingerprinting techniques</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="preventFingerprinting" class="toggle-input">
+                            <label for="preventFingerprinting" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="canvasProtection">Canvas Protection</label>
+                            <p>Add noise to canvas fingerprinting attempts</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="canvasProtection" class="toggle-input">
+                            <label for="canvasProtection" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="webglProtection">WebGL Protection</label>
+                            <p>Spoof WebGL renderer information</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="webglProtection" class="toggle-input">
+                            <label for="webglProtection" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="audioProtection">Audio Fingerprinting</label>
+                            <p>Protect against audio context fingerprinting</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="audioProtection" class="toggle-input">
+                            <label for="audioProtection" class="toggle-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Cookie Management</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="autoDeleteCookies">Auto-Delete Tracking Cookies</label>
+                            <p>Automatically remove cookies from known tracking domains</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="autoDeleteCookies" class="toggle-input">
+                            <label for="autoDeleteCookies" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="clearHistoryOnClose">Clear History on Browser Close</label>
+                            <p>Automatically clear browsing history when browser closes</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="clearHistoryOnClose" class="toggle-input">
+                            <label for="clearHistoryOnClose" class="toggle-label"></label>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Privacy Settings Tab -->
-            <section class="tab-content" id="privacy">
-                <div class="settings-section">
-                    <h2>Privacy Settings</h2>
-                    <p class="section-description">Advanced privacy and data handling options</p>
+            <!-- Auto Cleanup Settings -->
+            <section class="settings-section" id="cleanup">
+                <h2>Automatic Cleanup</h2>
+                
+                <div class="setting-group">
+                    <h3>Scheduled Cleanup</h3>
                     
-                    <div class="setting-group">
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Clear History on Close</h3>
-                                <p>Automatically clear browsing history when browser closes</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="clearHistoryOnClose">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="autoCleanupEnabled">Enable Auto Cleanup</label>
+                            <p>Automatically perform privacy cleanup at regular intervals</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Clear Downloads History</h3>
-                                <p>Include downloads in automatic cleanup</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="clearDownloads">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="autoCleanupEnabled" class="toggle-input">
+                            <label for="autoCleanupEnabled" class="toggle-label"></label>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Clear Form Data</h3>
-                                <p>Remove saved form data and autofill information</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="clearFormData">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="cleanupInterval">Cleanup Interval</label>
+                            <p>How often to perform automatic cleanup</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Data Retention Period</h3>
-                                <p>How long to keep privacy statistics and logs</p>
-                            </div>
-                            <div class="setting-control">
-                                <select id="dataRetentionPeriod">
-                                    <option value="7">7 days</option>
-                                    <option value="30" selected>30 days</option>
-                                    <option value="90">90 days</option>
-                                    <option value="365">1 year</option>
-                                    <option value="0">Forever</option>
-                                </select>
-                            </div>
+                        <div class="setting-control">
+                            <select id="cleanupInterval" class="select-input">
+                                <option value="15">Every 15 minutes</option>
+                                <option value="30">Every 30 minutes</option>
+                                <option value="60">Every hour</option>
+                                <option value="180">Every 3 hours</option>
+                                <option value="360">Every 6 hours</option>
+                                <option value="720">Every 12 hours</option>
+                                <option value="1440">Daily</option>
+                            </select>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Export Data</h3>
-                                <p>Download your privacy statistics and settings</p>
-                            </div>
-                            <div class="setting-control">
-                                <button class="btn-secondary" id="exportData">
-                                    <i class="fas fa-download"></i>
-                                    Export Data
-                                </button>
-                            </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="cleanupNotifications">Cleanup Notifications</label>
+                            <p>Show notifications when automatic cleanup completes</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="cleanupNotifications" class="toggle-input">
+                            <label for="cleanupNotifications" class="toggle-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Cleanup Options</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="cleanupCookies">Include Cookies</label>
+                            <p>Remove tracking cookies during auto cleanup</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="cleanupCookies" class="toggle-input">
+                            <label for="cleanupCookies" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="cleanupLocalStorage">Include Local Storage</label>
+                            <p>Clear local storage from tracking domains</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="cleanupLocalStorage" class="toggle-input">
+                            <label for="cleanupLocalStorage" class="toggle-label"></label>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="cleanupCache">Include Cache</label>
+                            <p>Clear browser cache during cleanup</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="cleanupCache" class="toggle-input">
+                            <label for="cleanupCache" class="toggle-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Manual Actions</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Quick Actions</label>
+                            <p>Perform cleanup actions immediately</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="action-btn primary" id="performCleanupNow">
+                                <i class="fas fa-broom"></i>
+                                Cleanup Now
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Reset Statistics</label>
+                            <p>Clear all tracked statistics and counters</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="action-btn secondary" id="resetStats">
+                                <i class="fas fa-undo"></i>
+                                Reset Stats
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Advanced Settings Tab -->
-            <section class="tab-content" id="advanced">
-                <div class="settings-section">
-                    <h2>Advanced Settings</h2>
-                    <p class="section-description">Expert-level configuration options</p>
+            <!-- Advanced Settings -->
+            <section class="settings-section" id="advanced">
+                <h2>Advanced Settings</h2>
+                
+                <div class="setting-group">
+                    <h3>Expert Options</h3>
                     
-                    <div class="setting-group">
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Debug Mode</h3>
-                                <p>Enable detailed logging for troubleshooting</p>
-                            </div>
-                            <div class="setting-control">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" id="debugMode">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="enhancedMode">Enhanced Protection Mode</label>
+                            <p>Enable experimental privacy protections (may break some websites)</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Custom Blocking Rules</h3>
-                                <p>Add custom domains or patterns to block</p>
-                            </div>
-                            <div class="setting-control">
-                                <button class="btn-secondary" id="manageBlockingRules">
-                                    <i class="fas fa-cog"></i>
-                                    Manage Rules
-                                </button>
-                            </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="enhancedMode" class="toggle-input">
+                            <label for="enhancedMode" class="toggle-label"></label>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Whitelist Domains</h3>
-                                <p>Domains to exclude from privacy protection</p>
-                            </div>
-                            <div class="setting-control">
-                                <button class="btn-secondary" id="manageWhitelist">
-                                    <i class="fas fa-list"></i>
-                                    Manage Whitelist
-                                </button>
-                            </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="debugMode">Debug Mode</label>
+                            <p>Enable detailed logging for troubleshooting</p>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Reset All Settings</h3>
-                                <p>Restore all settings to their default values</p>
-                            </div>
-                            <div class="setting-control">
-                                <button class="btn-danger" id="resetSettings">
-                                    <i class="fas fa-undo"></i>
-                                    Reset to Defaults
-                                </button>
-                            </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="debugMode" class="toggle-input">
+                            <label for="debugMode" class="toggle-label"></label>
                         </div>
-                        
-                        <div class="setting-item">
-                            <div class="setting-info">
-                                <h3>Clear All Data</h3>
-                                <p>Remove all stored statistics and configuration</p>
-                            </div>
-                            <div class="setting-control">
-                                <button class="btn-danger" id="clearAllData">
-                                    <i class="fas fa-trash"></i>
-                                    Clear All Data
-                                </button>
-                            </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="allowListEnabled">Allow List</label>
+                            <p>Enable custom allow list for trusted websites</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="checkbox" id="allowListEnabled" class="toggle-input">
+                            <label for="allowListEnabled" class="toggle-label"></label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group" id="allowListGroup" style="display: none;">
+                    <h3>Trusted Websites</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label for="allowListDomains">Allowed Domains</label>
+                            <p>Websites where privacy protection will be disabled (one per line)</p>
+                        </div>
+                        <div class="setting-control">
+                            <textarea id="allowListDomains" class="textarea-input" placeholder="example.com&#10;trusted-site.org&#10;my-bank.com" rows="6"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h3>Data Management</h3>
+                    
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Export Settings</label>
+                            <p>Download your current settings as a backup file</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="action-btn secondary" id="exportSettings">
+                                <i class="fas fa-download"></i>
+                                Export
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Import Settings</label>
+                            <p>Restore settings from a backup file</p>
+                        </div>
+                        <div class="setting-control">
+                            <input type="file" id="importSettings" accept=".json" style="display: none;">
+                            <button class="action-btn secondary" id="importSettingsBtn">
+                                <i class="fas fa-upload"></i>
+                                Import
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <label>Reset All Settings</label>
+                            <p>Restore all settings to their default values</p>
+                        </div>
+                        <div class="setting-control">
+                            <button class="action-btn danger" id="resetAllSettings">
+                                <i class="fas fa-exclamation-triangle"></i>
+                                Reset All
+                            </button>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- About Tab -->
-            <section class="tab-content" id="about">
-                <div class="settings-section">
-                    <h2>About Digital Footprint Eraser</h2>
-                    
-                    <div class="about-content">
-                        <div class="about-section">
-                            <h3>Privacy-First Design</h3>
-                            <p>Digital Footprint Eraser is built with privacy as the foundational principle. All processing happens locally on your device - no data is ever transmitted to external servers.</p>
-                        </div>
-                        
-                        <div class="about-section">
-                            <h3>Key Features</h3>
-                            <ul class="feature-list">
-                                <li>🍪 Comprehensive cookie and tracker cleanup</li>
-                                <li>🏢 Data broker removal from 500+ sites</li>
-                                <li>📱 Social media privacy optimization</li>
-                                <li>🔍 Real-time digital footprint scanning</li>
-                                <li>🛡️ Advanced fingerprinting protection</li>
-                                <li>🔒 100% local processing</li>
-                            </ul>
-                        </div>
-                        
-                        <div class="about-section">
-                            <h3>Statistics</h3>
-                            <div class="stats-grid">
-                                <div class="stat-item">
-                                    <div class="stat-value" id="totalTrackersBlocked">0</div>
-                                    <div class="stat-label">Trackers Blocked</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value" id="totalCookiesRemoved">0</div>
-                                    <div class="stat-label">Cookies Removed</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value" id="totalPagesProtected">0</div>
-                                    <div class="stat-label">Pages Protected</div>
-                                </div>
-                                <div class="stat-item">
-                                    <div class="stat-value" id="daysActive">0</div>
-                                    <div class="stat-label">Days Active</div>
-                                </div>
+            <!-- About Section -->
+            <section class="settings-section" id="about">
+                <h2>About Digital Footprint Eraser</h2>
+                
+                <div class="about-content">
+                    <div class="about-card">
+                        <h3>🛡️ Ultimate Privacy Protection</h3>
+                        <p>Digital Footprint Eraser provides comprehensive privacy protection by blocking trackers, removing cookies, and protecting against fingerprinting attempts.</p>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>🔒 100% Local Processing</h3>
+                        <p>All privacy analysis and cleanup happens locally in your browser. Your data never leaves your device, ensuring complete privacy.</p>
+                    </div>
+
+                    <div class="about-card">
+                        <h3>📊 Detailed Statistics</h3>
+                        <p>Track your privacy improvements with detailed statistics on blocked trackers, removed cookies, and protected browsing sessions.</p>
+                    </div>
+
+                    <div class="stats-display">
+                        <h3>Your Protection Statistics</h3>
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalTrackersBlocked">0</div>
+                                <div class="stat-label">Trackers Blocked</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalCookiesRemoved">0</div>
+                                <div class="stat-label">Cookies Removed</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="totalFingerprintingBlocked">0</div>
+                                <div class="stat-label">Fingerprinting Blocked</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="daysSinceInstall">0</div>
+                                <div class="stat-label">Days Protected</div>
                             </div>
                         </div>
-                        
-                        <div class="about-section">
-                            <h3>Support & Contribution</h3>
-                            <div class="support-links">
-                                <a href="https://github.com/bharathk2498/digital-footprint-eraser" target="_blank" class="support-link">
-                                    <i class="fab fa-github"></i>
-                                    <span>View on GitHub</span>
-                                </a>
-                                <a href="https://github.com/bharathk2498/digital-footprint-eraser/issues" target="_blank" class="support-link">
-                                    <i class="fas fa-bug"></i>
-                                    <span>Report Issues</span>
-                                </a>
-                                <a href="https://bharathk2498.github.io/digital-footprint-eraser" target="_blank" class="support-link">
-                                    <i class="fas fa-globe"></i>
-                                    <span>Web Application</span>
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="about-section">
-                            <h3>Version Information</h3>
-                            <div class="version-info">
-                                <p><strong>Version:</strong> 1.0.0</p>
-                                <p><strong>Build:</strong> <span id="buildDate">2025-07-20</span></p>
-                                <p><strong>License:</strong> MIT License</p>
-                                <p><strong>Privacy Policy:</strong> <a href="https://bharathk2498.github.io/digital-footprint-eraser/docs/PRIVACY_POLICY.md" target="_blank">View Policy</a></p>
-                            </div>
+                    </div>
+
+                    <div class="about-links">
+                        <h3>More Information</h3>
+                        <div class="link-grid">
+                            <a href="https://bharathk2498.github.io/digital-footprint-eraser" target="_blank" class="about-link">
+                                <i class="fas fa-globe"></i>
+                                <span>Full Web App</span>
+                            </a>
+                            <a href="https://github.com/bharathk2498/digital-footprint-eraser" target="_blank" class="about-link">
+                                <i class="fab fa-github"></i>
+                                <span>Source Code</span>
+                            </a>
+                            <a href="https://bharathk2498.github.io/digital-footprint-eraser/docs/PRIVACY_POLICY.md" target="_blank" class="about-link">
+                                <i class="fas fa-shield-alt"></i>
+                                <span>Privacy Policy</span>
+                            </a>
+                            <a href="https://bharathk2498.github.io/digital-footprint-eraser/docs/USER_GUIDE.md" target="_blank" class="about-link">
+                                <i class="fas fa-book"></i>
+                                <span>User Guide</span>
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -405,28 +516,33 @@
         <!-- Footer -->
         <footer class="options-footer">
             <div class="footer-content">
-                <div class="save-indicator" id="saveIndicator" style="display: none;">
-                    <i class="fas fa-check"></i>
-                    <span>Settings saved automatically</span>
-                </div>
+                <div class="save-status" id="saveStatus">Settings saved automatically</div>
                 <div class="footer-actions">
-                    <button class="btn-secondary" id="resetCurrentTab">Reset Tab</button>
-                    <button class="btn-primary" id="saveSettings">Save Settings</button>
+                    <button class="footer-btn" id="resetToDefaults">Reset to Defaults</button>
+                    <button class="footer-btn primary" id="saveSettings">Save Settings</button>
                 </div>
             </div>
         </footer>
 
     </div>
 
-    <!-- Modals -->
+    <!-- Confirmation Modal -->
     <div class="modal" id="confirmModal" style="display: none;">
         <div class="modal-content">
             <h3 id="confirmTitle">Confirm Action</h3>
             <p id="confirmMessage">Are you sure you want to proceed?</p>
             <div class="modal-actions">
-                <button class="btn-secondary" id="cancelAction">Cancel</button>
-                <button class="btn-danger" id="confirmAction">Confirm</button>
+                <button class="modal-btn secondary" id="confirmCancel">Cancel</button>
+                <button class="modal-btn primary" id="confirmOk">Confirm</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-content">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Processing...</div>
         </div>
     </div>
 
