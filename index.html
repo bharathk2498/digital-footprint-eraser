@@ -18,6 +18,12 @@
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#6366f1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Digital Footprint Eraser">
 </head>
 <body>
     <!-- Header -->
@@ -377,6 +383,102 @@
     <script src="assets/js/data-broker.js"></script>
     <script src="assets/js/social-cleanup.js"></script>
     <script src="assets/js/footprint-scanner.js"></script>
+
+    <!-- Service Worker Registration -->
+    <script>
+        // Register Service Worker for PWA functionality
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', async () => {
+                try {
+                    const registration = await navigator.serviceWorker.register('/sw.js');
+                    console.log('🔧 Service Worker registered successfully:', registration.scope);
+                    
+                    // Check for updates
+                    registration.addEventListener('updatefound', () => {
+                        const newWorker = registration.installing;
+                        console.log('🔄 New Service Worker available');
+                        
+                        newWorker.addEventListener('statechange', () => {
+                            if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                // New version available, show notification
+                                if (confirm('A new version of Digital Footprint Eraser is available. Reload to update?')) {
+                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                    window.location.reload();
+                                }
+                            }
+                        });
+                    });
+                    
+                    // Listen for messages from service worker
+                    navigator.serviceWorker.addEventListener('message', (event) => {
+                        console.log('💬 Message from Service Worker:', event.data);
+                    });
+                    
+                } catch (error) {
+                    console.log('❌ Service Worker registration failed:', error);
+                }
+            });
+            
+            // Listen for service worker updates
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                console.log('🔄 Service Worker updated, reloading page');
+                window.location.reload();
+            });
+        }
+        
+        // PWA Install Prompt
+        let deferredPrompt;
+        
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('📱 PWA install prompt available');
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            // Show custom install button or banner
+            showInstallPromotion();
+        });
+        
+        window.addEventListener('appinstalled', () => {
+            console.log('📱 PWA was installed');
+            deferredPrompt = null;
+            hideInstallPromotion();
+        });
+        
+        function showInstallPromotion() {
+            // Create install promotion banner
+            const installBanner = document.createElement('div');
+            installBanner.id = 'installBanner';
+            installBanner.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; right: 0; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); color: white; padding: 1rem; text-align: center; z-index: 1001; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                    <span style="margin-right: 1rem;">📱 Install Digital Footprint Eraser for easy access and offline functionality</span>
+                    <button onclick="installPWA()" style="background: white; color: #6366f1; border: none; padding: 0.5rem 1rem; border-radius: 0.25rem; margin-right: 0.5rem; cursor: pointer; font-weight: 600;">Install</button>
+                    <button onclick="hideInstallPromotion()" style="background: transparent; color: white; border: 1px solid white; padding: 0.5rem 1rem; border-radius: 0.25rem; cursor: pointer;">Later</button>
+                </div>
+            `;
+            document.body.appendChild(installBanner);
+        }
+        
+        function hideInstallPromotion() {
+            const banner = document.getElementById('installBanner');
+            if (banner) {
+                banner.remove();
+            }
+        }
+        
+        async function installPWA() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                console.log('📱 PWA install outcome:', outcome);
+                deferredPrompt = null;
+                hideInstallPromotion();
+            }
+        }
+        
+        // Make functions globally available
+        window.installPWA = installPWA;
+        window.hideInstallPromotion = hideInstallPromotion;
+    </script>
 
 </body>
 </html>
