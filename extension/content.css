@@ -1,0 +1,424 @@
+/**
+ * Digital Footprint Eraser - Content Script Styles
+ * Styles for elements injected into web pages by the content script
+ */
+
+/* Privacy Protection Notification */
+.dfe-privacy-notification {
+    position: fixed !important;
+    top: 20px !important;
+    right: 20px !important;
+    z-index: 2147483647 !important; /* Maximum z-index */
+    
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    line-height: 1.4 !important;
+    
+    max-width: 320px !important;
+    min-width: 280px !important;
+    
+    opacity: 0 !important;
+    transform: translateX(100%) !important;
+    transition: all 0.3s ease-in-out !important;
+    
+    cursor: pointer !important;
+    border: none !important;
+    outline: none !important;
+}
+
+.dfe-privacy-notification.dfe-visible {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+.dfe-privacy-notification.dfe-hiding {
+    opacity: 0 !important;
+    transform: translateX(100%) !important;
+}
+
+/* Notification Content */
+.dfe-notification-content {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+}
+
+.dfe-notification-icon {
+    font-size: 16px !important;
+    flex-shrink: 0 !important;
+}
+
+.dfe-notification-message {
+    flex: 1 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.dfe-notification-close {
+    background: none !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 20px !important;
+    height: 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 4px !important;
+    transition: background-color 0.2s ease !important;
+}
+
+.dfe-notification-close:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+}
+
+/* Privacy Status Indicator */
+.dfe-privacy-status {
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 2147483647 !important;
+    
+    background: rgba(0, 0, 0, 0.8) !important;
+    backdrop-filter: blur(10px) !important;
+    color: white !important;
+    border-radius: 20px !important;
+    padding: 8px 12px !important;
+    
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    transition: all 0.3s ease-in-out !important;
+    
+    cursor: pointer !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.dfe-privacy-status.dfe-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.dfe-status-dot {
+    width: 8px !important;
+    height: 8px !important;
+    border-radius: 50% !important;
+    background: #22c55e !important;
+    box-shadow: 0 0 4px rgba(34, 197, 94, 0.5) !important;
+    animation: dfe-pulse 2s infinite !important;
+}
+
+.dfe-status-text {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Status dot animation */
+@keyframes dfe-pulse {
+    0%, 100% {
+        opacity: 1 !important;
+    }
+    50% {
+        opacity: 0.5 !important;
+    }
+}
+
+/* Blocked Element Overlay */
+.dfe-blocked-overlay {
+    position: relative !important;
+    background: repeating-linear-gradient(
+        45deg,
+        #f3f4f6 0px,
+        #f3f4f6 10px,
+        #e5e7eb 10px,
+        #e5e7eb 20px
+    ) !important;
+    border: 2px dashed #6b7280 !important;
+    border-radius: 4px !important;
+    padding: 20px !important;
+    text-align: center !important;
+    color: #374151 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    opacity: 0.8 !important;
+}
+
+.dfe-blocked-overlay::after {
+    content: "🛡️ Blocked by Digital Footprint Eraser" !important;
+    display: block !important;
+    font-weight: 500 !important;
+    color: #6366f1 !important;
+}
+
+/* Removed Social Widget Placeholder */
+.dfe-removed-widget {
+    display: inline-block !important;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%) !important;
+    border: 1px solid #0ea5e9 !important;
+    border-radius: 6px !important;
+    padding: 8px 12px !important;
+    margin: 2px !important;
+    
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 12px !important;
+    color: #0369a1 !important;
+    
+    position: relative !important;
+    opacity: 0.9 !important;
+}
+
+.dfe-removed-widget::before {
+    content: "🔒" !important;
+    margin-right: 4px !important;
+}
+
+.dfe-removed-widget::after {
+    content: " (Removed for Privacy)" !important;
+}
+
+/* Fingerprinting Protection Notice */
+.dfe-fingerprint-notice {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 2147483647 !important;
+    
+    background: rgba(239, 68, 68, 0.95) !important;
+    color: white !important;
+    border-radius: 8px !important;
+    padding: 16px 20px !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+    
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    text-align: center !important;
+    
+    max-width: 300px !important;
+    
+    opacity: 0 !important;
+    transform: translate(-50%, -50%) scale(0.8) !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.dfe-fingerprint-notice.dfe-visible {
+    opacity: 1 !important;
+    transform: translate(-50%, -50%) scale(1) !important;
+}
+
+.dfe-fingerprint-notice h4 {
+    margin: 0 0 8px 0 !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.dfe-fingerprint-notice p {
+    margin: 0 !important;
+    opacity: 0.9 !important;
+}
+
+/* Privacy Score Widget */
+.dfe-privacy-score-widget {
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    z-index: 2147483647 !important;
+    
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+    
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    
+    opacity: 0 !important;
+    transform: translateX(-100%) !important;
+    transition: all 0.3s ease-in-out !important;
+    
+    cursor: pointer !important;
+    user-select: none !important;
+}
+
+.dfe-privacy-score-widget.dfe-visible {
+    opacity: 1 !important;
+    transform: translateX(0) !important;
+}
+
+.dfe-score-number {
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    color: #6366f1 !important;
+    line-height: 1 !important;
+    margin: 0 0 4px 0 !important;
+}
+
+.dfe-score-label {
+    font-size: 10px !important;
+    color: #64748b !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+    .dfe-blocked-overlay {
+        background: repeating-linear-gradient(
+            45deg,
+            #374151 0px,
+            #374151 10px,
+            #4b5563 10px,
+            #4b5563 20px
+        ) !important;
+        border-color: #9ca3af !important;
+        color: #d1d5db !important;
+    }
+    
+    .dfe-removed-widget {
+        background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+        border-color: #3b82f6 !important;
+        color: #93c5fd !important;
+    }
+    
+    .dfe-privacy-score-widget {
+        background: rgba(30, 41, 59, 0.95) !important;
+        border-color: rgba(255, 255, 255, 0.1) !important;
+        color: white !important;
+    }
+    
+    .dfe-score-label {
+        color: #94a3b8 !important;
+    }
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+    .dfe-privacy-notification {
+        top: 10px !important;
+        right: 10px !important;
+        left: 10px !important;
+        max-width: none !important;
+        min-width: auto !important;
+    }
+    
+    .dfe-privacy-status {
+        bottom: 10px !important;
+        right: 10px !important;
+    }
+    
+    .dfe-privacy-score-widget {
+        top: 10px !important;
+        left: 10px !important;
+        padding: 8px 12px !important;
+    }
+    
+    .dfe-score-number {
+        font-size: 20px !important;
+    }
+    
+    .dfe-fingerprint-notice {
+        left: 10px !important;
+        right: 10px !important;
+        max-width: none !important;
+        transform: translateY(-50%) !important;
+    }
+    
+    .dfe-fingerprint-notice.dfe-visible {
+        transform: translateY(-50%) !important;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .dfe-privacy-notification,
+    .dfe-privacy-status,
+    .dfe-privacy-score-widget,
+    .dfe-fingerprint-notice {
+        transition: none !important;
+    }
+    
+    @keyframes dfe-pulse {
+        0%, 100% {
+            opacity: 1 !important;
+        }
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .dfe-privacy-notification {
+        background: #000000 !important;
+        border: 2px solid #ffffff !important;
+    }
+    
+    .dfe-blocked-overlay {
+        background: #ffffff !important;
+        border: 3px solid #000000 !important;
+        color: #000000 !important;
+    }
+    
+    .dfe-removed-widget {
+        background: #ffffff !important;
+        border: 2px solid #000000 !important;
+        color: #000000 !important;
+    }
+}
+
+/* Ensure elements don't interfere with page layout */
+.dfe-privacy-notification,
+.dfe-privacy-status,
+.dfe-privacy-score-widget,
+.dfe-fingerprint-notice {
+    pointer-events: auto !important;
+    box-sizing: border-box !important;
+    
+    /* Reset all possible inherited styles */
+    all: initial !important;
+    
+    /* Reapply our styles after reset */
+    position: fixed !important;
+    z-index: 2147483647 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+}
+
+/* Accessibility improvements */
+.dfe-privacy-notification:focus,
+.dfe-privacy-status:focus,
+.dfe-privacy-score-widget:focus {
+    outline: 2px solid #ffffff !important;
+    outline-offset: 2px !important;
+}
+
+/* Print styles - hide all DFE elements when printing */
+@media print {
+    .dfe-privacy-notification,
+    .dfe-privacy-status,
+    .dfe-privacy-score-widget,
+    .dfe-fingerprint-notice,
+    .dfe-blocked-overlay,
+    .dfe-removed-widget {
+        display: none !important;
+    }
+}
