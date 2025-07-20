@@ -6,7 +6,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*google-analytics.com/*",
+      "urlFilter": "||google-analytics.com^",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -17,7 +17,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*googletagmanager.com/*",
+      "urlFilter": "||googletagmanager.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -28,8 +28,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*doubleclick.net/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+      "urlFilter": "||googlesyndication.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "subdocument"]
     }
   },
   {
@@ -39,8 +39,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*googlesyndication.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "||doubleclick.net^",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "subdocument"]
     }
   },
   {
@@ -50,7 +50,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*facebook.com/tr/*",
+      "urlFilter": "||facebook.com/tr/*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -61,7 +61,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*connect.facebook.net/*",
+      "urlFilter": "||connect.facebook.net^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -72,7 +72,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*twitter.com/i/adsct*",
+      "urlFilter": "||twitter.com/i/adsct*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -83,7 +83,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*linkedin.com/insight/*",
+      "urlFilter": "||linkedin.com/insight/*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -94,8 +94,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*outbrain.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+      "urlFilter": "||outbrain.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "subdocument"]
     }
   },
   {
@@ -105,8 +105,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*taboola.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image", "sub_frame"]
+      "urlFilter": "||taboola.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "subdocument"]
     }
   },
   {
@@ -116,7 +116,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*criteo.com/*",
+      "urlFilter": "||criteo.com^",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -127,8 +127,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*amazon-adsystem.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "||amazon-adsystem.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "subdocument"]
     }
   },
   {
@@ -138,7 +138,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*quantserve.com/*",
+      "urlFilter": "||quantserve.com^",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -149,7 +149,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*scorecardresearch.com/*",
+      "urlFilter": "||scorecardresearch.com^",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -160,44 +160,41 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*adsystem.com/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "||adsystem.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "subdocument"]
     }
   },
   {
     "id": 16,
-    "priority": 2,
+    "priority": 1,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*pixel*",
-      "resourceTypes": ["image"],
-      "requestMethods": ["get"]
+      "urlFilter": "||ads.yahoo.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "subdocument"]
     }
   },
   {
     "id": 17,
-    "priority": 2,
+    "priority": 1,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*beacon*",
-      "resourceTypes": ["image", "xmlhttprequest"],
-      "requestMethods": ["get", "post"]
+      "urlFilter": "||yandex.ru/metrica/*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
     "id": 18,
-    "priority": 2,
+    "priority": 1,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*track*",
-      "resourceTypes": ["image", "xmlhttprequest"],
-      "requestMethods": ["get", "post"]
+      "urlFilter": "||baidu.com/hm.js*",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -207,8 +204,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*yandex.ru/metrika/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "||hotjar.com^",
+      "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
@@ -218,7 +215,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*baidu.com/hm.js*",
+      "urlFilter": "||fullstory.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -229,7 +226,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*hotjar.com/*",
+      "urlFilter": "||mouseflow.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -240,7 +237,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*fullstory.com/*",
+      "urlFilter": "||crazyegg.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -251,7 +248,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*mouseflow.com/*",
+      "urlFilter": "||mixpanel.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -262,7 +259,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*clarity.ms/*",
+      "urlFilter": "||segment.com/v1/*",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -273,41 +270,53 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*mixpanel.com/*",
+      "urlFilter": "||amplitude.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
   {
     "id": 26,
-    "priority": 1,
+    "priority": 2,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*segment.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*pixel*",
+      "resourceTypes": ["image"],
+      "requestDomains": [
+        "facebook.com",
+        "twitter.com",
+        "linkedin.com",
+        "pinterest.com",
+        "reddit.com"
+      ]
     }
   },
   {
     "id": 27,
-    "priority": 1,
+    "priority": 2,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*amplitude.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*track*",
+      "resourceTypes": ["image", "xmlhttprequest"],
+      "excludedRequestDomains": [
+        "soundcloud.com",
+        "spotify.com",
+        "youtube.com"
+      ]
     }
   },
   {
     "id": 28,
-    "priority": 1,
+    "priority": 2,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*heap.io/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "*beacon*",
+      "resourceTypes": ["image", "xmlhttprequest", "ping"]
     }
   },
   {
@@ -317,9 +326,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*intercom.io/*",
-      "resourceTypes": ["script", "xmlhttprequest"],
-      "excludedRequestDomains": ["widget.intercom.io"]
+      "urlFilter": "||addthis.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "subdocument"]
     }
   },
   {
@@ -329,59 +337,41 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*zendesk.com/embeddable.js*",
-      "resourceTypes": ["script"]
+      "urlFilter": "||sharethis.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "subdocument"]
     }
   },
   {
     "id": 31,
-    "priority": 3,
+    "priority": 1,
     "action": {
-      "type": "modifyHeaders",
-      "requestHeaders": [
-        {
-          "header": "DNT",
-          "operation": "set",
-          "value": "1"
-        }
-      ]
+      "type": "block"
     },
     "condition": {
-      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest"]
+      "urlFilter": "||disqus.com/embed/*",
+      "resourceTypes": ["script", "subdocument"]
     }
   },
   {
     "id": 32,
-    "priority": 3,
+    "priority": 1,
     "action": {
-      "type": "modifyHeaders",
-      "requestHeaders": [
-        {
-          "header": "Sec-GPC",
-          "operation": "set",
-          "value": "1"
-        }
-      ]
+      "type": "block"
     },
     "condition": {
-      "resourceTypes": ["main_frame", "sub_frame", "xmlhttprequest"]
+      "urlFilter": "||googleadservices.com^",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
     "id": 33,
-    "priority": 2,
+    "priority": 1,
     "action": {
-      "type": "modifyHeaders",
-      "responseHeaders": [
-        {
-          "header": "X-Frame-Options",
-          "operation": "set",
-          "value": "DENY"
-        }
-      ]
+      "type": "block"
     },
     "condition": {
-      "resourceTypes": ["main_frame", "sub_frame"]
+      "urlFilter": "||google.com/ads/*",
+      "resourceTypes": ["script", "xmlhttprequest", "image", "subdocument"]
     }
   },
   {
@@ -391,8 +381,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*addthis.com/*",
-      "resourceTypes": ["script", "xmlhttprequest"]
+      "urlFilter": "||bing.com/th/id/*",
+      "resourceTypes": ["image"]
     }
   },
   {
@@ -402,7 +392,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*sharethis.com/*",
+      "urlFilter": "||analytics.tiktok.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   },
@@ -413,7 +403,7 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*pinterest.com/ct/*",
+      "urlFilter": "||snapchat.com/p/*",
       "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
@@ -424,8 +414,8 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*snapchat.com/p.js*",
-      "resourceTypes": ["script"]
+      "urlFilter": "||pinterest.com/ct/*",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
     }
   },
   {
@@ -435,29 +425,151 @@
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*tiktok.com/i18n/pixel/*",
-      "resourceTypes": ["script", "xmlhttprequest", "image"]
+      "urlFilter": "||reddit.com/api/v1/pixel/*",
+      "resourceTypes": ["image", "xmlhttprequest"]
     }
   },
   {
     "id": 39,
-    "priority": 1,
+    "priority": 3,
     "action": {
-      "type": "block"
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "x-frame-options",
+          "operation": "set",
+          "value": "SAMEORIGIN"
+        }
+      ]
     },
     "condition": {
-      "urlFilter": "*reddit.com/static/pixel.js*",
-      "resourceTypes": ["script"]
+      "resourceTypes": ["main_frame", "sub_frame"]
     }
   },
   {
     "id": 40,
+    "priority": 3,
+    "action": {
+      "type": "modifyHeaders",
+      "responseHeaders": [
+        {
+          "header": "referrer-policy",
+          "operation": "set",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    },
+    "condition": {
+      "resourceTypes": ["main_frame"]
+    }
+  },
+  {
+    "id": 41,
     "priority": 1,
     "action": {
       "type": "block"
     },
     "condition": {
-      "urlFilter": "*bing.com/UET/*",
+      "urlFilter": "||tealiumiq.com^",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 42,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||ensighten.com^",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 43,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||optimizely.com^",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 44,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||googleoptimize.com^",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 45,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||nr-data.net^",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 46,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||newrelic.com^",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 47,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||pingdom.net^",
+      "resourceTypes": ["script", "xmlhttprequest", "image"]
+    }
+  },
+  {
+    "id": 48,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||kissmetrics.com^",
+      "resourceTypes": ["script", "xmlhttprequest"]
+    }
+  },
+  {
+    "id": 49,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||heap-js.s3.amazonaws.com^",
+      "resourceTypes": ["script"]
+    }
+  },
+  {
+    "id": 50,
+    "priority": 1,
+    "action": {
+      "type": "block"
+    },
+    "condition": {
+      "urlFilter": "||luckyorange.com^",
       "resourceTypes": ["script", "xmlhttprequest"]
     }
   }
