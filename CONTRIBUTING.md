@@ -1,399 +1,381 @@
 # Contributing to Digital Footprint Eraser
 
-**Welcome!** Thank you for your interest in contributing to Digital Footprint Eraser. This project is committed to privacy protection and we welcome contributions that enhance user privacy and security.
+We're thrilled that you're interested in contributing to Digital Footprint Eraser! This document provides guidelines and information about how to contribute to this privacy-focused project.
 
-## 🔐 Privacy-First Development
+## 🌟 Ways to Contribute
 
-Before contributing, please understand that **privacy is our core principle**:
+### 🐛 Bug Reports
+- Use the [GitHub Issues](https://github.com/bharathk2498/digital-footprint-eraser/issues) page
+- Search existing issues before creating a new one
+- Provide detailed reproduction steps
+- Include browser version, OS, and extension version (if applicable)
 
-- ✅ **No data collection** - We never collect user data
-- ✅ **Local processing only** - Everything runs on the user's device
-- ✅ **Zero telemetry** - No analytics or usage tracking
-- ✅ **Open source** - Complete transparency in all functionality
+### 💡 Feature Requests
+- Describe the privacy problem you're trying to solve
+- Explain how your feature would benefit users
+- Consider the privacy implications of your request
+- Check if similar features are already planned in our roadmap
 
-## 🚀 Quick Start
+### 🔧 Code Contributions
+- Fork the repository
+- Create a feature branch
+- Write clean, documented code
+- Add tests where appropriate
+- Submit a pull request
+
+### 📚 Documentation
+- Improve user guides and documentation
+- Translate content to other languages
+- Create tutorials and examples
+- Update API documentation
+
+### 🏢 Data Broker Database
+- Add new data broker websites to our database
+- Update removal URLs and procedures
+- Test and verify removal processes
+- Document new legal requirements
+
+## 🚀 Getting Started
 
 ### Prerequisites
-- **Node.js** 18+ 
-- **Git** 
-- Modern browser (Chrome/Firefox/Edge)
-- Code editor (VS Code recommended)
+- Git for version control
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Text editor (VS Code, Vim, etc.)
+- Basic knowledge of HTML, CSS, JavaScript
+- Understanding of privacy concepts
 
-### Setup Development Environment
-
+### Development Setup
 ```bash
-# 1. Fork and clone the repository
+# 1. Fork the repository on GitHub
+# 2. Clone your fork
 git clone https://github.com/YOUR_USERNAME/digital-footprint-eraser.git
 cd digital-footprint-eraser
 
-# 2. Install development dependencies
-npm install
+# 3. Add upstream remote
+git remote add upstream https://github.com/bharathk2498/digital-footprint-eraser.git
 
-# 3. Start development server
-python3 -m http.server 8000
-# OR
-npx live-server
-
-# 4. Open in browser
-open http://localhost:8000
-```
-
-### Development Workflow
-
-```bash
-# Create feature branch
+# 4. Create a development branch
 git checkout -b feature/your-feature-name
 
-# Make changes and test locally
-# ... develop and test your changes ...
-
-# Run quality checks
-npm run lint
-npm run test
-
-# Commit with clear message
-git commit -m "feat: add new privacy feature"
-
-# Push and create pull request
-git push origin feature/your-feature-name
+# 5. Start development server (optional)
+python3 -m http.server 8000
+# Visit http://localhost:8000
 ```
 
-## 📋 Types of Contributions
+### Browser Extension Development
+```bash
+# Load extension in Chrome for testing
+# 1. Open chrome://extensions/
+# 2. Enable "Developer mode"
+# 3. Click "Load unpacked"
+# 4. Select the extension/ folder
 
-### 🔧 Code Contributions
+# Test PWA functionality
+# 1. Open the web app in browser
+# 2. Test offline functionality
+# 3. Test installation prompts
+```
 
-**High-Priority Areas:**
-- **Privacy enhancement** features
-- **Security improvements**
-- **Performance optimizations**
-- **Cross-browser compatibility**
-- **Accessibility improvements**
-
-**What We Welcome:**
-- New privacy protection features
-- Bug fixes and security patches
-- Browser extension enhancements
-- UI/UX improvements
-- Documentation improvements
-- Test coverage expansion
-
-**What We Don't Accept:**
-- ❌ Any form of user tracking or analytics
-- ❌ External API calls that compromise privacy
-- ❌ Features that require data transmission
-- ❌ Dependencies on closed-source libraries
-- ❌ Code that violates our privacy principles
-
-### 📚 Documentation Contributions
-
-- User guides and tutorials
-- Technical documentation
-- Privacy policy clarifications
-- Translation into other languages
-- Video tutorials and demos
-- Blog posts about privacy protection
-
-### 🐛 Bug Reports & Feature Requests
-
-Use our issue templates:
-- **Bug Report**: Clear reproduction steps
-- **Feature Request**: Privacy-focused enhancements
-- **Security Issue**: Use security disclosure process
-
-## 🏗️ Development Guidelines
+## 📋 Development Guidelines
 
 ### Code Style
+- Use modern JavaScript (ES6+)
+- Follow consistent indentation (2 spaces)
+- Use meaningful variable and function names
+- Add comments for complex logic
+- Maintain 100% local processing - no external API calls for core functionality
 
-**JavaScript:**
+### JavaScript Guidelines
 ```javascript
-// Use ES6+ features and modern syntax
-const privacyProtection = {
-    enabled: true,
-    level: 'strict'
-};
-
-// Clear, descriptive function names
-function analyzePrivacyRisk(browserData) {
-    // Implementation that respects privacy
+// ✅ Good: Clear, privacy-focused function
+async function removeTrackingCookies(domain) {
+  const cookies = await getCookiesForDomain(domain);
+  return await deleteCookies(cookies.filter(isTrackingCookie));
 }
 
-// Comprehensive error handling
-try {
-    await cleanupTrackingData();
-} catch (error) {
-    console.error('Privacy cleanup failed:', error);
-    // Never send error data externally
+// ❌ Bad: Unclear purpose, potential privacy issue
+async function sendData(data) {
+  return await fetch('/api/collect', { 
+    method: 'POST', 
+    body: JSON.stringify(data) 
+  });
 }
 ```
 
-**CSS:**
-```css
-/* Use CSS custom properties */
-:root {
-    --primary-color: #6366f1;
-    --text-primary: #f8fafc;
-}
+### CSS Guidelines
+- Use CSS custom properties for theming
+- Follow mobile-first responsive design
+- Maintain dark theme compatibility
+- Use semantic class names
+- Optimize for performance
 
-/* Mobile-first responsive design */
-.privacy-card {
-    padding: 1rem;
-}
+### Privacy Guidelines
+- **NEVER** transmit user data to external servers
+- **ALWAYS** process data locally in the browser
+- **CLEARLY** document what data is accessed and why
+- **MINIMIZE** data collection and storage
+- **RESPECT** user choices and consent
 
-@media (min-width: 768px) {
-    .privacy-card {
-        padding: 2rem;
-    }
-}
-```
+## 🔐 Security Requirements
 
-**HTML:**
-```html
-<!-- Semantic, accessible markup -->
-<section class="privacy-scanner" role="main">
-    <h2 id="scanner-title">Digital Footprint Scanner</h2>
-    <button aria-describedby="scanner-title" class="scan-btn">
-        Start Privacy Scan
-    </button>
-</section>
-```
-
-### Privacy Requirements
-
-**✅ Required Practices:**
-- All processing must be local-only
-- No external API calls without explicit user consent
-- Clear user control over all data
-- Transparent functionality (no hidden features)
-- Secure by default configurations
-
-**❌ Prohibited Practices:**
-- Collecting any personal information
-- Transmitting data to external servers
-- Using third-party analytics or tracking
-- Storing sensitive data without encryption
-- Hidden or obfuscated functionality
-
-### Security Guidelines
-
-**Code Security:**
+### Secure Coding Practices
 - Validate all user inputs
-- Use Content Security Policy (CSP)
-- Avoid `eval()` and similar dangerous functions
-- Sanitize data before DOM insertion
-- Use HTTPS for all external resources
+- Use Content Security Policy
+- Avoid eval() and innerHTML with user data
+- Implement proper error handling
+- Use HTTPS for any external resources
 
-**Extension Security:**
-- Minimal permissions in manifest
-- Secure message passing between scripts
-- No inline scripts or styles
-- Regular security dependency updates
-
-### Testing Requirements
-
-**Required Tests:**
-- Unit tests for core privacy functions
-- Integration tests for complete workflows
-- Cross-browser compatibility testing
-- Performance testing on low-end devices
-- Accessibility testing (WCAG 2.1 AA)
-
-**Test Structure:**
+### Privacy-First Development
 ```javascript
-// Example test structure
+// ✅ Privacy-compliant: Local processing only
+function analyzePrivacyRisk(browserData) {
+  // All analysis happens locally
+  const score = calculateLocalPrivacyScore(browserData);
+  return { score, recommendations: getLocalRecommendations(score) };
+}
+
+// ❌ Privacy violation: External data transmission
+function analyzePrivacyRisk(browserData) {
+  // DON'T DO THIS - violates our privacy principles
+  return fetch('/api/analyze', {
+    method: 'POST',
+    body: JSON.stringify(browserData)
+  });
+}
+```
+
+## 🧪 Testing
+
+### Manual Testing Checklist
+- [ ] Cookie cleanup works across different browsers
+- [ ] Privacy scanner accurately detects tracking
+- [ ] Data broker removal generates correct emails
+- [ ] Extension popup functions correctly
+- [ ] PWA installs and works offline
+- [ ] No console errors in any browser
+- [ ] Privacy protection doesn't break legitimate websites
+
+### Browser Testing Matrix
+| Feature | Chrome | Firefox | Safari | Edge |
+|---------|--------|---------|--------|------|
+| Web App | ✅ | ✅ | ✅ | ✅ |
+| Extension | ✅ | ✅ | ❌ | ✅ |
+| PWA | ✅ | ✅ | ✅ | ✅ |
+
+### Testing Guidelines
+```javascript
+// Test privacy scanner accuracy
 describe('Privacy Scanner', () => {
-    it('should detect tracking scripts', () => {
-        const mockPage = createMockPage();
-        const result = analyzePrivacyRisk(mockPage);
-        expect(result.trackingScripts).toBeGreaterThan(0);
-    });
-    
-    it('should not transmit any data externally', () => {
-        const networkSpy = jest.spyOn(global, 'fetch');
-        runPrivacyScan();
-        expect(networkSpy).not.toHaveBeenCalled();
-    });
+  it('should detect tracking cookies correctly', () => {
+    const mockCookies = [
+      { name: 'session', domain: 'example.com' },
+      { name: '_ga', domain: 'google-analytics.com' }
+    ];
+    const result = analyzeTrackingCookies(mockCookies);
+    expect(result.trackingCookies).toHaveLength(1);
+    expect(result.trackingCookies[0].name).toBe('_ga');
+  });
 });
 ```
 
-## 📝 Pull Request Process
+## 🏢 Data Broker Contributions
+
+### Adding New Data Brokers
+1. Research legitimate data broker websites
+2. Verify they actually collect personal information
+3. Find their privacy policy and opt-out procedures
+4. Test the removal process manually
+5. Add entry to `assets/data/data-brokers.json`
+
+### Data Broker Entry Format
+```json
+{
+  "id": "unique-identifier",
+  "name": "Data Broker Name",
+  "category": "people_search",
+  "domain": "example.com",
+  "description": "Brief description of what data they collect",
+  "removal_url": "https://example.com/opt-out",
+  "removal_method": "form",
+  "removal_difficulty": "easy",
+  "legal_basis": ["GDPR", "CCPA"],
+  "verified_date": "2025-07-20",
+  "instructions": [
+    "Visit the opt-out page",
+    "Fill in your information",
+    "Submit the form"
+  ]
+}
+```
+
+### Verification Process
+- Test removal URLs are working
+- Verify removal forms accept submissions
+- Document any special requirements
+- Note response times and confirmation methods
+
+## 📝 Documentation Contributions
+
+### Documentation Standards
+- Write in clear, simple English
+- Include code examples where helpful
+- Add screenshots for UI instructions
+- Keep security and privacy in mind
+- Update table of contents when needed
+
+### Writing Guidelines
+```markdown
+# ✅ Good: Clear, actionable instruction
+## How to Block Social Media Trackers
+
+1. Open the extension popup
+2. Click "Block Social Trackers"
+3. Confirm the action when prompted
+
+This will remove Facebook, Twitter, and LinkedIn tracking widgets from the current page.
+
+# ❌ Bad: Vague, unhelpful instruction
+## Social Stuff
+
+Click things to make privacy better maybe.
+```
+
+## 🔄 Pull Request Process
 
 ### Before Submitting
+- [ ] Code follows our style guidelines
+- [ ] All tests pass (if applicable)
+- [ ] Documentation is updated
+- [ ] Privacy implications are considered
+- [ ] No external data transmission added
+- [ ] Browser compatibility verified
 
-1. **Test thoroughly** across multiple browsers
-2. **Run all quality checks**: `npm run lint && npm run test`
-3. **Update documentation** if adding new features
-4. **Check accessibility** with screen readers
-5. **Verify privacy compliance** - no data leakage
-
-### PR Guidelines
-
-**Title Format:**
-- `feat: add new privacy protection feature`
-- `fix: resolve cookie cleanup issue`
-- `docs: update installation guide`
-- `security: patch XSS vulnerability`
-
-**Description Template:**
+### Pull Request Template
 ```markdown
-## Changes
-- Brief description of what changed
+## Description
+Brief description of changes
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation update
+- [ ] Data broker addition
+- [ ] Security improvement
 
 ## Privacy Impact
-- How this affects user privacy (required)
-- Any new permissions or data access
+- [ ] No privacy impact
+- [ ] Improves user privacy
+- [ ] Changes how data is processed (explain below)
 
 ## Testing
-- [ ] Tested in Chrome, Firefox, Safari
-- [ ] Verified no data transmission
-- [ ] Accessibility tested
-- [ ] Performance impact assessed
+- [ ] Tested in Chrome
+- [ ] Tested in Firefox
+- [ ] Tested extension functionality
+- [ ] Tested PWA functionality
 
-## Screenshots
-(If UI changes)
+## Checklist
+- [ ] Code follows style guidelines
+- [ ] Self-review completed
+- [ ] Documentation updated
+- [ ] No external API calls added
 ```
 
 ### Review Process
+1. Automated checks run automatically
+2. Privacy review by maintainers
+3. Code review and feedback
+4. Security assessment if needed
+5. Final approval and merge
 
-1. **Automated checks** must pass
-2. **Code review** by maintainers
-3. **Privacy review** - critical requirement
-4. **Security review** for sensitive changes
-5. **Community feedback** for major features
+## 🌍 Internationalization
 
-**Review Criteria:**
-- ✅ Code quality and readability
-- ✅ Privacy compliance (highest priority)
-- ✅ Security best practices
-- ✅ Performance impact
-- ✅ Accessibility standards
-- ✅ Cross-browser compatibility
+### Adding Translations
+1. Create language file in `i18n/` directory
+2. Follow existing JSON structure
+3. Translate all user-facing strings
+4. Test UI with longer translations
+5. Consider right-to-left languages if applicable
 
-## 🏷️ Issue Guidelines
+### Translation Guidelines
+- Maintain the privacy-focused tone
+- Use culturally appropriate language
+- Keep technical terms consistent
+- Consider local privacy laws and regulations
 
-### Bug Reports
+## 📋 Issue Labels
 
-Use the bug report template and include:
-- **Clear reproduction steps**
-- **Expected vs actual behavior**
-- **Browser and OS information**
-- **Screenshots or recordings** (if relevant)
-- **Privacy impact assessment**
+| Label | Description |
+|-------|-------------|
+| `bug` | Something isn't working |
+| `enhancement` | New feature or request |
+| `documentation` | Improvements to docs |
+| `privacy` | Privacy-related concerns |
+| `security` | Security vulnerabilities |
+| `data-broker` | Data broker database updates |
+| `extension` | Browser extension issues |
+| `pwa` | Progressive Web App issues |
+| `good first issue` | Good for newcomers |
+| `help wanted` | Extra attention needed |
 
-### Feature Requests
+## 🏆 Recognition
 
-**Good Feature Requests:**
-- Enhance user privacy protection
-- Improve usability without compromising privacy
-- Add educational privacy content
-- Extend browser compatibility
-- Improve accessibility
-
-**Include in Request:**
-- **Clear problem statement**
-- **Proposed solution**
-- **Privacy considerations**
-- **User benefit explanation**
-- **Implementation difficulty estimate**
-
-### Security Issues
-
-**🚨 Report security issues privately:**
-- Email: security@your-email.com
-- Use GitHub Security Advisories
-- Do NOT create public issues for security problems
-
-## 🌟 Recognition
-
-### Contributor Types
-
-**🥇 Core Contributors**
-- Regular privacy-focused contributions
-- Code review participation
-- Community support and guidance
-
-**🥈 Feature Contributors**
-- Significant feature additions
-- Major bug fixes
-- Documentation improvements
-
-**🥉 Community Contributors**
-- Bug reports and testing
-- Documentation fixes
-- Accessibility improvements
-
-### Recognition Methods
-- Contributors listed in README
-- Annual contributor appreciation
-- Conference speaking opportunities
-- Privacy community networking
-
-## 📚 Resources
-
-### Learning Resources
-- **Privacy Engineering**: [Privacy by Design Principles](https://iapp.org/resources/privacy-by-design/)
-- **Web Security**: [OWASP Web Security](https://owasp.org/www-project-web-security-testing-guide/)
-- **Accessibility**: [WCAG Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
-- **Browser Extensions**: [Chrome Extension Docs](https://developer.chrome.com/docs/extensions/)
-
-### Tools We Use
-- **Linting**: ESLint, Stylelint
-- **Testing**: Jest, Playwright
-- **Build**: Node.js, npm scripts
-- **CI/CD**: GitHub Actions
-- **Security**: OWASP ZAP, npm audit
-
-### Community
-- **Discussions**: GitHub Discussions
-- **Chat**: Join our privacy-focused community
-- **Blog**: Privacy engineering articles
-- **Newsletter**: Monthly privacy updates
-
-## 📜 License and Legal
-
-### Code License
-- All contributions under **MIT License**
-- By contributing, you agree to license your contributions under MIT
-- Ensure you have rights to contribute the code
-
-### Privacy Commitment
-- All contributors must respect our **zero-data-collection** principle
-- No contributions that compromise user privacy will be accepted
-- We reserve the right to reject contributions that violate privacy principles
+### Contributors
+- All contributors are listed in our README
+- Significant contributions are highlighted in release notes
+- Privacy researchers receive special recognition
 
 ### Attribution
-- Contributors will be recognized in project documentation
-- Significant contributions may receive special recognition
-- We respect contributor preferences for attribution
+- Code contributions maintain original authorship
+- Documentation improvements are credited
+- Data broker research is acknowledged
+
+## ❓ Questions?
+
+### Getting Help
+- Join our [GitHub Discussions](https://github.com/bharathk2498/digital-footprint-eraser/discussions)
+- Ask questions in existing issues
+- Read our documentation thoroughly first
+
+### Contact Information
+- **Privacy Questions**: privacy@digitalfootprinteraser.com
+- **Security Issues**: security@digitalfootprinteraser.com  
+- **General Contributions**: Open a GitHub issue
+
+## 📜 Legal Considerations
+
+### Contributor License Agreement
+By contributing, you agree that:
+- Your contributions will be licensed under the MIT License
+- You have the right to submit your contributions
+- Your contributions don't violate any third-party rights
+
+### Privacy Commitment
+All contributors must respect our privacy-first principles:
+- No user data leaves the user's device
+- All processing happens locally
+- User consent and control are paramount
+- Transparency in all data handling
+
+## 🎯 Contribution Areas
+
+### High Priority
+- 🔍 **Privacy scanner improvements** - Better detection algorithms
+- 🏢 **Data broker database** - More removal sites and verification
+- 🌐 **Browser compatibility** - Better cross-browser support
+- 📱 **Mobile experience** - PWA and responsive design improvements
+
+### Medium Priority
+- 🧪 **Testing infrastructure** - Automated testing setup
+- 📚 **Documentation** - User guides and developer docs
+- 🌍 **Internationalization** - Multi-language support
+- 🎨 **UI/UX improvements** - Better user experience
+
+### Expert Level
+- 🔐 **Security hardening** - Advanced security features
+- ⚡ **Performance optimization** - Faster scanning and cleanup
+- 🤖 **Advanced privacy detection** - Machine learning approaches
+- 🏢 **Enterprise features** - Business and compliance tools
 
 ---
 
-## 🤝 Code of Conduct
-
-### Our Standards
-
-**✅ Positive Behavior:**
-- Respectful and inclusive communication
-- Focus on privacy protection and user benefit
-- Constructive feedback and collaboration
-- Welcoming newcomers and diverse perspectives
-
-**❌ Unacceptable Behavior:**
-- Harassment, discrimination, or hate speech
-- Promoting surveillance or privacy-violating practices
-- Spam, trolling, or off-topic discussions
-- Violating contributor or user privacy
-
-### Enforcement
-
-- Issues will be addressed promptly and fairly
-- Temporary or permanent bans for serious violations
-- Focus on education and community building
-- Appeal process available for all decisions
-
----
-
-**Thank you for contributing to privacy protection! Every contribution helps make the internet a more private and secure place for everyone.** 🔐
-
-**Questions?** Open a discussion or reach out to maintainers.
-
-*Last updated: July 2025*
+Thank you for contributing to Digital Footprint Eraser! Together, we're building a more private internet. 🔐✨
