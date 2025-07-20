@@ -1,53 +1,58 @@
 /**
  * Digital Footprint Eraser - Extension Options Script
- * Handles settings management and user preferences
+ * Handles settings configuration and user preferences
  */
-
-// Options page state
-let optionsState = {
-    settings: {},
-    statistics: {},
-    isLoading: false,
-    hasUnsavedChanges: false
-};
 
 // Default settings configuration
 const DEFAULT_SETTINGS = {
+    // Core Protection
     privacyProtectionEnabled: true,
-    trackingProtectionLevel: 'strict',
-    notificationsEnabled: true,
-    autoDeleteCookies: true,
-    clearHistoryOnClose: false,
-    autoCleanupEnabled: true,
-    cleanupInterval: 30,
-    blockSocialTrackers: true,
-    blockAdvertising: true,
-    blockAnalytics: true,
+    blockTrackers: true,
     removeSocialWidgets: true,
     preventFingerprinting: true,
-    spoofUserAgent: false,
-    blockWebRTC: false,
-    customDomains: '',
-    whitelistedSites: ''
+    trackingProtectionLevel: 'standard',
+    
+    // Auto Cleanup
+    autoCleanupEnabled: true,
+    cleanupInterval: 30,
+    autoDeleteCookies: true,
+    clearHistoryOnClose: false,
+    clearDownloads: false,
+    
+    // Tracking Protection
+    blockAnalytics: true,
+    blockAdvertising: true,
+    blockSocialTrackers: true,
+    blockCryptomining: true,
+    blockMalware: true,
+    
+    // Advanced
+    notificationsEnabled: true,
+    showTrackerCount: true,
+    keepLocalStats: true,
+    debugMode: false
 };
+
+// Current settings state
+let currentSettings = { ...DEFAULT_SETTINGS };
+let hasUnsavedChanges = false;
 
 /**
  * Initialize options page
  */
 document.addEventListener('DOMContentLoaded', async () => {
-    console.log('🚀 Digital Footprint Eraser: Options page initializing...');
+    console.log('⚙️ Digital Footprint Eraser: Options page initializing...');
     
     try {
         await loadSettings();
-        await loadStatistics();
+        initializeUI();
         bindEventListeners();
-        updateUI();
-        setupAutoSave();
+        loadStatistics();
         
         console.log('✅ Options page initialization complete');
     } catch (error) {
-        console.error('❌ Options initialization failed:', error);
-        showMessage('Failed to load settings', 'error');
+        console.error('❌ Options page initialization failed:', error);
+        showNotification('Failed to load settings', 'error');
     }
 });
 
@@ -55,560 +60,256 @@ document.addEventListener('DOMContentLoaded', async () => {
  * Load settings from storage
  */
 async function loadSettings() {
-    console.log('📋 Loading settings...');
-    
     try {
-        const stored = await chrome.storage.sync.get(Object.keys(DEFAULT_SETTINGS));
+        const stored = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+        currentSettings = { ...DEFAULT_SETTINGS, ...stored };
         
-        // Merge with defaults
-        optionsState.settings = { ...DEFAULT_SETTINGS, ...stored };
-        
-        console.log('✅ Settings loaded:', optionsState.settings);
+        console.log('📖 Settings loaded:', currentSettings);
     } catch (error) {
-        console.error('❌ Failed to load settings:', error);
-        optionsState.settings = { ...DEFAULT_SETTINGS };
+        console.error('Failed to load settings:', error);
+        throw error;
     }
 }
 
 /**
- * Load statistics from storage
+ * Initialize UI elements with current settings
  */
-async function loadStatistics() {
-    console.log('📊 Loading statistics...');
-    
-    try {
-        const stats = await chrome.storage.local.get([
-            'totalTrackersBlocked',
-            'totalCookiesRemoved', 
-            'totalWidgetsRemoved',
-            'fingerrintingBlocked'
-        ]);
-        
-        optionsState.statistics = {
-            totalTrackersBlocked: stats.totalTrackersBlocked || 0,
-            totalCookiesRemoved: stats.totalCookiesRemoved || 0,
-            totalWidgetsRemoved: stats.totalWidgetsRemoved || 0,
-            fingerrintingBlocked: stats.fingerrintingBlocked || 0
-        };
-        
-        console.log('✅ Statistics loaded:', optionsState.statistics);
-    } catch (error) {
-        console.error('❌ Failed to load statistics:', error);
-        optionsState.statistics = {
-            totalTrackersBlocked: 0,
-            totalCookiesRemoved: 0,
-            totalWidgetsRemoved: 0,
-            fingerrintingBlocked: 0
-        };
-    }
-}
-
-/**
- * Update UI with current settings and statistics
- */
-function updateUI() {
-    console.log('🎨 Updating UI...');
-    
-    // Update settings controls
-    updateSettingsControls();
-    
-    // Update statistics display
-    updateStatisticsDisplay();
-    
-    // Update dependent controls
-    updateDependentControls();
-}
-
-/**
- * Update settings form controls
- */
-function updateSettingsControls() {
-    Object.keys(optionsState.settings).forEach(key => {
+function initializeUI() {
+    // Populate all form elements with current settings
+    Object.keys(currentSettings).forEach(key => {
         const element = document.getElementById(key);
-        if (!element) return;
-        
-        const value = optionsState.settings[key];
-        
-        if (element.type === 'checkbox') {
-            element.checked = value;
-        } else if (element.tagName === 'SELECT') {
-            element.value = value;
-        } else if (element.tagName === 'TEXTAREA') {
-            element.value = value;
-        } else {
-            element.value = value;
+        if (element) {
+            if (element.type === 'checkbox') {
+                element.checked = currentSettings[key];
+            } else if (element.tagName === 'SELECT') {
+                element.value = currentSettings[key];
+            } else {
+                element.value = currentSettings[key];
+            }
         }
     });
-}
-
-/**
- * Update statistics display
- */
-function updateStatisticsDisplay() {
-    const stats = optionsState.statistics;
     
-    updateStatElement('totalTrackersBlocked', stats.totalTrackersBlocked);
-    updateStatElement('totalCookiesRemoved', stats.totalCookiesRemoved);
-    updateStatElement('totalWidgetsRemoved', stats.totalWidgetsRemoved);
-    updateStatElement('fingerrintingBlocked', stats.fingerrintingBlocked);
-}
-
-/**
- * Update individual stat element
- */
-function updateStatElement(elementId, value) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = formatNumber(value);
-    }
-}
-
-/**
- * Update controls that depend on other settings
- */
-function updateDependentControls() {
-    // Show/hide cleanup interval setting based on auto cleanup
-    const cleanupIntervalSetting = document.getElementById('cleanupIntervalSetting');
-    const autoCleanupEnabled = optionsState.settings.autoCleanupEnabled;
+    // Set initial tab
+    showTab('privacy');
     
-    if (cleanupIntervalSetting) {
-        cleanupIntervalSetting.style.display = autoCleanupEnabled ? 'flex' : 'none';
-    }
+    console.log('🎨 UI initialized with current settings');
 }
 
 /**
- * Bind event listeners to form controls
+ * Bind event listeners
  */
 function bindEventListeners() {
-    console.log('🎧 Binding event listeners...');
-    
-    // Settings form controls
-    bindSettingsListeners();
-    
-    // Action buttons
-    bindActionButtons();
-    
-    // Auto-save on changes
-    bindAutoSaveListeners();
-    
-    // Keyboard shortcuts
-    bindKeyboardShortcuts();
-}
-
-/**
- * Bind settings form listeners
- */
-function bindSettingsListeners() {
-    Object.keys(DEFAULT_SETTINGS).forEach(key => {
-        const element = document.getElementById(key);
-        if (!element) return;
-        
-        const eventType = element.type === 'checkbox' ? 'change' : 'input';
-        element.addEventListener(eventType, (event) => {
-            handleSettingChange(key, event);
+    // Tab navigation
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            const tabName = e.target.dataset.tab;
+            showTab(tabName);
         });
     });
+    
+    // Settings change listeners
+    Object.keys(DEFAULT_SETTINGS).forEach(key => {
+        const element = document.getElementById(key);
+        if (element) {
+            const eventType = element.type === 'checkbox' ? 'change' : 'input';
+            element.addEventListener(eventType, () => {
+                handleSettingChange(key, element);
+            });
+        }
+    });
+    
+    // Action buttons
+    document.getElementById('saveSettings').addEventListener('click', saveSettings);
+    document.getElementById('openFullApp').addEventListener('click', openFullApp);
+    document.getElementById('exportSettings').addEventListener('click', exportSettings);
+    document.getElementById('importSettings').addEventListener('click', () => {
+        document.getElementById('importFile').click();
+    });
+    document.getElementById('importFile').addEventListener('change', importSettings);
+    document.getElementById('resetSettings').addEventListener('click', showResetConfirmation);
+    
+    // Modal handlers
+    document.getElementById('cancelAction').addEventListener('click', hideModal);
+    document.getElementById('confirmAction').addEventListener('click', confirmAction);
+    
+    // Prevent accidental tab closure with unsaved changes
+    window.addEventListener('beforeunload', (e) => {
+        if (hasUnsavedChanges) {
+            e.preventDefault();
+            e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        }
+    });
+    
+    console.log('🔗 Event listeners bound');
 }
 
 /**
- * Handle individual setting changes
+ * Show specific tab content
  */
-function handleSettingChange(key, event) {
-    const element = event.target;
+function showTab(tabName) {
+    // Update navigation
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.tab === tabName) {
+            tab.classList.add('active');
+        }
+    });
+    
+    // Update content
+    document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    const targetTab = document.getElementById(`${tabName}-tab`);
+    if (targetTab) {
+        targetTab.classList.add('active');
+    }
+    
+    console.log(`📄 Switched to ${tabName} tab`);
+}
+
+/**
+ * Handle setting changes
+ */
+function handleSettingChange(key, element) {
     let value;
     
     if (element.type === 'checkbox') {
         value = element.checked;
     } else if (element.tagName === 'SELECT') {
         value = element.value;
-    } else if (element.type === 'number') {
-        value = parseInt(element.value, 10);
     } else {
         value = element.value;
     }
     
-    // Update state
-    optionsState.settings[key] = value;
-    optionsState.hasUnsavedChanges = true;
+    // Update current settings
+    currentSettings[key] = value;
+    hasUnsavedChanges = true;
     
-    // Update dependent controls
-    updateDependentControls();
+    // Update save button state
+    updateSaveButtonState();
     
-    // Visual feedback
-    markAsChanged(element);
+    // Handle special cases
+    handleSpecialSettings(key, value);
     
     console.log(`⚙️ Setting changed: ${key} = ${value}`);
 }
 
 /**
- * Bind action button listeners
+ * Handle special setting dependencies
  */
-function bindActionButtons() {
-    // Save settings
-    const saveBtn = document.getElementById('saveSettings');
-    if (saveBtn) {
-        saveBtn.addEventListener('click', handleSaveSettings);
-    }
-    
-    // Reset settings
-    const resetBtn = document.getElementById('resetSettings');
-    if (resetBtn) {
-        resetBtn.addEventListener('click', handleResetSettings);
-    }
-    
-    // Reset statistics
-    const resetStatsBtn = document.getElementById('resetStats');
-    if (resetStatsBtn) {
-        resetStatsBtn.addEventListener('click', handleResetStatistics);
-    }
-    
-    // Export statistics
-    const exportStatsBtn = document.getElementById('exportStats');
-    if (exportStatsBtn) {
-        exportStatsBtn.addEventListener('click', handleExportStatistics);
-    }
-    
-    // Open full app
-    const openFullAppBtn = document.getElementById('openFullApp');
-    if (openFullAppBtn) {
-        openFullAppBtn.addEventListener('click', handleOpenFullApp);
-    }
-    
-    // Privacy policy link
-    const privacyLink = document.getElementById('privacyPolicyLink');
-    if (privacyLink) {
-        privacyLink.addEventListener('click', handlePrivacyPolicyLink);
-    }
-}
-
-/**
- * Bind auto-save listeners
- */
-function bindAutoSaveListeners() {
-    // Auto-save after 2 seconds of inactivity
-    let autoSaveTimeout;
-    
-    const autoSave = () => {
-        clearTimeout(autoSaveTimeout);
-        autoSaveTimeout = setTimeout(() => {
-            if (optionsState.hasUnsavedChanges) {
-                saveSettingsQuietly();
+function handleSpecialSettings(key, value) {
+    switch (key) {
+        case 'privacyProtectionEnabled':
+            // If main protection is disabled, show warning
+            if (!value) {
+                showNotification('Privacy protection disabled. Your browsing data may be tracked.', 'warning');
             }
-        }, 2000);
-    };
-    
-    // Listen to all form changes
-    document.querySelectorAll('input, select, textarea').forEach(element => {
-        element.addEventListener('input', autoSave);
-        element.addEventListener('change', autoSave);
-    });
+            break;
+            
+        case 'autoCleanupEnabled':
+            // Enable/disable cleanup interval setting
+            const intervalSelect = document.getElementById('cleanupInterval');
+            if (intervalSelect) {
+                intervalSelect.disabled = !value;
+            }
+            break;
+            
+        case 'debugMode':
+            // Show debug warning
+            if (value) {
+                showNotification('Debug mode enabled. This may impact performance.', 'warning');
+            }
+            break;
+    }
 }
 
 /**
- * Bind keyboard shortcuts
+ * Update save button state
  */
-function bindKeyboardShortcuts() {
-    document.addEventListener('keydown', (event) => {
-        // Ctrl/Cmd + S to save
-        if ((event.ctrlKey || event.metaKey) && event.key === 's') {
-            event.preventDefault();
-            handleSaveSettings();
+function updateSaveButtonState() {
+    const saveButton = document.getElementById('saveSettings');
+    if (saveButton) {
+        if (hasUnsavedChanges) {
+            saveButton.textContent = '💾 Save Changes';
+            saveButton.style.background = '#f59e0b';
+        } else {
+            saveButton.textContent = '✅ Settings Saved';
+            saveButton.style.background = '#22c55e';
         }
-        
-        // Ctrl/Cmd + R to reset (with confirmation)
-        if ((event.ctrlKey || event.metaKey) && event.key === 'r') {
-            event.preventDefault();
-            handleResetSettings();
-        }
-    });
+    }
 }
 
 /**
- * Event Handlers
+ * Save settings to storage
  */
-async function handleSaveSettings() {
-    console.log('💾 Saving settings...');
-    
+async function saveSettings() {
     try {
-        setLoadingState(true);
-        
-        // Validate settings
-        const validationErrors = validateSettings();
-        if (validationErrors.length > 0) {
-            showMessage(`Validation errors: ${validationErrors.join(', ')}`, 'error');
-            return;
-        }
+        console.log('💾 Saving settings...');
         
         // Save to storage
-        await chrome.storage.sync.set(optionsState.settings);
+        await chrome.storage.sync.set(currentSettings);
         
         // Notify background script of changes
         await chrome.runtime.sendMessage({
             action: 'settingsUpdated',
-            settings: optionsState.settings
+            settings: currentSettings
         });
         
-        // Update state
-        optionsState.hasUnsavedChanges = false;
+        hasUnsavedChanges = false;
+        updateSaveButtonState();
         
-        // Visual feedback
-        clearChangedMarkers();
-        showMessage('Settings saved successfully!', 'success');
+        showNotification('Settings saved successfully!', 'success');
         
         console.log('✅ Settings saved successfully');
         
     } catch (error) {
         console.error('❌ Failed to save settings:', error);
-        showMessage('Failed to save settings', 'error');
-    } finally {
-        setLoadingState(false);
+        showNotification('Failed to save settings. Please try again.', 'error');
     }
 }
 
-async function handleResetSettings() {
-    const confirmed = confirm('Are you sure you want to reset all settings to defaults? This cannot be undone.');
-    
-    if (!confirmed) return;
-    
-    console.log('🔄 Resetting settings to defaults...');
-    
+/**
+ * Load and display statistics
+ */
+async function loadStatistics() {
     try {
-        setLoadingState(true);
+        const stats = await chrome.storage.local.get([
+            'totalTrackersBlocked',
+            'totalCookiesRemoved',
+            'totalCleanups',
+            'installDate'
+        ]);
         
-        // Reset to defaults
-        optionsState.settings = { ...DEFAULT_SETTINGS };
-        optionsState.hasUnsavedChanges = true;
+        // Update statistics display
+        updateStatistic('totalTrackersBlocked', stats.totalTrackersBlocked || 0);
+        updateStatistic('totalCookiesRemoved', stats.totalCookiesRemoved || 0);
+        updateStatistic('totalCleanups', stats.totalCleanups || 0);
         
-        // Update UI
-        updateUI();
+        // Calculate days since install
+        const installDate = stats.installDate || new Date().toISOString();
+        const daysSince = Math.floor((Date.now() - new Date(installDate)) / (1000 * 60 * 60 * 24));
+        updateStatistic('daysSinceInstall', daysSince);
         
-        // Save immediately
-        await handleSaveSettings();
-        
-        showMessage('Settings reset to defaults', 'success');
+        console.log('📊 Statistics loaded');
         
     } catch (error) {
-        console.error('❌ Failed to reset settings:', error);
-        showMessage('Failed to reset settings', 'error');
-    } finally {
-        setLoadingState(false);
+        console.error('Failed to load statistics:', error);
     }
-}
-
-async function handleResetStatistics() {
-    const confirmed = confirm('Are you sure you want to reset all statistics? This cannot be undone.');
-    
-    if (!confirmed) return;
-    
-    console.log('📊 Resetting statistics...');
-    
-    try {
-        setLoadingState(true);
-        
-        // Reset statistics
-        optionsState.statistics = {
-            totalTrackersBlocked: 0,
-            totalCookiesRemoved: 0,
-            totalWidgetsRemoved: 0,
-            fingerrintingBlocked: 0
-        };
-        
-        // Save to storage
-        await chrome.storage.local.set(optionsState.statistics);
-        
-        // Update display
-        updateStatisticsDisplay();
-        
-        showMessage('Statistics reset successfully', 'success');
-        
-    } catch (error) {
-        console.error('❌ Failed to reset statistics:', error);
-        showMessage('Failed to reset statistics', 'error');
-    } finally {
-        setLoadingState(false);
-    }
-}
-
-function handleExportStatistics() {
-    console.log('📁 Exporting statistics...');
-    
-    try {
-        const exportData = {
-            statistics: optionsState.statistics,
-            settings: optionsState.settings,
-            exportDate: new Date().toISOString(),
-            version: '1.0.0'
-        };
-        
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], {
-            type: 'application/json'
-        });
-        
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `dfe-export-${new Date().toISOString().split('T')[0]}.json`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        
-        showMessage('Statistics exported successfully', 'success');
-        
-    } catch (error) {
-        console.error('❌ Failed to export statistics:', error);
-        showMessage('Failed to export statistics', 'error');
-    }
-}
-
-function handleOpenFullApp() {
-    chrome.tabs.create({
-        url: 'https://bharathk2498.github.io/digital-footprint-eraser/?source=extension-options'
-    });
-}
-
-function handlePrivacyPolicyLink(event) {
-    event.preventDefault();
-    chrome.tabs.create({
-        url: 'https://bharathk2498.github.io/digital-footprint-eraser/docs/PRIVACY_POLICY.md'
-    });
 }
 
 /**
- * Utility Functions
+ * Update statistic display
  */
-
-/**
- * Save settings quietly (without user feedback)
- */
-async function saveSettingsQuietly() {
-    try {
-        await chrome.storage.sync.set(optionsState.settings);
-        
-        await chrome.runtime.sendMessage({
-            action: 'settingsUpdated',
-            settings: optionsState.settings
-        });
-        
-        optionsState.hasUnsavedChanges = false;
-        clearChangedMarkers();
-        
-        console.log('💾 Settings auto-saved');
-        
-    } catch (error) {
-        console.warn('Auto-save failed:', error);
+function updateStatistic(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+        element.textContent = formatNumber(value);
     }
 }
 
 /**
- * Validate current settings
- */
-function validateSettings() {
-    const errors = [];
-    
-    // Validate cleanup interval
-    const interval = optionsState.settings.cleanupInterval;
-    if (interval < 5 || interval > 1440) {
-        errors.push('Cleanup interval must be between 5 and 1440 minutes');
-    }
-    
-    // Validate custom domains format
-    const customDomains = optionsState.settings.customDomains.trim();
-    if (customDomains) {
-        const domains = customDomains.split('\n').filter(d => d.trim());
-        for (const domain of domains) {
-            if (!isValidDomain(domain.trim())) {
-                errors.push(`Invalid domain format: ${domain}`);
-            }
-        }
-    }
-    
-    // Validate whitelisted sites format
-    const whitelistedSites = optionsState.settings.whitelistedSites.trim();
-    if (whitelistedSites) {
-        const sites = whitelistedSites.split('\n').filter(s => s.trim());
-        for (const site of sites) {
-            if (!isValidDomain(site.trim())) {
-                errors.push(`Invalid site format: ${site}`);
-            }
-        }
-    }
-    
-    return errors;
-}
-
-/**
- * Check if domain format is valid
- */
-function isValidDomain(domain) {
-    // Basic domain validation
-    const domainRegex = /^[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(\.[a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-    return domainRegex.test(domain);
-}
-
-/**
- * Set loading state for UI
- */
-function setLoadingState(isLoading) {
-    optionsState.isLoading = isLoading;
-    
-    // Disable all form controls
-    document.querySelectorAll('input, select, textarea, button').forEach(element => {
-        element.disabled = isLoading;
-    });
-    
-    // Update save button
-    const saveBtn = document.getElementById('saveSettings');
-    if (saveBtn) {
-        if (isLoading) {
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-        } else {
-            saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Settings';
-        }
-    }
-}
-
-/**
- * Mark element as changed
- */
-function markAsChanged(element) {
-    const settingItem = element.closest('.setting-item');
-    if (settingItem) {
-        settingItem.classList.add('changed');
-    }
-}
-
-/**
- * Clear all changed markers
- */
-function clearChangedMarkers() {
-    document.querySelectorAll('.setting-item.changed').forEach(item => {
-        item.classList.remove('changed');
-    });
-}
-
-/**
- * Show message overlay
- */
-function showMessage(text, type = 'success') {
-    const overlay = document.getElementById('messageOverlay');
-    const icon = overlay.querySelector('.message-icon');
-    const messageText = overlay.querySelector('.message-text');
-    
-    if (overlay && icon && messageText) {
-        icon.className = `message-icon ${type}`;
-        messageText.textContent = text;
-        overlay.style.display = 'flex';
-        
-        // Auto-hide after 3 seconds
-        setTimeout(() => {
-            overlay.style.display = 'none';
-        }, 3000);
-    }
-}
-
-/**
- * Format number for display
+ * Format numbers for display
  */
 function formatNumber(num) {
     if (num >= 1000000) {
@@ -620,60 +321,279 @@ function formatNumber(num) {
 }
 
 /**
- * Setup auto-save functionality
+ * Export settings to file
  */
-function setupAutoSave() {
-    // Warn user about unsaved changes when leaving
-    window.addEventListener('beforeunload', (event) => {
-        if (optionsState.hasUnsavedChanges) {
-            event.preventDefault();
-            event.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-        }
-    });
+function exportSettings() {
+    try {
+        const exportData = {
+            version: '1.0.0',
+            timestamp: new Date().toISOString(),
+            settings: currentSettings
+        };
+        
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+            type: 'application/json'
+        });
+        
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `digital-footprint-eraser-settings-${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showNotification('Settings exported successfully!', 'success');
+        
+        console.log('📤 Settings exported');
+        
+    } catch (error) {
+        console.error('Export failed:', error);
+        showNotification('Failed to export settings', 'error');
+    }
+}
+
+/**
+ * Import settings from file
+ */
+function importSettings(event) {
+    const file = event.target.files[0];
+    if (!file) return;
     
-    // Auto-save when page loses focus
-    window.addEventListener('blur', () => {
-        if (optionsState.hasUnsavedChanges) {
-            saveSettingsQuietly();
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+        try {
+            const importData = JSON.parse(e.target.result);
+            
+            // Validate import data
+            if (!importData.settings) {
+                throw new Error('Invalid settings file format');
+            }
+            
+            // Merge with default settings to ensure all keys exist
+            const newSettings = { ...DEFAULT_SETTINGS, ...importData.settings };
+            
+            // Update current settings
+            currentSettings = newSettings;
+            hasUnsavedChanges = true;
+            
+            // Update UI
+            initializeUI();
+            updateSaveButtonState();
+            
+            showNotification('Settings imported successfully! Click Save to apply.', 'success');
+            
+            console.log('📥 Settings imported');
+            
+        } catch (error) {
+            console.error('Import failed:', error);
+            showNotification('Failed to import settings. Please check the file format.', 'error');
         }
+    };
+    
+    reader.readAsText(file);
+    
+    // Reset file input
+    event.target.value = '';
+}
+
+/**
+ * Show reset confirmation modal
+ */
+function showResetConfirmation() {
+    const modal = document.getElementById('confirmModal');
+    const message = document.getElementById('confirmMessage');
+    
+    if (modal && message) {
+        message.textContent = 'Are you sure you want to reset all settings to default values? This action cannot be undone.';
+        modal.style.display = 'flex';
+        
+        // Set up confirm action
+        modal.dataset.action = 'reset';
+    }
+}
+
+/**
+ * Show modal
+ */
+function showModal(title, message, action) {
+    const modal = document.getElementById('confirmModal');
+    const messageEl = document.getElementById('confirmMessage');
+    
+    if (modal && messageEl) {
+        messageEl.textContent = message;
+        modal.style.display = 'flex';
+        modal.dataset.action = action;
+    }
+}
+
+/**
+ * Hide modal
+ */
+function hideModal() {
+    const modal = document.getElementById('confirmModal');
+    if (modal) {
+        modal.style.display = 'none';
+        delete modal.dataset.action;
+    }
+}
+
+/**
+ * Confirm modal action
+ */
+async function confirmAction() {
+    const modal = document.getElementById('confirmModal');
+    const action = modal?.dataset.action;
+    
+    switch (action) {
+        case 'reset':
+            await resetSettings();
+            break;
+    }
+    
+    hideModal();
+}
+
+/**
+ * Reset all settings to defaults
+ */
+async function resetSettings() {
+    try {
+        console.log('🔄 Resetting settings to defaults...');
+        
+        // Reset to default settings
+        currentSettings = { ...DEFAULT_SETTINGS };
+        hasUnsavedChanges = true;
+        
+        // Update UI
+        initializeUI();
+        updateSaveButtonState();
+        
+        showNotification('Settings reset to defaults. Click Save to apply.', 'success');
+        
+        console.log('✅ Settings reset successfully');
+        
+    } catch (error) {
+        console.error('❌ Failed to reset settings:', error);
+        showNotification('Failed to reset settings', 'error');
+    }
+}
+
+/**
+ * Open full application
+ */
+function openFullApp() {
+    chrome.tabs.create({
+        url: 'https://bharathk2498.github.io/digital-footprint-eraser/?source=extension-options'
     });
 }
 
 /**
- * Listen for storage changes from other extension parts
+ * Show notification
  */
-chrome.storage.onChanged.addListener((changes, areaName) => {
-    if (areaName === 'sync') {
-        // Settings changed from another source
-        console.log('📡 Settings updated from external source');
+function showNotification(message, type = 'success') {
+    const notification = document.getElementById('notification');
+    const icon = notification.querySelector('.notification-icon');
+    const messageEl = notification.querySelector('.notification-message');
+    
+    if (notification && icon && messageEl) {
+        // Set icon based on type
+        switch (type) {
+            case 'success':
+                icon.className = 'notification-icon fas fa-check-circle success';
+                break;
+            case 'error':
+                icon.className = 'notification-icon fas fa-exclamation-circle error';
+                break;
+            case 'warning':
+                icon.className = 'notification-icon fas fa-exclamation-triangle warning';
+                break;
+            default:
+                icon.className = 'notification-icon fas fa-info-circle';
+        }
         
-        // Update local state
+        messageEl.textContent = message;
+        notification.style.display = 'block';
+        
+        // Auto-hide after 4 seconds
+        setTimeout(() => {
+            notification.style.display = 'none';
+        }, 4000);
+    }
+}
+
+/**
+ * Handle keyboard shortcuts
+ */
+document.addEventListener('keydown', (e) => {
+    // Ctrl/Cmd + S to save
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (hasUnsavedChanges) {
+            saveSettings();
+        }
+    }
+    
+    // Escape to close modal
+    if (e.key === 'Escape') {
+        hideModal();
+    }
+});
+
+/**
+ * Monitor for setting changes from other sources
+ */
+chrome.storage.onChanged.addListener((changes, namespace) => {
+    if (namespace === 'sync') {
+        console.log('📡 Settings changed externally, reloading...');
+        
+        // Reload settings if they were changed elsewhere
         Object.keys(changes).forEach(key => {
-            if (key in optionsState.settings) {
-                optionsState.settings[key] = changes[key].newValue;
+            if (key in DEFAULT_SETTINGS) {
+                currentSettings[key] = changes[key].newValue;
             }
         });
         
-        // Update UI
-        updateSettingsControls();
-        updateDependentControls();
-    }
-    
-    if (areaName === 'local') {
-        // Statistics might have changed
-        const statKeys = ['totalTrackersBlocked', 'totalCookiesRemoved', 'totalWidgetsRemoved', 'fingerrintingBlocked'];
-        const hasStatChanges = statKeys.some(key => key in changes);
-        
-        if (hasStatChanges) {
-            console.log('📊 Statistics updated from external source');
-            loadStatistics().then(() => {
-                updateStatisticsDisplay();
-            });
+        // Update UI if no unsaved changes
+        if (!hasUnsavedChanges) {
+            initializeUI();
         }
     }
 });
 
-console.log('🔐 Digital Footprint Eraser: Options script loaded');
-console.log('⚙️ Settings management: Ready');
-console.log('📊 Statistics tracking: Active');
-console.log('💾 Auto-save: Enabled');
+/**
+ * Handle messages from background script
+ */
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    console.log('📨 Options page received message:', message);
+    
+    switch (message.type) {
+        case 'settingsRequest':
+            sendResponse({ settings: currentSettings });
+            break;
+        case 'statsUpdated':
+            if (message.stats) {
+                loadStatistics();
+            }
+            break;
+    }
+});
+
+/**
+ * Performance monitoring
+ */
+const performanceObserver = new PerformanceObserver((list) => {
+    for (const entry of list.getEntries()) {
+        if (entry.entryType === 'navigation') {
+            console.log(`⚡ Options page loaded in ${entry.loadEventEnd - entry.navigationStart}ms`);
+        }
+    }
+});
+
+performanceObserver.observe({ entryTypes: ['navigation'] });
+
+console.log('⚙️ Digital Footprint Eraser: Options script loaded');
+console.log('🎛️ Settings management: Ready');
+console.log('🔄 Auto-sync: Enabled');
+console.log('💾 Backup/restore: Available');
