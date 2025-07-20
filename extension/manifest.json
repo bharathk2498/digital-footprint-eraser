@@ -1,0 +1,125 @@
+{
+  "manifest_version": 3,
+  "name": "Digital Footprint Eraser",
+  "version": "1.0.0",
+  "description": "Ultimate privacy protection - Remove cookies, data brokers, and optimize social media privacy. 100% local processing.",
+  "author": "Digital Footprint Eraser Team",
+  "homepage_url": "https://github.com/bharathk2498/digital-footprint-eraser",
+  
+  "permissions": [
+    "storage",
+    "cookies",
+    "tabs",
+    "activeTab",
+    "scripting",
+    "background",
+    "notifications",
+    "contextMenus",
+    "history",
+    "downloads"
+  ],
+  
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  
+  "optional_permissions": [
+    "browsingData",
+    "privacy",
+    "webNavigation"
+  ],
+  
+  "background": {
+    "service_worker": "extension/background.js",
+    "type": "module"
+  },
+  
+  "action": {
+    "default_popup": "extension/popup.html",
+    "default_title": "Digital Footprint Eraser",
+    "default_icon": {
+      "16": "assets/images/icon-16x16.png",
+      "32": "assets/images/icon-32x32.png",
+      "48": "assets/images/icon-48x48.png",
+      "128": "assets/images/icon-128x128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "assets/images/icon-16x16.png",
+    "32": "assets/images/icon-32x32.png",
+    "48": "assets/images/icon-48x48.png",
+    "128": "assets/images/icon-128x128.png"
+  },
+  
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["extension/content.js"],
+      "css": ["extension/content.css"],
+      "run_at": "document_start",
+      "all_frames": false
+    }
+  ],
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/js/footprint-scanner.js",
+        "assets/js/cookie-cleaner.js",
+        "assets/data/data-brokers.json"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  
+  "commands": {
+    "quick-cleanup": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C",
+        "mac": "Command+Shift+C"
+      },
+      "description": "Quick cookie and tracker cleanup"
+    },
+    "privacy-scan": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+P",
+        "mac": "Command+Shift+P"
+      },
+      "description": "Scan current page for privacy issues"
+    },
+    "toggle-protection": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+T",
+        "mac": "Command+Shift+T"
+      },
+      "description": "Toggle privacy protection on/off"
+    }
+  },
+  
+  "options_ui": {
+    "page": "extension/options.html",
+    "open_in_tab": true
+  },
+  
+  "side_panel": {
+    "default_path": "extension/sidepanel.html"
+  },
+  
+  "declarative_net_request": {
+    "rule_resources": [
+      {
+        "id": "privacy_rules",
+        "enabled": true,
+        "path": "extension/rules.json"
+      }
+    ]
+  },
+  
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'; worker-src 'self'"
+  },
+  
+  "minimum_chrome_version": "88",
+  "minimum_edge_version": "88"
+}
