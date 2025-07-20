@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Footprint Eraser</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-container">
+        
+        <!-- Header -->
+        <header class="popup-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-eraser"></i>
+                    <span>Digital Footprint Eraser</span>
+                </div>
+                <div class="status-indicator" id="statusIndicator">
+                    <span class="status-dot active"></span>
+                    <span class="status-text">Protected</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="popup-main">
+            
+            <!-- Privacy Score -->
+            <section class="privacy-score">
+                <div class="score-circle">
+                    <div class="score-value" id="privacyScore">--</div>
+                    <div class="score-label">Privacy Score</div>
+                </div>
+                <div class="score-details">
+                    <div class="score-item">
+                        <span class="score-number" id="trackersBlocked">0</span>
+                        <span class="score-desc">Trackers Blocked</span>
+                    </div>
+                    <div class="score-item">
+                        <span class="score-number" id="cookiesRemoved">0</span>
+                        <span class="score-desc">Cookies Cleaned</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button class="action-btn primary" id="quickCleanup">
+                        <i class="fas fa-broom"></i>
+                        <span>Quick Cleanup</span>
+                    </button>
+                    <button class="action-btn secondary" id="privacyScan">
+                        <i class="fas fa-search"></i>
+                        <span>Scan This Page</span>
+                    </button>
+                </div>
+                <div class="action-buttons">
+                    <button class="action-btn tertiary" id="blockTrackers">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Block Trackers</span>
+                    </button>
+                    <button class="action-btn tertiary" id="clearCookies">
+                        <i class="fas fa-cookie-bite"></i>
+                        <span>Clear Cookies</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Current Page Analysis -->
+            <section class="page-analysis" id="pageAnalysis">
+                <h3>Current Page</h3>
+                <div class="analysis-results" id="analysisResults">
+                    <div class="analysis-item">
+                        <span class="analysis-label">Trackers:</span>
+                        <span class="analysis-value" id="pageTrackers">Scanning...</span>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">Cookies:</span>
+                        <span class="analysis-value" id="pageCookies">Scanning...</span>
+                    </div>
+                    <div class="analysis-item">
+                        <span class="analysis-label">Privacy Risk:</span>
+                        <span class="analysis-value risk" id="pageRisk">Analyzing...</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Protection Toggle -->
+            <section class="protection-control">
+                <div class="toggle-container">
+                    <label for="protectionToggle" class="toggle-label">
+                        <span>Privacy Protection</span>
+                        <div class="toggle-switch">
+                            <input type="checkbox" id="protectionToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </div>
+                    </label>
+                </div>
+                <p class="toggle-description">
+                    Automatically blocks trackers and protects your privacy while browsing
+                </p>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="popup-footer">
+            <div class="footer-buttons">
+                <button class="footer-btn" id="openFullApp">
+                    <i class="fas fa-external-link-alt"></i>
+                    Open Full App
+                </button>
+                <button class="footer-btn" id="openSettings">
+                    <i class="fas fa-cog"></i>
+                    Settings
+                </button>
+            </div>
+            <div class="footer-info">
+                <span class="last-cleanup" id="lastCleanup">Last cleanup: Never</span>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <div class="loading-text">Processing...</div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification" style="display: none;">
+        <div class="notification-content">
+            <i class="notification-icon"></i>
+            <span class="notification-message"></span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="popup.js"></script>
+</body>
+</html>
