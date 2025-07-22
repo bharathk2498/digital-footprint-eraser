@@ -8,6 +8,7 @@ class DigitalFootprintEraser {
         this.progress = 0;
         this.tasks = [];
         this.isProcessing = false;
+        this.currentSection = 'home';
         this.results = {
             cookies: null,
             brokers: null,
@@ -25,7 +26,101 @@ class DigitalFootprintEraser {
         this.bindEvents();
         this.initializeComponents();
         this.checkBrowserCapabilities();
+        this.initNavigation();
         console.log('🧹 Digital Footprint Eraser initialized');
+    }
+
+    /**
+     * Initialize navigation system
+     */
+    initNavigation() {
+        // Bind navigation links
+        document.getElementById('navHome')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.navigateToSection('home');
+        });
+        
+        document.getElementById('navFeatures')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.navigateToSection('features');
+        });
+        
+        document.getElementById('navScanner')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.navigateToSection('scanner');
+        });
+        
+        document.getElementById('navAbout')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.navigateToSection('about');
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('popstate', (e) => {
+            const section = e.state?.section || 'home';
+            this.navigateToSection(section, false);
+        });
+
+        // Set initial state
+        this.updateActiveNavLink('home');
+    }
+
+    /**
+     * Navigate to a specific section
+     */
+    navigateToSection(sectionName, pushState = true) {
+        // Hide all sections
+        const sections = ['home', 'features', 'scanner', 'about'];
+        sections.forEach(section => {
+            const element = document.getElementById(section);
+            if (element) {
+                element.style.display = 'none';
+            }
+        });
+
+        // Hide main app if showing
+        const mainApp = document.getElementById('mainApp');
+        if (mainApp) {
+            mainApp.style.display = 'none';
+        }
+
+        // Show target section
+        const targetSection = document.getElementById(sectionName);
+        if (targetSection) {
+            targetSection.style.display = 'block';
+            this.currentSection = sectionName;
+            
+            // Update browser history
+            if (pushState) {
+                const url = sectionName === 'home' ? '/' : `/#${sectionName}`;
+                history.pushState({ section: sectionName }, '', url);
+            }
+            
+            // Update active navigation link
+            this.updateActiveNavLink(sectionName);
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            // Track navigation
+            this.trackEvent('section_viewed', { section: sectionName });
+        }
+    }
+
+    /**
+     * Update active navigation link styling
+     */
+    updateActiveNavLink(activeSection) {
+        // Remove active class from all nav links
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        
+        // Add active class to current section
+        const activeLink = document.getElementById(`nav${activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}`);
+        if (activeLink) {
+            activeLink.classList.add('active');
+        }
     }
 
     /**
@@ -125,8 +220,23 @@ class DigitalFootprintEraser {
      * Show the main application interface
      */
     showMainApp() {
-        document.querySelector('.hero').style.display = 'none';
+        // Hide all sections
+        const sections = ['home', 'features', 'scanner', 'about'];
+        sections.forEach(section => {
+            const element = document.getElementById(section);
+            if (element) {
+                element.style.display = 'none';
+            }
+        });
+        
+        // Show main app
         document.getElementById('mainApp').style.display = 'block';
+        
+        // Update navigation
+        this.updateActiveNavLink('cleanup');
+        
+        // Update browser history
+        history.pushState({ section: 'cleanup' }, '', '/#cleanup');
         
         // Smooth scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -268,6 +378,11 @@ class DigitalFootprintEraser {
     async startFootprintScan() {
         if (this.isProcessing) return;
         
+        // Show main app if not already shown
+        if (document.getElementById('mainApp').style.display === 'none') {
+            this.showMainApp();
+        }
+        
         this.updateStatus('scannerStatus', 'Processing...', 'processing');
         
         try {
@@ -326,9 +441,9 @@ class DigitalFootprintEraser {
      */
     getCookieCleanupOptions() {
         return {
-            clearCookies: document.getElementById('clearCookies').checked,
-            clearCache: document.getElementById('clearCache').checked,
-            clearSessions: document.getElementById('clearSessions').checked
+            clearCookies: document.getElementById('clearCookies')?.checked || false,
+            clearCache: document.getElementById('clearCache')?.checked || false,
+            clearSessions: document.getElementById('clearSessions')?.checked || false
         };
     }
 
@@ -337,11 +452,11 @@ class DigitalFootprintEraser {
      */
     getPersonalInfo() {
         return {
-            firstName: document.getElementById('firstName').value.trim(),
-            lastName: document.getElementById('lastName').value.trim(),
-            email: document.getElementById('email').value.trim(),
-            phone: document.getElementById('phone').value.trim(),
-            address: document.getElementById('address').value.trim()
+            firstName: document.getElementById('firstName')?.value.trim() || '',
+            lastName: document.getElementById('lastName')?.value.trim() || '',
+            email: document.getElementById('email')?.value.trim() || '',
+            phone: document.getElementById('phone')?.value.trim() || '',
+            address: document.getElementById('address')?.value.trim() || ''
         };
     }
 
@@ -439,7 +554,7 @@ class DigitalFootprintEraser {
      */
     formatCookieResults(result) {
         return `
-            <h4>🍪 Cookie Cleanup Results</h4>
+            <h4>Cookie Cleanup Results</h4>
             <div class="result-stats">
                 <div class="stat-item">
                     <span class="stat-value">${result.cookiesRemoved || 0}</span>
@@ -463,7 +578,7 @@ class DigitalFootprintEraser {
      */
     formatBrokerResults(result) {
         return `
-            <h4>🏢 Data Broker Removal Results</h4>
+            <h4>Data Broker Removal Results</h4>
             <div class="result-stats">
                 <div class="stat-item">
                     <span class="stat-value">${result.totalRequests || 0}</span>
@@ -493,7 +608,7 @@ class DigitalFootprintEraser {
      */
     formatSocialResults(result) {
         return `
-            <h4>📱 Social Media Optimization Results</h4>
+            <h4>Social Media Optimization Results</h4>
             <div class="social-results">
                 ${result.platforms?.map(platform => `
                     <div class="platform-result">
@@ -515,7 +630,7 @@ class DigitalFootprintEraser {
      */
     formatScannerResults(result) {
         return `
-            <h4>🔍 Digital Footprint Analysis</h4>
+            <h4>Digital Footprint Analysis</h4>
             <div class="scan-results">
                 <div class="privacy-score-detail">
                     <h5>Privacy Score: ${result.privacyScore}/100</h5>
@@ -578,7 +693,7 @@ class DigitalFootprintEraser {
             </head>
             <body>
                 <div class="header">
-                    <h1>🧹 Digital Footprint Privacy Report</h1>
+                    <h1>Digital Footprint Privacy Report</h1>
                     <p>Generated on ${date}</p>
                 </div>
                 
@@ -588,12 +703,12 @@ class DigitalFootprintEraser {
                 ${this.results.scanner ? this.generateScannerReportSection() : ''}
                 
                 <div class="section">
-                    <h2>📋 Summary & Next Steps</h2>
+                    <h2>Summary & Next Steps</h2>
                     <p>This report summarizes your digital footprint cleanup activities. Continue monitoring your privacy settings regularly and repeat this process quarterly for optimal protection.</p>
                 </div>
                 
                 <footer style="text-align: center; margin-top: 30px; color: #666;">
-                    <p>Generated by Digital Footprint Eraser | <a href="https://github.com/yourusername/digital-footprint-eraser">Open Source</a></p>
+                    <p>Generated by Digital Footprint Eraser | Open Source Privacy Tool</p>
                 </footer>
             </body>
             </html>
@@ -607,7 +722,7 @@ class DigitalFootprintEraser {
         const result = this.results.cookies;
         return `
             <div class="section">
-                <h2>🍪 Cookie Cleanup Results</h2>
+                <h2>Cookie Cleanup Results</h2>
                 <div class="stat">Cookies Removed: ${result.cookiesRemoved || 0}</div>
                 <div class="stat">Storage Cleared: ${result.storageCleared || 0} items</div>
                 <div class="stat">Cache Cleared: ${result.cacheCleared ? 'Yes' : 'No'}</div>
@@ -623,7 +738,7 @@ class DigitalFootprintEraser {
         const result = this.results.brokers;
         return `
             <div class="section">
-                <h2>🏢 Data Broker Removal</h2>
+                <h2>Data Broker Removal</h2>
                 <div class="stat">Removal Requests: ${result.totalRequests || 0}</div>
                 <div class="stat">Email Templates: ${result.emailsGenerated || 0}</div>
                 <h3>Priority Brokers to Contact:</h3>
@@ -643,7 +758,7 @@ class DigitalFootprintEraser {
         const result = this.results.social;
         return `
             <div class="section">
-                <h2>📱 Social Media Privacy</h2>
+                <h2>Social Media Privacy</h2>
                 ${result.platforms?.map(platform => `
                     <h3>${platform.name}</h3>
                     <ul>
@@ -661,7 +776,7 @@ class DigitalFootprintEraser {
         const result = this.results.scanner;
         return `
             <div class="section">
-                <h2>🔍 Digital Footprint Analysis</h2>
+                <h2>Digital Footprint Analysis</h2>
                 <div class="stat">Privacy Score: ${result.privacyScore}/100</div>
                 <div class="stat">Exposure Level: ${result.exposureLevel}</div>
                 <div class="stat">Risk Factors: ${result.riskFactors}</div>
