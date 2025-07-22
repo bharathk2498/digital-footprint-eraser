@@ -34,9 +34,10 @@
                 <span>Digital Footprint Eraser</span>
             </div>
             <div class="nav-links">
-                <a href="#features" class="nav-link">Features</a>
-                <a href="#scanner" class="nav-link">Scanner</a>
-                <a href="#about" class="nav-link">About</a>
+                <a href="#home" class="nav-link" id="navHome">Home</a>
+                <a href="#features" class="nav-link" id="navFeatures">Features</a>
+                <a href="#scanner" class="nav-link" id="navScanner">Scanner</a>
+                <a href="#about" class="nav-link" id="navAbout">About</a>
                 <button class="btn-primary" id="startCleanup">Start Cleanup</button>
             </div>
             <div class="mobile-menu-toggle">
@@ -45,8 +46,8 @@
         </nav>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
+    <!-- Home Section (Hero) -->
+    <section id="home" class="hero">
         <div class="hero-content">
             <h1 class="hero-title">
                 Erase Your Digital Footprint
@@ -79,6 +80,342 @@
                     <i class="fas fa-code"></i>
                     Open Source
                 </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comprehensive Privacy Protection</h2>
+                <p>Everything you need to completely erase your digital footprint</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-cookie-bite"></i>
+                    </div>
+                    <h3>Cookie & Tracker Cleanup</h3>
+                    <p>Remove all tracking cookies, clear browsing data, and eliminate session storage across browsers. Advanced cleanup includes IndexedDB and WebSQL data.</p>
+                    <ul class="feature-list">
+                        <li>First-party & third-party cookies</li>
+                        <li>Local storage & session storage</li>
+                        <li>Browser cache & history</li>
+                        <li>IndexedDB & WebSQL cleanup</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h3>Data Broker Removal</h3>
+                    <p>Generate removal requests for 500+ data broker websites. Automated email templates and direct links to opt-out forms.</p>
+                    <ul class="feature-list">
+                        <li>247 people search sites</li>
+                        <li>89 background check services</li>
+                        <li>164 marketing databases</li>
+                        <li>Automated email templates</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-share-alt"></i>
+                    </div>
+                    <h3>Social Media Privacy</h3>
+                    <p>Step-by-step instructions to optimize privacy settings across all major social platforms. Reduce your digital footprint significantly.</p>
+                    <ul class="feature-list">
+                        <li>Facebook privacy optimization</li>
+                        <li>Instagram & Twitter settings</li>
+                        <li>LinkedIn professional privacy</li>
+                        <li>TikTok & YouTube controls</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-radar"></i>
+                    </div>
+                    <h3>Digital Footprint Scanner</h3>
+                    <p>Comprehensive analysis of your current digital exposure. Get a privacy score and personalized recommendations for improvement.</p>
+                    <ul class="feature-list">
+                        <li>Browser privacy assessment</li>
+                        <li>Tracking exposure analysis</li>
+                        <li>Data leakage detection</li>
+                        <li>Personalized recommendations</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>100% Local Processing</h3>
+                    <p>All operations happen locally in your browser. No data transmission, no cloud processing, complete privacy guaranteed.</p>
+                    <ul class="feature-list">
+                        <li>No data leaves your device</li>
+                        <li>No accounts required</li>
+                        <li>No tracking or analytics</li>
+                        <li>Open source codebase</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-download"></i>
+                    </div>
+                    <h3>Detailed Reports</h3>
+                    <p>Generate comprehensive privacy reports with actionable insights. Download templates and documentation for your records.</p>
+                    <ul class="feature-list">
+                        <li>Privacy assessment reports</li>
+                        <li>Email template downloads</li>
+                        <li>Step-by-step guides</li>
+                        <li>Progress tracking</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="features-cta">
+                <button class="btn-primary btn-large" onclick="app.showMainApp()">
+                    <i class="fas fa-rocket"></i>
+                    Start Your Privacy Cleanup
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scanner Section -->
+    <section id="scanner" class="scanner-section" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2>Digital Footprint Scanner</h2>
+                <p>Analyze your current privacy exposure and get actionable insights</p>
+            </div>
+
+            <div class="scanner-preview">
+                <div class="scanner-card">
+                    <div class="scanner-header">
+                        <h3>Privacy Assessment Overview</h3>
+                        <p>Our scanner analyzes multiple aspects of your digital privacy</p>
+                    </div>
+
+                    <div class="scan-categories">
+                        <div class="scan-category">
+                            <div class="category-icon">
+                                <i class="fas fa-browser"></i>
+                            </div>
+                            <div class="category-info">
+                                <h4>Browser Privacy</h4>
+                                <p>Analyzes Do Not Track settings, cookie policies, private browsing detection, and WebRTC leak protection.</p>
+                            </div>
+                        </div>
+
+                        <div class="scan-category">
+                            <div class="category-icon">
+                                <i class="fas fa-eye-slash"></i>
+                            </div>
+                            <div class="category-info">
+                                <h4>Tracking Protection</h4>
+                                <p>Detects analytics trackers, advertising scripts, social media pixels, and fingerprinting attempts.</p>
+                            </div>
+                        </div>
+
+                        <div class="scan-category">
+                            <div class="category-icon">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <div class="category-info">
+                                <h4>Data Leakage</h4>
+                                <p>Scans local storage, session data, form persistence, and clipboard access vulnerabilities.</p>
+                            </div>
+                        </div>
+
+                        <div class="scan-category">
+                            <div class="category-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="category-info">
+                                <h4>Social Media Exposure</h4>
+                                <p>Identifies social widgets, sharing trackers, and embedded content that may compromise privacy.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="scanner-features">
+                        <h4>What You'll Get:</h4>
+                        <ul>
+                            <li><strong>Privacy Score (0-100):</strong> Overall assessment of your current privacy level</li>
+                            <li><strong>Exposure Level:</strong> Risk categorization (Low, Medium, High, Critical)</li>
+                            <li><strong>Detailed Breakdown:</strong> Category-specific scores and findings</li>
+                            <li><strong>Personalized Recommendations:</strong> Actionable steps to improve your privacy</li>
+                            <li><strong>Risk Factor Analysis:</strong> Identification of specific vulnerabilities</li>
+                        </ul>
+                    </div>
+
+                    <div class="scanner-cta">
+                        <button class="btn-primary" onclick="app.startFootprintScan()">
+                            <i class="fas fa-search"></i>
+                            Start Privacy Scan
+                        </button>
+                        <button class="btn-secondary" onclick="app.showMainApp()">
+                            <i class="fas fa-tools"></i>
+                            Go to Full Cleanup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section" style="display: none;">
+        <div class="container">
+            <div class="section-header">
+                <h2>About Digital Footprint Eraser</h2>
+                <p>Your complete privacy protection solution</p>
+            </div>
+
+            <div class="about-content">
+                <div class="about-main">
+                    <div class="about-text">
+                        <h3>Why Digital Privacy Matters</h3>
+                        <p>In today's digital world, your personal information is constantly being collected, stored, and sold by data brokers, advertising companies, and social media platforms. Every website you visit, every form you fill out, and every social interaction creates a digital footprint that can be used to profile and track you.</p>
+
+                        <p>Digital Footprint Eraser provides a comprehensive solution to reclaim your privacy. Our tool combines advanced browser cleanup with automated data broker removal and social media optimization to give you complete control over your digital presence.</p>
+
+                        <h3>Our Privacy-First Approach</h3>
+                        <p>Unlike other privacy tools that require you to trust them with your data, Digital Footprint Eraser operates entirely within your browser. Nothing is transmitted to external servers, no accounts are required, and all processing happens locally on your device.</p>
+                    </div>
+
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <div class="stat-number">500+</div>
+                            <div class="stat-label">Data Brokers Covered</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">100%</div>
+                            <div class="stat-label">Local Processing</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">0</div>
+                            <div class="stat-label">Data Transmitted</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">6</div>
+                            <div class="stat-label">Social Platforms</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="features-comparison">
+                    <h3>How We're Different</h3>
+                    <div class="comparison-table">
+                        <div class="comparison-header">
+                            <div>Feature</div>
+                            <div>Digital Footprint Eraser</div>
+                            <div>Other Tools</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div>Local Processing</div>
+                            <div class="check">✓ 100% Local</div>
+                            <div class="cross">✗ Cloud Processing</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div>Data Broker Removal</div>
+                            <div class="check">✓ 500+ Sites</div>
+                            <div class="partial">◐ Limited Coverage</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div>Social Media Guide</div>
+                            <div class="check">✓ All Major Platforms</div>
+                            <div class="cross">✗ Generic Advice</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div>Open Source</div>
+                            <div class="check">✓ Fully Open</div>
+                            <div class="cross">✗ Proprietary</div>
+                        </div>
+                        <div class="comparison-row">
+                            <div>Cost</div>
+                            <div class="check">✓ Completely Free</div>
+                            <div class="cross">✗ Subscription Required</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tech-details">
+                    <h3>Technical Details</h3>
+                    <div class="tech-grid">
+                        <div class="tech-card">
+                            <h4>Browser Compatibility</h4>
+                            <ul>
+                                <li>Chrome 90+</li>
+                                <li>Firefox 88+</li>
+                                <li>Safari 14+</li>
+                                <li>Edge 90+</li>
+                            </ul>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Technologies Used</h4>
+                            <ul>
+                                <li>Vanilla JavaScript (ES6+)</li>
+                                <li>Progressive Web App</li>
+                                <li>Local Storage APIs</li>
+                                <li>Browser Extension APIs</li>
+                            </ul>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Security Features</h4>
+                            <ul>
+                                <li>Content Security Policy</li>
+                                <li>HTTPS Enforcement</li>
+                                <li>No External Dependencies</li>
+                                <li>Sandboxed Execution</li>
+                            </ul>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Privacy Standards</h4>
+                            <ul>
+                                <li>GDPR Compliant</li>
+                                <li>CCPA Aligned</li>
+                                <li>Zero Data Collection</li>
+                                <li>Transparent Processing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="open-source">
+                    <h3>Open Source & Transparent</h3>
+                    <p>Digital Footprint Eraser is completely open source. You can review every line of code, contribute improvements, or fork the project for your own use. We believe privacy tools should be transparent and verifiable.</p>
+                    
+                    <div class="open-source-links">
+                        <a href="https://github.com/bharathk2498/digital-footprint-eraser" target="_blank" class="btn-secondary">
+                            <i class="fab fa-github"></i>
+                            View Source Code
+                        </a>
+                        <a href="https://github.com/bharathk2498/digital-footprint-eraser/issues" target="_blank" class="btn-secondary">
+                            <i class="fas fa-bug"></i>
+                            Report Issues
+                        </a>
+                        <a href="https://github.com/bharathk2498/digital-footprint-eraser/blob/main/CONTRIBUTING.md" target="_blank" class="btn-secondary">
+                            <i class="fas fa-hands-helping"></i>
+                            Contribute
+                        </a>
+                    </div>
+                </div>
+
+                <div class="about-cta">
+                    <h3>Ready to Reclaim Your Privacy?</h3>
+                    <p>Start your digital cleanup today and take control of your online presence.</p>
+                    <button class="btn-primary btn-large" onclick="app.showMainApp()">
+                        <i class="fas fa-rocket"></i>
+                        Start Privacy Cleanup
+                    </button>
+                </div>
             </div>
         </div>
     </section>
