@@ -51,9 +51,9 @@ class FootprintScanner {
             // Check Do Not Track
             if (navigator.doNotTrack === '1') {
                 browserAnalysis.score += 20;
-                browserAnalysis.findings.push('✅ Do Not Track enabled');
+                browserAnalysis.findings.push('PASS: Do Not Track enabled');
             } else {
-                browserAnalysis.findings.push('❌ Do Not Track disabled');
+                browserAnalysis.findings.push('FAIL: Do Not Track disabled');
                 result.recommendations.push('Enable Do Not Track in browser settings');
             }
 
@@ -61,40 +61,40 @@ class FootprintScanner {
             const cookieTest = this.testCookieBlocking();
             if (cookieTest.thirdPartyBlocked) {
                 browserAnalysis.score += 30;
-                browserAnalysis.findings.push('✅ Third-party cookies appear to be blocked');
+                browserAnalysis.findings.push('PASS: Third-party cookies appear to be blocked');
             } else {
-                browserAnalysis.findings.push('❌ Third-party cookies may be enabled');
+                browserAnalysis.findings.push('FAIL: Third-party cookies may be enabled');
                 result.recommendations.push('Block third-party cookies in browser settings');
             }
 
             // Check for private browsing indicators
             if (this.isPrivateBrowsing()) {
                 browserAnalysis.score += 25;
-                browserAnalysis.findings.push('✅ Private browsing mode detected');
+                browserAnalysis.findings.push('PASS: Private browsing mode detected');
             } else {
-                browserAnalysis.findings.push('ℹ️ Regular browsing mode (consider using private mode)');
+                browserAnalysis.findings.push('INFO: Regular browsing mode (consider using private mode)');
             }
 
             // Check JavaScript privacy APIs
             if (!('geolocation' in navigator)) {
                 browserAnalysis.score += 15;
-                browserAnalysis.findings.push('✅ Geolocation API disabled');
+                browserAnalysis.findings.push('PASS: Geolocation API disabled');
             } else {
-                browserAnalysis.findings.push('⚠️ Geolocation API available');
+                browserAnalysis.findings.push('WARN: Geolocation API available');
                 result.recommendations.push('Disable location services for websites');
             }
 
             // Check for WebRTC leaks
             if (this.hasWebRTCLeak()) {
-                browserAnalysis.findings.push('❌ Potential WebRTC IP leak detected');
+                browserAnalysis.findings.push('FAIL: Potential WebRTC IP leak detected');
                 result.recommendations.push('Consider disabling WebRTC in browser settings');
             } else {
                 browserAnalysis.score += 10;
-                browserAnalysis.findings.push('✅ No obvious WebRTC leaks detected');
+                browserAnalysis.findings.push('PASS: No obvious WebRTC leaks detected');
             }
 
         } catch (error) {
-            browserAnalysis.findings.push('❌ Browser analysis encountered errors');
+            browserAnalysis.findings.push('ERROR: Browser analysis encountered errors');
         }
 
         result.scoreBreakdown.push(browserAnalysis);
@@ -118,48 +118,48 @@ class FootprintScanner {
             
             if (trackers.analytics.length === 0) {
                 trackingAnalysis.score += 25;
-                trackingAnalysis.findings.push('✅ No analytics trackers detected');
+                trackingAnalysis.findings.push('PASS: No analytics trackers detected');
             } else {
-                trackingAnalysis.findings.push(`❌ ${trackers.analytics.length} analytics trackers found`);
+                trackingAnalysis.findings.push(`FAIL: ${trackers.analytics.length} analytics trackers found`);
                 result.recommendations.push('Use ad blocker to prevent tracking scripts');
             }
 
             if (trackers.advertising.length === 0) {
                 trackingAnalysis.score += 25;
-                trackingAnalysis.findings.push('✅ No advertising trackers detected');
+                trackingAnalysis.findings.push('PASS: No advertising trackers detected');
             } else {
-                trackingAnalysis.findings.push(`❌ ${trackers.advertising.length} advertising trackers found`);
+                trackingAnalysis.findings.push(`FAIL: ${trackers.advertising.length} advertising trackers found`);
             }
 
             if (trackers.social.length === 0) {
                 trackingAnalysis.score += 20;
-                trackingAnalysis.findings.push('✅ No social media trackers detected');
+                trackingAnalysis.findings.push('PASS: No social media trackers detected');
             } else {
-                trackingAnalysis.findings.push(`❌ ${trackers.social.length} social media trackers found`);
+                trackingAnalysis.findings.push(`FAIL: ${trackers.social.length} social media trackers found`);
                 result.recommendations.push('Block social media tracking pixels');
             }
 
             // Check for fingerprinting attempts
             const fingerprintingRisk = this.assessFingerprintingRisk();
             if (fingerprintingRisk.score > 50) {
-                trackingAnalysis.findings.push('❌ High fingerprinting risk detected');
+                trackingAnalysis.findings.push('FAIL: High fingerprinting risk detected');
                 result.recommendations.push('Use browser with fingerprinting protection');
             } else {
                 trackingAnalysis.score += 15;
-                trackingAnalysis.findings.push('✅ Low fingerprinting risk');
+                trackingAnalysis.findings.push('PASS: Low fingerprinting risk');
             }
 
             // Check for beacon/pixel tracking
             const beaconCount = this.detectTrackingBeacons();
             if (beaconCount === 0) {
                 trackingAnalysis.score += 15;
-                trackingAnalysis.findings.push('✅ No tracking beacons detected');
+                trackingAnalysis.findings.push('PASS: No tracking beacons detected');
             } else {
-                trackingAnalysis.findings.push(`❌ ${beaconCount} tracking beacons found`);
+                trackingAnalysis.findings.push(`FAIL: ${beaconCount} tracking beacons found`);
             }
 
         } catch (error) {
-            trackingAnalysis.findings.push('❌ Tracking analysis encountered errors');
+            trackingAnalysis.findings.push('ERROR: Tracking analysis encountered errors');
         }
 
         result.scoreBreakdown.push(trackingAnalysis);
@@ -182,50 +182,50 @@ class FootprintScanner {
             const storageFindings = this.scanLocalStorage();
             if (storageFindings.sensitiveData.length === 0) {
                 leakageAnalysis.score += 30;
-                leakageAnalysis.findings.push('✅ No sensitive data in localStorage');
+                leakageAnalysis.findings.push('PASS: No sensitive data in localStorage');
             } else {
-                leakageAnalysis.findings.push(`❌ ${storageFindings.sensitiveData.length} potential sensitive items in storage`);
+                leakageAnalysis.findings.push(`FAIL: ${storageFindings.sensitiveData.length} potential sensitive items in storage`);
                 result.recommendations.push('Clear browser storage regularly');
             }
 
             // Check for form data persistence
             if (this.hasFormDataPersistence()) {
-                leakageAnalysis.findings.push('⚠️ Forms may store data locally');
+                leakageAnalysis.findings.push('WARN: Forms may store data locally');
                 result.recommendations.push('Disable form data saving in browser');
             } else {
                 leakageAnalysis.score += 20;
-                leakageAnalysis.findings.push('✅ No obvious form data persistence');
+                leakageAnalysis.findings.push('PASS: No obvious form data persistence');
             }
 
             // Check for automatic password filling
             if (this.hasPasswordManager()) {
-                leakageAnalysis.findings.push('ℹ️ Password manager detected (review saved passwords)');
+                leakageAnalysis.findings.push('INFO: Password manager detected (review saved passwords)');
                 result.recommendations.push('Audit saved passwords and remove unused ones');
             } else {
                 leakageAnalysis.score += 15;
-                leakageAnalysis.findings.push('✅ No browser password manager detected');
+                leakageAnalysis.findings.push('PASS: No browser password manager detected');
             }
 
             // Check for clipboard access
             if ('clipboard' in navigator) {
-                leakageAnalysis.findings.push('⚠️ Clipboard API available to websites');
+                leakageAnalysis.findings.push('WARN: Clipboard API available to websites');
                 result.recommendations.push('Be cautious of clipboard access permissions');
             } else {
                 leakageAnalysis.score += 10;
-                leakageAnalysis.findings.push('✅ Clipboard API not available');
+                leakageAnalysis.findings.push('PASS: Clipboard API not available');
             }
 
             // Check session storage
             const sessionData = this.scanSessionStorage();
             if (sessionData.itemCount === 0) {
                 leakageAnalysis.score += 25;
-                leakageAnalysis.findings.push('✅ Session storage is clean');
+                leakageAnalysis.findings.push('PASS: Session storage is clean');
             } else {
-                leakageAnalysis.findings.push(`ℹ️ ${sessionData.itemCount} items in session storage`);
+                leakageAnalysis.findings.push(`INFO: ${sessionData.itemCount} items in session storage`);
             }
 
         } catch (error) {
-            leakageAnalysis.findings.push('❌ Data leakage analysis encountered errors');
+            leakageAnalysis.findings.push('ERROR: Data leakage analysis encountered errors');
         }
 
         result.scoreBreakdown.push(leakageAnalysis);
@@ -248,9 +248,9 @@ class FootprintScanner {
             const socialWidgets = this.detectSocialWidgets();
             if (socialWidgets.length === 0) {
                 socialAnalysis.score += 40;
-                socialAnalysis.findings.push('✅ No social media widgets detected');
+                socialAnalysis.findings.push('PASS: No social media widgets detected');
             } else {
-                socialAnalysis.findings.push(`❌ ${socialWidgets.length} social media widgets found`);
+                socialAnalysis.findings.push(`FAIL: ${socialWidgets.length} social media widgets found`);
                 result.recommendations.push('Social widgets can track you - consider blocking');
             }
 
@@ -258,23 +258,23 @@ class FootprintScanner {
             const shareTracking = this.detectSocialSharing();
             if (!shareTracking) {
                 socialAnalysis.score += 30;
-                socialAnalysis.findings.push('✅ No social sharing tracking detected');
+                socialAnalysis.findings.push('PASS: No social sharing tracking detected');
             } else {
-                socialAnalysis.findings.push('❌ Social sharing tracking detected');
+                socialAnalysis.findings.push('FAIL: Social sharing tracking detected');
             }
 
             // Check for embedded social content
             const embeddedContent = this.detectEmbeddedSocialContent();
             if (embeddedContent.length === 0) {
                 socialAnalysis.score += 30;
-                socialAnalysis.findings.push('✅ No embedded social content');
+                socialAnalysis.findings.push('PASS: No embedded social content');
             } else {
-                socialAnalysis.findings.push(`⚠️ ${embeddedContent.length} embedded social elements found`);
+                socialAnalysis.findings.push(`WARN: ${embeddedContent.length} embedded social elements found`);
                 result.recommendations.push('Embedded social content can track your activity');
             }
 
         } catch (error) {
-            socialAnalysis.findings.push('❌ Social media analysis encountered errors');
+            socialAnalysis.findings.push('ERROR: Social media analysis encountered errors');
         }
 
         result.scoreBreakdown.push(socialAnalysis);
@@ -296,31 +296,31 @@ class FootprintScanner {
             // Check HTTPS usage
             if (location.protocol === 'https:') {
                 securityAnalysis.score += 50;
-                securityAnalysis.findings.push('✅ Using HTTPS connection');
+                securityAnalysis.findings.push('PASS: Using HTTPS connection');
             } else {
-                securityAnalysis.findings.push('❌ Using unencrypted HTTP connection');
+                securityAnalysis.findings.push('FAIL: Using unencrypted HTTP connection');
                 result.recommendations.push('Always use HTTPS websites when possible');
             }
 
             // Check for mixed content
             if (this.hasMixedContent()) {
-                securityAnalysis.findings.push('⚠️ Mixed content detected (HTTP resources on HTTPS page)');
+                securityAnalysis.findings.push('WARN: Mixed content detected (HTTP resources on HTTPS page)');
                 result.recommendations.push('Avoid websites with mixed content warnings');
             } else {
                 securityAnalysis.score += 25;
-                securityAnalysis.findings.push('✅ No mixed content detected');
+                securityAnalysis.findings.push('PASS: No mixed content detected');
             }
 
             // Check for secure cookies
             if (this.hasSecureCookies()) {
                 securityAnalysis.score += 25;
-                securityAnalysis.findings.push('✅ Secure cookie flags detected');
+                securityAnalysis.findings.push('PASS: Secure cookie flags detected');
             } else {
-                securityAnalysis.findings.push('⚠️ Some cookies may lack security flags');
+                securityAnalysis.findings.push('WARN: Some cookies may lack security flags');
             }
 
         } catch (error) {
-            securityAnalysis.findings.push('❌ Security analysis encountered errors');
+            securityAnalysis.findings.push('ERROR: Security analysis encountered errors');
         }
 
         result.scoreBreakdown.push(securityAnalysis);
@@ -342,14 +342,14 @@ class FootprintScanner {
             // Analyze localStorage contents
             const localStorageData = this.analyzeStorageContents(localStorage, 'localStorage');
             if (localStorageData.totalItems === 0) {
-                storageAnalysis.findings.push('✅ localStorage is empty');
+                storageAnalysis.findings.push('PASS: localStorage is empty');
             } else {
                 storageAnalysis.score -= Math.min(localStorageData.totalItems * 2, 30);
-                storageAnalysis.findings.push(`ℹ️ ${localStorageData.totalItems} items in localStorage`);
+                storageAnalysis.findings.push(`INFO: ${localStorageData.totalItems} items in localStorage`);
                 
                 if (localStorageData.suspiciousItems > 0) {
                     storageAnalysis.score -= 20;
-                    storageAnalysis.findings.push(`⚠️ ${localStorageData.suspiciousItems} potentially tracking-related items`);
+                    storageAnalysis.findings.push(`WARN: ${localStorageData.suspiciousItems} potentially tracking-related items`);
                     result.recommendations.push('Clear localStorage regularly to remove tracking data');
                 }
             }
@@ -357,10 +357,10 @@ class FootprintScanner {
             // Analyze sessionStorage contents
             const sessionStorageData = this.analyzeStorageContents(sessionStorage, 'sessionStorage');
             if (sessionStorageData.totalItems === 0) {
-                storageAnalysis.findings.push('✅ sessionStorage is empty');
+                storageAnalysis.findings.push('PASS: sessionStorage is empty');
             } else {
                 storageAnalysis.score -= Math.min(sessionStorageData.totalItems, 15);
-                storageAnalysis.findings.push(`ℹ️ ${sessionStorageData.totalItems} items in sessionStorage`);
+                storageAnalysis.findings.push(`INFO: ${sessionStorageData.totalItems} items in sessionStorage`);
             }
 
             // Check IndexedDB usage
@@ -368,18 +368,18 @@ class FootprintScanner {
                 try {
                     const dbInfo = await this.getIndexedDBInfo();
                     if (dbInfo.databases.length === 0) {
-                        storageAnalysis.findings.push('✅ No IndexedDB databases found');
+                        storageAnalysis.findings.push('PASS: No IndexedDB databases found');
                     } else {
                         storageAnalysis.score -= Math.min(dbInfo.databases.length * 5, 25);
-                        storageAnalysis.findings.push(`ℹ️ ${dbInfo.databases.length} IndexedDB databases found`);
+                        storageAnalysis.findings.push(`INFO: ${dbInfo.databases.length} IndexedDB databases found`);
                     }
                 } catch (error) {
-                    storageAnalysis.findings.push('ℹ️ Could not analyze IndexedDB (may be restricted)');
+                    storageAnalysis.findings.push('INFO: Could not analyze IndexedDB (may be restricted)');
                 }
             }
 
         } catch (error) {
-            storageAnalysis.findings.push('❌ Storage analysis encountered errors');
+            storageAnalysis.findings.push('ERROR: Storage analysis encountered errors');
         }
 
         // Ensure score doesn't go below 0
@@ -880,13 +880,13 @@ class FootprintScanner {
     static generateRecommendations(result) {
         // Add general recommendations based on score
         if (result.privacyScore < 60) {
-            result.recommendations.unshift('🚨 Critical: Your digital privacy needs immediate attention');
+            result.recommendations.unshift('CRITICAL: Your digital privacy needs immediate attention');
             result.recommendations.push('Consider using a privacy-focused browser like Firefox or Brave');
             result.recommendations.push('Install a comprehensive ad blocker like uBlock Origin');
         } else if (result.privacyScore < 80) {
-            result.recommendations.unshift('⚠️ Warning: Several privacy improvements recommended');
+            result.recommendations.unshift('WARNING: Several privacy improvements recommended');
         } else {
-            result.recommendations.unshift('✅ Good: Your privacy settings are well-configured');
+            result.recommendations.unshift('GOOD: Your privacy settings are well-configured');
         }
 
         // Add category-specific recommendations
