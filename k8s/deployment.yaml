@@ -1,0 +1,353 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: digital-footprint-eraser
+  labels:
+    name: digital-footprint-eraser
+    environment: production
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: eraser-config
+  namespace: digital-footprint-eraser
+data:
+  production.json: |
+    {
+      "application": {
+        "name": "Advanced Digital Footprint Eraser",
+        "version": "2.0.0",
+        "environment": "kubernetes",
+        "debug": false
+      },
+      "security": {
+        "encryption": {
+          "algorithm": "AES-256-GCM",
+          "keyDerivation": "PBKDF2",
+          "iterations": 100000
+        }
+      },
+      "realTimeProtection": {
+        "enabled": true,
+        "scanInterval": 30000,
+        "alertLevel": "medium"
+      }
+    }
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: eraser-secrets
+  namespace: digital-footprint-eraser
+type: Opaque
+data:
+  # Base64 encoded secrets
+  api-key: YWRtaW4tYXBpLWtleS1oZXJl  # admin-api-key-here
+  encryption-key: c2VjdXJlLWVuY3J5cHRpb24ta2V5  # secure-encryption-key
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: digital-footprint-eraser
+  namespace: digital-footprint-eraser
+  labels:
+    app: digital-footprint-eraser
+    version: v2.0.0
+    tier: frontend
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: digital-footprint-eraser
+  template:
+    metadata:
+      labels:
+        app: digital-footprint-eraser
+        version: v2.0.0
+        tier: frontend
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8080"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: eraser-service-account
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+        runAsGroup: 1001
+        fsGroup: 1001
+      containers:
+      - name: digital-footprint-eraser
+        image: bharathk2498/digital-footprint-eraser:v2.0.0
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: KUBERNETES_DEPLOYMENT
+          value: "true"
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: eraser-secrets
+              key: api-key
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: tmp-volume
+          mountPath: /tmp
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 1001
+          capabilities:
+            drop:
+            - ALL
+      volumes:
+      - name: config-volume
+        configMap:
+          name: eraser-config
+      - name: tmp-volume
+        emptyDir: {}
+      nodeSelector:
+        kubernetes.io/os: linux
+      tolerations:
+      - key: "node.kubernetes.io/not-ready"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+      - key: "node.kubernetes.io/unreachable"
+        operator: "Exists"
+        effect: "NoExecute"
+        tolerationSeconds: 300
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: eraser-service-account
+  namespace: digital-footprint-eraser
+  labels:
+    app: digital-footprint-eraser
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: digital-footprint-eraser-service
+  namespace: digital-footprint-eraser
+  labels:
+    app: digital-footprint-eraser
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:region:account:certificate/cert-id"
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 443
+    targetPort: 8080
+    protocol: TCP
+    name: https
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  selector:
+    app: digital-footprint-eraser
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: digital-footprint-eraser-ingress
+  namespace: digital-footprint-eraser
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: DENY";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+      more_set_headers "Strict-Transport-Security: max-age=31536000; includeSubDomains";
+      more_set_headers "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:";
+spec:
+  tls:
+  - hosts:
+    - eraser.company.com
+    secretName: eraser-tls
+  rules:
+  - host: eraser.company.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: digital-footprint-eraser-service
+            port:
+              number: 80
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: digital-footprint-eraser-hpa
+  namespace: digital-footprint-eraser
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: digital-footprint-eraser
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 0
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+      - type: Pods
+        value: 4
+        periodSeconds: 15
+      selectPolicy: Max
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: digital-footprint-eraser-pdb
+  namespace: digital-footprint-eraser
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: digital-footprint-eraser
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: digital-footprint-eraser-netpol
+  namespace: digital-footprint-eraser
+spec:
+  podSelector:
+    matchLabels:
+      app: digital-footprint-eraser
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    - podSelector:
+        matchLabels:
+          app: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8080
+  egress:
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 53
+    - protocol: UDP
+      port: 53
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 443
+---
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: digital-footprint-eraser-limits
+  namespace: digital-footprint-eraser
+spec:
+  limits:
+  - default:
+      memory: "512Mi"
+      cpu: "500m"
+    defaultRequest:
+      memory: "256Mi"
+      cpu: "250m"
+    type: Container
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: digital-footprint-eraser-quota
+  namespace: digital-footprint-eraser
+spec:
+  hard:
+    requests.cpu: "2"
+    requests.memory: 4Gi
+    limits.cpu: "4"
+    limits.memory: 8Gi
+    pods: "10"
+    services: "5"
+    persistentvolumeclaims: "2"
