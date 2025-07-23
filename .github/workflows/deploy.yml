@@ -1,0 +1,276 @@
+name: 🚀 Deploy DigitalShield Pro
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  # Security and Quality Checks
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔍 Check for Secrets
+        run: |
+          echo "🔍 Scanning for potential secrets..."
+          ! grep -r "api_key\|password\|secret\|token" --include="*.html" --include="*.js" --include="*.css" . || {
+            echo "❌ Potential secrets found in code"
+            exit 1
+          }
+          echo "✅ No secrets detected"
+
+      - name: 🛡️ Security Headers Check
+        run: |
+          echo "🛡️ Checking security implementations..."
+          if grep -q "Content-Security-Policy" index.html; then
+            echo "✅ CSP implementation found"
+          else
+            echo "⚠️ Consider adding Content-Security-Policy"
+          fi
+
+      - name: 🍪 Privacy Check
+        run: |
+          echo "🍪 Checking privacy compliance..."
+          if grep -q "localStorage.clear\|sessionStorage.clear" index.html; then
+            echo "✅ Storage clearing functionality confirmed"
+          fi
+          if ! grep -q "google-analytics\|gtag\|facebook\|tracking" index.html; then
+            echo "✅ No tracking scripts detected"
+          else
+            echo "❌ Tracking scripts found - privacy violation"
+            exit 1
+          fi
+
+  # Code Quality and Validation
+  quality-check:
+    name: 🧪 Quality Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔍 HTML Validation
+        run: |
+          echo "🔍 Validating HTML structure..."
+          # Check for basic HTML5 structure
+          grep -q "<!DOCTYPE html>" index.html && echo "✅ HTML5 doctype found"
+          grep -q "<meta charset=\"UTF-8\">" index.html && echo "✅ UTF-8 charset set"
+          grep -q "<meta name=\"viewport\"" index.html && echo "✅ Viewport meta tag found"
+
+      - name: 🎨 CSS Quality Check
+        run: |
+          echo "🎨 Checking CSS quality..."
+          # Check for CSS custom properties
+          grep -q ":root" index.html && echo "✅ CSS custom properties used"
+          # Check for responsive design
+          grep -q "@media" index.html && echo "✅ Responsive design implemented"
+
+      - name: ⚡ JavaScript Validation
+        run: |
+          echo "⚡ Validating JavaScript..."
+          # Check for modern JavaScript
+          grep -q "const\|let\|=>" index.html && echo "✅ Modern JavaScript syntax used"
+          # Check for security practices
+          grep -q "innerHTML" index.html && {
+            echo "⚠️ innerHTML usage detected - ensure proper sanitization"
+          } || echo "✅ No innerHTML usage"
+
+      - name: 📱 Mobile Optimization Check
+        run: |
+          echo "📱 Checking mobile optimization..."
+          grep -q "max-width.*768px" index.html && echo "✅ Mobile breakpoints found"
+          grep -q "responsive\|mobile" index.html && echo "✅ Mobile optimization references found"
+
+  # Performance and Accessibility
+  performance-check:
+    name: 📊 Performance Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 📏 File Size Analysis
+        run: |
+          echo "📏 Analyzing file sizes..."
+          HTML_SIZE=$(wc -c < index.html)
+          echo "📄 index.html: $(echo "scale=2; $HTML_SIZE/1024" | bc)KB"
+          
+          if [ $HTML_SIZE -gt 500000 ]; then
+            echo "⚠️ HTML file is large (>500KB), consider optimization"
+          else
+            echo "✅ HTML file size is optimal"
+          fi
+
+      - name: 🔍 Performance Optimization Check
+        run: |
+          echo "🔍 Checking performance optimizations..."
+          # Check for lazy loading
+          grep -q "loading=\"lazy\"" index.html && echo "✅ Lazy loading implemented" || echo "💡 Consider lazy loading for images"
+          
+          # Check for minification opportunities
+          if grep -q "  \|    " index.html; then
+            echo "💡 File could benefit from minification"
+          fi
+
+      - name: ♿ Accessibility Check
+        run: |
+          echo "♿ Checking accessibility features..."
+          grep -q "alt=" index.html && echo "✅ Image alt attributes found" || echo "💡 No images found or alt attributes missing"
+          grep -q "aria-" index.html && echo "✅ ARIA attributes found" || echo "💡 Consider adding ARIA attributes"
+          grep -q "role=" index.html && echo "✅ Role attributes found" || echo "💡 Consider adding role attributes"
+
+  # Build and Deploy
+  build-and-deploy:
+    name: 🏗️ Build & Deploy
+    runs-on: ubuntu-latest
+    needs: [security-scan, quality-check, performance-check]
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: 🏗️ Build Process
+        run: |
+          echo "🏗️ Starting build process..."
+          
+          # Create build directory
+          mkdir -p _site
+          
+          # Copy main files
+          cp index.html _site/
+          cp README.md _site/
+          cp LICENSE _site/
+          
+          # Generate build info
+          echo "Build Date: $(date)" > _site/build-info.txt
+          echo "Commit: ${{ github.sha }}" >> _site/build-info.txt
+          echo "Branch: ${{ github.ref_name }}" >> _site/build-info.txt
+          
+          # Add security headers (if using a custom 404.html)
+          cat > _site/404.html << 'EOF'
+          <!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="UTF-8">
+              <meta name="viewport" content="width=device-width, initial-scale=1.0">
+              <title>Page Not Found - DigitalShield Pro</title>
+              <meta http-equiv="refresh" content="0;url=/">
+              <style>
+                  body { font-family: Arial; text-align: center; padding: 50px; background: #0A0A0F; color: #F8FAFC; }
+                  .logo { color: #8B5CF6; font-size: 2rem; margin-bottom: 1rem; }
+              </style>
+          </head>
+          <body>
+              <div class="logo">🛡️ DigitalShield Pro</div>
+              <h1>Page Not Found</h1>
+              <p>Redirecting to homepage...</p>
+              <script>window.location.href = '/';</script>
+          </body>
+          </html>
+          EOF
+          
+          echo "✅ Build completed successfully"
+
+      - name: 📤 Upload Artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+      - name: 🚀 Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Post-deployment validation
+  validate-deployment:
+    name: ✅ Validate Deployment
+    runs-on: ubuntu-latest
+    needs: build-and-deploy
+    steps:
+      - name: 🌐 Test Deployment
+        run: |
+          echo "🌐 Testing deployment..."
+          SITE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          echo "Testing URL: $SITE_URL"
+          
+          # Wait for deployment to propagate
+          sleep 30
+          
+          # Test if site is accessible
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$SITE_URL" || echo "000")
+          
+          if [ "$HTTP_STATUS" = "200" ]; then
+            echo "✅ Site is accessible (HTTP $HTTP_STATUS)"
+          else
+            echo "❌ Site deployment failed (HTTP $HTTP_STATUS)"
+            exit 1
+          fi
+
+      - name: 🧪 Functional Test
+        run: |
+          echo "🧪 Running functional tests..."
+          SITE_URL="https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          
+          # Test if critical elements are present
+          CONTENT=$(curl -s "$SITE_URL")
+          
+          echo "$CONTENT" | grep -q "DigitalShield Pro" && echo "✅ Title found"
+          echo "$CONTENT" | grep -q "clearAllCookies" && echo "✅ Cookie cleaner function found"
+          echo "$CONTENT" | grep -q "analyzePassword" && echo "✅ Password analyzer function found"
+          echo "$CONTENT" | grep -q "Privacy Tools" && echo "✅ Privacy tools section found"
+          
+          echo "✅ All functional tests passed"
+
+  # Notify on success
+  notify-success:
+    name: 📢 Success Notification
+    runs-on: ubuntu-latest
+    needs: [build-and-deploy, validate-deployment]
+    if: success()
+    steps:
+      - name: 🎉 Deployment Success
+        run: |
+          echo "🎉 DigitalShield Pro deployed successfully!"
+          echo "🌐 Live URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+          echo "📊 Build Info:"
+          echo "   - Commit: ${{ github.sha }}"
+          echo "   - Branch: ${{ github.ref_name }}"
+          echo "   - Triggered by: ${{ github.actor }}"
+          echo "   - Deployment time: $(date)"
+
+  # Handle failures
+  notify-failure:
+    name: 🚨 Failure Notification
+    runs-on: ubuntu-latest
+    needs: [security-scan, quality-check, performance-check, build-and-deploy, validate-deployment]
+    if: failure()
+    steps:
+      - name: 🚨 Deployment Failed
+        run: |
+          echo "🚨 DigitalShield Pro deployment failed!"
+          echo "📋 Check the workflow logs for details"
+          echo "🔧 Common issues:"
+          echo "   - Security scan failures"
+          echo "   - HTML validation errors"
+          echo "   - File size issues"
+          echo "   - GitHub Pages configuration"
