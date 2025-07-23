@@ -1,0 +1,51 @@
+{
+  "name": "digital-footprint-eraser",
+  "version": "3.0.0",
+  "description": "Enterprise-grade digital footprint removal and privacy protection suite with freemium model",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "live-server --port=8000 --host=localhost",
+    "build": "echo 'Static build - no build process required'",
+    "test": "echo 'Tests will be added in future versions'",
+    "deploy": "gh-pages -d ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bharathk2498/digital-footprint-eraser.git"
+  },
+  "keywords": [
+    "cybersecurity",
+    "privacy",
+    "digital-footprint",
+    "data-removal",
+    "gdpr",
+    "ccpa",
+    "devsecops",
+    "enterprise",
+    "freemium",
+    "saas"
+  ],
+  "author": "bharathk2498",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bharathk2498/digital-footprint-eraser/issues"
+  },
+  "homepage": "https://bharathk2498.github.io/digital-footprint-eraser",
+  "devDependencies": {
+    "live-server": "^1.2.2",
+    "gh-pages": "^4.0.0"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

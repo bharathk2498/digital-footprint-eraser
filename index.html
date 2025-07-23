@@ -3,1223 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Digital Footprint Eraser v2.0</title>
+    <title>Digital Footprint Eraser - Professional Privacy Suite</title>
+    <meta name="description" content="Enterprise-grade digital footprint removal and privacy protection. Free basic tools, premium advanced features.">
+    <meta name="keywords" content="digital footprint, privacy, cybersecurity, data removal, GDPR, CCPA">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Digital Footprint Eraser - Professional Privacy Suite">
+    <meta property="og:description" content="Enterprise-grade digital footprint removal and privacy protection">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bharathk2498.github.io/digital-footprint-eraser">
+    
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React and ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Lucide React Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --danger-gradient: linear-gradient(135deg, #ff6b6b 0%, #ee5a5a 100%);
-            --success-gradient: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
-            --warning-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --dark-bg: #1a1a2e;
-            --darker-bg: #16213e;
-            --card-bg: #0f3460;
-            --text-primary: #ffffff;
-            --text-secondary: #b0c4de;
-            --accent-blue: #4da6ff;
-            --accent-purple: #8b5cf6;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --glow: 0 0 20px rgba(77, 166, 255, 0.3);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--dark-bg);
-            color: var(--text-primary);
-            overflow-x: hidden;
-            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
         }
-
-        /* Animated background */
-        .bg-animation {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: linear-gradient(45deg, #1a1a2e, #16213e, #0f3460);
-            background-size: 400% 400%;
-            animation: gradientFlow 15s ease infinite;
+        
+        .gradient-bg {
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
         }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* Header */
-        .header {
-            background: rgba(15, 52, 96, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 1rem 2rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--primary-gradient);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .logo-text {
-            font-size: 1.5rem;
-            font-weight: 700;
-            background: var(--primary-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .system-status {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--success-gradient);
-            animation: statusBlink 2s infinite;
-        }
-
-        @keyframes statusBlink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.5; }
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-            gap: 2rem;
-            display: grid;
-            grid-template-columns: 300px 1fr;
-            min-height: calc(100vh - 80px);
-        }
-
-        /* Sidebar */
-        .sidebar {
-            background: rgba(15, 52, 96, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2rem;
-            height: fit-content;
-            box-shadow: var(--shadow);
-        }
-
-        .nav-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .nav-item:hover {
-            background: rgba(77, 166, 255, 0.1);
-            border-color: var(--accent-blue);
-            box-shadow: var(--glow);
-            transform: translateX(5px);
-        }
-
-        .nav-item.active {
-            background: var(--primary-gradient);
-            border-color: transparent;
-        }
-
-        /* Main Content */
-        .main-content {
-            display: grid;
-            gap: 2rem;
-            grid-template-rows: auto 1fr;
-        }
-
-        /* Dashboard Cards */
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: rgba(15, 52, 96, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: var(--shadow);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--text-primary);
-        }
-
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        /* Metrics */
-        .metric {
-            text-align: center;
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            margin-bottom: 1rem;
-        }
-
-        .metric-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-
-        .metric-value.threat-level {
-            background: var(--danger-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .metric-value.privacy-score {
-            background: var(--success-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .metric-label {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 2rem;
-        }
-
-        .btn {
-            background: var(--primary-gradient);
-            border: none;
-            border-radius: 15px;
-            padding: 1rem 2rem;
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(77, 166, 255, 0.4);
-        }
-
-        .btn.danger {
-            background: var(--danger-gradient);
-        }
-
-        .btn.success {
-            background: var(--success-gradient);
-        }
-
-        .btn.warning {
-            background: var(--warning-gradient);
-        }
-
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* Progress Bars */
-        .progress {
+        
+        .glass-effect {
+            backdrop-filter: blur(16px);
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            height: 8px;
-            overflow: hidden;
-            margin: 1rem 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
-
-        .progress-bar {
-            height: 100%;
-            border-radius: 25px;
-            transition: width 0.5s ease;
-            position: relative;
-            overflow: hidden;
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-
-        .progress-bar.threat {
-            background: var(--danger-gradient);
-        }
-
-        .progress-bar.privacy {
-            background: var(--success-gradient);
-        }
-
-        .progress-bar::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-            background-size: 50px 50px;
-            animation: move 2s linear infinite;
-        }
-
-        @keyframes move {
-            0% { background-position: 0 0; }
-            100% { background-position: 50px 50px; }
-        }
-
-        /* Scan Results */
-        .scan-results {
-            margin-top: 2rem;
-        }
-
-        .result-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .result-item:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: var(--accent-blue);
-        }
-
-        .result-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .result-type {
-            font-weight: 600;
-            color: var(--accent-blue);
-        }
-
-        .result-severity {
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .severity-high {
-            background: var(--danger-gradient);
-        }
-
-        .severity-medium {
-            background: var(--warning-gradient);
-        }
-
-        .severity-low {
-            background: var(--success-gradient);
-        }
-
-        /* Alerts */
-        .alert {
-            position: fixed;
-            top: 100px;
-            right: 2rem;
-            padding: 1rem 2rem;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            z-index: 1001;
-            transform: translateX(400px);
-            transition: transform 0.3s ease;
-            max-width: 400px;
-        }
-
-        .alert.show {
-            transform: translateX(0);
-        }
-
-        .alert.success {
-            background: var(--success-gradient);
-        }
-
-        .alert.error {
-            background: var(--danger-gradient);
-        }
-
-        .alert.warning {
-            background: var(--warning-gradient);
-        }
-
-        .alert.info {
-            background: var(--primary-gradient);
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top-color: white;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Real-time Protection Toggle */
-        .protection-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 1rem;
-            margin: 1rem 0;
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 60px;
-            height: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .toggle-switch.active {
-            background: var(--success-gradient);
-        }
-
-        .toggle-slider {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .toggle-switch.active .toggle-slider {
-            transform: translateX(30px);
-        }
-
-        /* Notification System */
-        .notification-container {
-            position: fixed;
-            top: 100px;
-            right: 2rem;
-            z-index: 1001;
-            max-width: 400px;
-        }
-
-        .notification {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 15px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            box-shadow: var(--shadow);
-            transform: translateX(400px);
-            transition: all 0.3s ease;
-            opacity: 0;
-        }
-
-        .notification.show {
-            transform: translateX(0);
-            opacity: 1;
-        }
-
-        .notification.success {
-            border-left: 4px solid #56ab2f;
-        }
-
-        .notification.error {
-            border-left: 4px solid #ff6b6b;
-        }
-
-        .notification.warning {
-            border-left: 4px solid #f093fb;
-        }
-
-        .notification.info {
-            border-left: 4px solid #4da6ff;
-        }
-
-        .notification-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .notification-close {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 0;
-            margin-left: 1rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 1200px) {
-            .container {
-                grid-template-columns: 1fr;
-                gap: 1rem;
+        
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
             }
-            
-            .sidebar {
-                order: 2;
-            }
-            
-            .main-content {
-                order: 1;
+            50% {
+                opacity: .7;
             }
         }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-            
-            .header-content {
-                padding: 0 1rem;
-            }
-            
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .action-buttons {
-                grid-template-columns: 1fr;
-            }
+        
+        .risk-critical {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
         }
-
-        /* Additional Effects */
-        .glow-effect {
-            position: relative;
-            overflow: hidden;
+        
+        .risk-high {
+            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
         }
-
-        .glow-effect::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(transparent, rgba(77, 166, 255, 0.3), transparent 30%);
-            animation: rotate 4s linear infinite;
-        }
-
-        .glow-effect::after {
-            content: '';
-            position: absolute;
-            inset: 3px;
-            background: var(--card-bg);
-            border-radius: inherit;
-            z-index: 1;
-        }
-
-        .glow-effect > * {
-            position: relative;
-            z-index: 2;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        
+        .risk-medium {
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
         }
     </style>
 </head>
 <body>
-    <div class="bg-animation"></div>
+    <div id="root"></div>
     
-    <header class="header">
-        <div class="header-content">
-            <div class="logo">
-                <div class="logo-icon">🛡️</div>
-                <div class="logo-text">Advanced Digital Footprint Eraser v2.0</div>
-            </div>
-            <div class="system-status">
-                <div class="status-indicator" id="statusIndicator"></div>
-                <span id="statusText">System Ready</span>
-            </div>
-        </div>
-    </header>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { 
+            Lock, Shield, Trash2, Eye, AlertTriangle, CheckCircle, Clock, Target, 
+            BarChart3, Settings, Download, RefreshCw, Zap, Crown, Search, Globe,
+            Database, Users, Mail, Camera, FileText, ExternalLink, ChevronRight,
+            TrendingUp, Activity, Layers, Filter, X, Star
+        } = lucide;
 
-    <div class="container">
-        <aside class="sidebar">
-            <div class="nav-item active" data-section="dashboard">
-                <span>📊</span>
-                <span>Dashboard</span>
-            </div>
-            <div class="nav-item" data-section="scanner">
-                <span>🔍</span>
-                <span>System Scanner</span>
-            </div>
-            <div class="nav-item" data-section="cleanup">
-                <span>🧹</span>
-                <span>Intelligent Cleanup</span>
-            </div>
-            <div class="nav-item" data-section="protection">
-                <span>🛡️</span>
-                <span>Real-time Protection</span>
-            </div>
-            <div class="nav-item" data-section="downloads">
-                <span>📥</span>
-                <span>Download Manager</span>
-            </div>
-            <div class="nav-item" data-section="security">
-                <span>🔒</span>
-                <span>Security Center</span>
-            </div>
-            <div class="nav-item" data-section="settings">
-                <span>⚙️</span>
-                <span>Settings</span>
-            </div>
-        </aside>
+        const DigitalFootprintEraser = () => {
+            const [isPremium, setIsPremium] = useState(false);
+            const [password, setPassword] = useState('');
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [scanProgress, setScanProgress] = useState(0);
+            const [isScanning, setIsScanning] = useState(false);
+            const [selectedPlatforms, setSelectedPlatforms] = useState([]);
+            const [showUpgrade, setShowUpgrade] = useState(false);
 
-        <main class="main-content">
-            <!-- Dashboard Section -->
-            <div id="dashboard" class="section active">
-                <div class="dashboard-grid">
-                    <!-- System Health Card -->
-                    <div class="card glow-effect">
-                        <div class="card-header">
-                            <h3 class="card-title">System Health</h3>
-                            <div class="card-icon" style="background: var(--success-gradient);">💚</div>
-                        </div>
-                        <div class="metric">
-                            <div class="metric-value threat-level" id="threatLevel">0</div>
-                            <div class="metric-label">Threat Level</div>
-                            <div class="progress">
-                                <div class="progress-bar threat" id="threatProgress" style="width: 0%"></div>
-                            </div>
-                        </div>
-                        <div class="metric">
-                            <div class="metric-value privacy-score" id="privacyScore">100</div>
-                            <div class="metric-label">Privacy Score</div>
-                            <div class="progress">
-                                <div class="progress-bar privacy" id="privacyProgress" style="width: 100%"></div>
-                            </div>
-                        </div>
-                    </div>
+            const PREMIUM_PASSWORD = 'premium2024';
 
-                    <!-- Quick Actions Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Quick Actions</h3>
-                            <div class="card-icon" style="background: var(--primary-gradient);">⚡</div>
-                        </div>
-                        <div class="action-buttons">
-                            <button class="btn" id="quickScanBtn">
-                                <span class="loading" id="scanLoading" style="display: none;"></span>
-                                Quick Scan
-                            </button>
-                            <button class="btn success" id="smartCleanupBtn">Smart Cleanup</button>
-                            <button class="btn warning" id="emergencyCleanupBtn">Emergency Mode</button>
-                        </div>
-                        <div class="protection-toggle">
-                            <span>Real-time Protection</span>
-                            <div class="toggle-switch" id="protectionToggle">
-                                <div class="toggle-slider"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Recent Activity Card -->
-                    <div class="card">
-                        <div class="card-header">
-                            <h3 class="card-title">Recent Activity</h3>
-                            <div class="card-icon" style="background: var(--warning-gradient);">📋</div>
-                        </div>
-                        <div class="scan-results" id="recentActivity">
-                            <div class="result-item">
-                                <div class="result-header">
-                                    <span class="result-type">System Initialized</span>
-                                    <span class="result-severity severity-low">Info</span>
-                                </div>
-                                <p>Advanced Digital Footprint Eraser v2.0 ready for operation</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Scanner Section -->
-            <div id="scanner" class="section" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Advanced System Scanner</h3>
-                        <div class="card-icon" style="background: var(--primary-gradient);">🔍</div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn" id="deepScanBtn">Deep Scan</button>
-                        <button class="btn success" id="aiScanBtn">AI-Powered Scan</button>
-                        <button class="btn warning" id="securityScanBtn">Security Audit</button>
-                    </div>
-                    <div class="scan-results" id="scanResults"></div>
-                </div>
-            </div>
-
-            <!-- Cleanup Section -->
-            <div id="cleanup" class="section" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Intelligent Cleanup Engine</h3>
-                        <div class="card-icon" style="background: var(--success-gradient);">🧹</div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn" id="conservativeCleanupBtn">Conservative</button>
-                        <button class="btn success" id="balancedCleanupBtn">Balanced</button>
-                        <button class="btn danger" id="aggressiveCleanupBtn">Aggressive</button>
-                    </div>
-                    <div class="scan-results" id="cleanupResults"></div>
-                </div>
-            </div>
-
-            <!-- Protection Section -->
-            <div id="protection" class="section" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Real-time Protection</h3>
-                        <div class="card-icon" style="background: var(--success-gradient);">🛡️</div>
-                    </div>
-                    <div class="protection-toggle">
-                        <span>Advanced Threat Detection</span>
-                        <div class="toggle-switch active">
-                            <div class="toggle-slider"></div>
-                        </div>
-                    </div>
-                    <div class="protection-toggle">
-                        <span>Privacy Shield</span>
-                        <div class="toggle-switch active">
-                            <div class="toggle-slider"></div>
-                        </div>
-                    </div>
-                    <div class="protection-toggle">
-                        <span>Auto-Cleanup</span>
-                        <div class="toggle-switch">
-                            <div class="toggle-slider"></div>
-                        </div>
-                    </div>
-                    <div class="scan-results" id="protectionActivity"></div>
-                </div>
-            </div>
-
-            <!-- Downloads Section -->
-            <div id="downloads" class="section" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Download Manager</h3>
-                        <div class="card-icon" style="background: var(--warning-gradient);">📥</div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn" id="scanDownloadsBtn">Scan Downloads</button>
-                        <button class="btn success" id="organizeDownloadsBtn">Auto-Organize</button>
-                        <button class="btn danger" id="cleanDownloadsBtn">Clean Duplicates</button>
-                    </div>
-                    <div class="scan-results" id="downloadResults"></div>
-                </div>
-            </div>
-
-            <!-- Security Section -->
-            <div id="security" class="section" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Security Center</h3>
-                        <div class="card-icon" style="background: var(--danger-gradient);">🔒</div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn" id="securityAuditBtn">Security Audit</button>
-                        <button class="btn warning" id="vulnerabilityScanBtn">Vulnerability Scan</button>
-                        <button class="btn danger" id="emergencyLockdownBtn">Emergency Lockdown</button>
-                    </div>
-                    <div class="scan-results" id="securityResults"></div>
-                </div>
-            </div>
-
-            <!-- Settings Section -->
-            <div id="settings" class="section" style="display: none;">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">System Settings</h3>
-                        <div class="card-icon" style="background: var(--accent-purple);">⚙️</div>
-                    </div>
-                    <div class="settings-grid">
-                        <div class="setting-group">
-                            <h4>Protection Settings</h4>
-                            <div class="protection-toggle">
-                                <span>Real-time Scanning</span>
-                                <div class="toggle-switch active">
-                                    <div class="toggle-slider"></div>
-                                </div>
-                            </div>
-                            <div class="protection-toggle">
-                                <span>Auto-Cleanup</span>
-                                <div class="toggle-switch">
-                                    <div class="toggle-slider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Scripts -->
-    <script src="assets/js/advanced-system-scanner.js"></script>
-    <script src="assets/js/secure-file-processor.js"></script>
-    <script src="assets/js/intelligent-cleanup-engine.js"></script>
-    <script src="assets/js/real-time-protection.js"></script>
-    <script src="assets/js/advanced-dashboard.js"></script>
-    <script src="assets/js/advanced-digital-footprint-eraser.js"></script>
-    
-    <script>
-        // Enhanced UI Controller
-        class AdvancedUI {
-            constructor() {
-                this.currentSection = 'dashboard';
-                this.alerts = [];
-                this.init();
-            }
-
-            init() {
-                this.bindEvents();
-                this.updateMetrics();
-                this.startStatusUpdates();
-            }
-
-            bindEvents() {
-                // Navigation
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.addEventListener('click', (e) => {
-                        const section = item.dataset.section;
-                        this.switchSection(section);
-                    });
-                });
-
-                // Quick Actions
-                document.getElementById('quickScanBtn').addEventListener('click', () => {
-                    this.performQuickScan();
-                });
-
-                document.getElementById('smartCleanupBtn').addEventListener('click', () => {
-                    this.performSmartCleanup();
-                });
-
-                document.getElementById('emergencyCleanupBtn').addEventListener('click', () => {
-                    this.performEmergencyCleanup();
-                });
-
-                // Protection Toggle
-                document.getElementById('protectionToggle').addEventListener('click', () => {
-                    this.toggleProtection();
-                });
-
-                // Additional section buttons
-                this.bindSectionButtons();
-            }
-
-            bindSectionButtons() {
-                // Scanner buttons
-                document.getElementById('deepScanBtn')?.addEventListener('click', () => {
-                    this.performDeepScan();
-                });
-
-                document.getElementById('aiScanBtn')?.addEventListener('click', () => {
-                    this.performAIScan();
-                });
-
-                // Cleanup buttons
-                document.getElementById('conservativeCleanupBtn')?.addEventListener('click', () => {
-                    this.performCleanup('conservative');
-                });
-
-                document.getElementById('balancedCleanupBtn')?.addEventListener('click', () => {
-                    this.performCleanup('balanced');
-                });
-
-                document.getElementById('aggressiveCleanupBtn')?.addEventListener('click', () => {
-                    this.performCleanup('aggressive');
-                });
-            }
-
-            switchSection(section) {
-                // Update navigation
-                document.querySelectorAll('.nav-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                document.querySelector(`[data-section="${section}"]`).classList.add('active');
-
-                // Update content
-                document.querySelectorAll('.section').forEach(sec => {
-                    sec.style.display = 'none';
-                });
-                document.getElementById(section).style.display = 'block';
-
-                this.currentSection = section;
-            }
-
-            async performQuickScan() {
-                const btn = document.getElementById('quickScanBtn');
-                const loading = document.getElementById('scanLoading');
-                
-                btn.disabled = true;
-                loading.style.display = 'inline-block';
-                btn.innerHTML = '<span class="loading"></span> Scanning...';
-
-                try {
-                    if (window.digitalFootprintEraser) {
-                        const results = await window.digitalFootprintEraser.performComprehensiveScan({ quick: true });
-                        this.displayScanResults(results);
-                        this.showAlert('Quick scan completed successfully!', 'success');
-                    } else {
-                        this.simulateQuickScan();
-                    }
-                } catch (error) {
-                    this.showAlert('Scan failed: ' + error.message, 'error');
-                } finally {
-                    btn.disabled = false;
-                    loading.style.display = 'none';
-                    btn.innerHTML = 'Quick Scan';
-                }
-            }
-
-            async performDeepScan() {
-                this.showAlert('Deep scan initiated...', 'info');
-                // Implement deep scan logic
-            }
-
-            async performAIScan() {
-                this.showAlert('AI-powered scan starting...', 'info');
-                // Implement AI scan logic
-            }
-
-            async performSmartCleanup() {
-                try {
-                    if (window.digitalFootprintEraser) {
-                        const results = await window.digitalFootprintEraser.performIntelligentCleanup('balanced');
-                        this.displayCleanupResults(results);
-                        this.showAlert('Smart cleanup completed!', 'success');
-                    } else {
-                        this.simulateCleanup();
-                    }
-                } catch (error) {
-                    this.showAlert('Cleanup failed: ' + error.message, 'error');
-                }
-            }
-
-            async performCleanup(strategy) {
-                this.showAlert(`${strategy.charAt(0).toUpperCase() + strategy.slice(1)} cleanup started...`, 'info');
-                // Implement specific cleanup strategy
-            }
-
-            async performEmergencyCleanup() {
-                if (confirm('Emergency cleanup will aggressively remove all suspicious files. Continue?')) {
-                    try {
-                        if (window.digitalFootprintEraser) {
-                            const results = await window.digitalFootprintEraser.emergencyCleanup();
-                            this.displayCleanupResults(results);
-                            this.showAlert('Emergency cleanup completed!', 'success');
-                        } else {
-                            this.simulateEmergencyCleanup();
-                        }
-                    } catch (error) {
-                        this.showAlert('Emergency cleanup failed: ' + error.message, 'error');
-                    }
-                }
-            }
-
-            toggleProtection() {
-                const toggle = document.getElementById('protectionToggle');
-                const isActive = toggle.classList.contains('active');
-                
-                if (isActive) {
-                    toggle.classList.remove('active');
-                    this.showAlert('Protection disabled', 'warning');
+            const handlePremiumAuth = () => {
+                if (password === PREMIUM_PASSWORD) {
+                    setIsPremium(true);
+                    setShowUpgrade(false);
                 } else {
-                    toggle.classList.add('active');
-                    this.showAlert('Protection enabled', 'success');
-                    if (window.digitalFootprintEraser) {
-                        window.digitalFootprintEraser.enableAdvancedProtection();
-                    }
+                    alert('Incorrect password. Try: premium2024');
                 }
-            }
+            };
 
-            // Simulation methods for when the main engine isn't loaded
-            simulateQuickScan() {
-                const results = {
-                    scanSummary: {
-                        filesScanned: Math.floor(Math.random() * 1000) + 500,
-                        threatsFound: Math.floor(Math.random() * 10),
-                        privacyRisks: Math.floor(Math.random() * 5)
+            const platforms = [
+                { name: 'Google', icon: '🔍', risk: 'High', findings: 847, premium: false },
+                { name: 'Facebook', icon: '📘', risk: 'Critical', findings: 234, premium: false },
+                { name: 'LinkedIn', icon: '💼', risk: 'Medium', findings: 156, premium: false },
+                { name: 'Twitter/X', icon: '🐦', risk: 'High', findings: 423, premium: false },
+                { name: 'Instagram', icon: '📷', risk: 'Medium', findings: 189, premium: false },
+                { name: 'Data Brokers', icon: '🏢', risk: 'Critical', findings: 1247, premium: true },
+                { name: 'Public Records', icon: '📋', risk: 'High', findings: 567, premium: true },
+                { name: 'Dark Web', icon: '🕳️', risk: 'Critical', findings: 89, premium: true },
+                { name: 'Breach Databases', icon: '💀', risk: 'Critical', findings: 23, premium: true },
+                { name: 'IoT Devices', icon: '📡', risk: 'Medium', findings: 45, premium: true }
+            ];
+
+            const startBasicScan = () => {
+                setIsScanning(true);
+                setScanProgress(0);
+                const interval = setInterval(() => {
+                    setScanProgress(prev => {
+                        if (prev >= 100) {
+                            clearInterval(interval);
+                            setIsScanning(false);
+                            return 100;
+                        }
+                        return prev + Math.random() * 12;
+                    });
+                }, 400);
+            };
+
+            const UpgradeModal = () => (
+                showUpgrade && React.createElement('div', {
+                    className: "fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+                }, 
+                    React.createElement('div', {
+                        className: "bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md border border-purple-500/30"
                     },
-                    systemHealth: {
-                        overallStatus: 'healthy'
-                    }
-                };
-                this.displayScanResults(results);
-                this.showAlert('Quick scan completed!', 'success');
-            }
+                        React.createElement('div', {
+                            className: "text-center mb-6"
+                        },
+                            React.createElement('div', {
+                                className: "inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-4"
+                            },
+                                React.createElement(Crown, {
+                                    className: "w-8 h-8 text-purple-400"
+                                })
+                            ),
+                            React.createElement('h2', {
+                                className: "text-2xl font-bold text-white mb-2"
+                            }, "Upgrade to Premium"),
+                            React.createElement('p', {
+                                className: "text-gray-300"
+                            }, "Access advanced enterprise-grade features")
+                        ),
+                        React.createElement('div', {
+                            className: "space-y-4 mb-6"
+                        },
+                            React.createElement('div', {
+                                className: "flex items-center text-sm text-gray-300"
+                            },
+                                React.createElement(CheckCircle, {
+                                    className: "w-4 h-4 text-green-400 mr-3"
+                                }),
+                                "Deep Web & Dark Web Scanning"
+                            ),
+                            React.createElement('div', {
+                                className: "flex items-center text-sm text-gray-300"
+                            },
+                                React.createElement(CheckCircle, {
+                                    className: "w-4 h-4 text-green-400 mr-3"
+                                }),
+                                "Automated Removal Requests"
+                            ),
+                            React.createElement('div', {
+                                className: "flex items-center text-sm text-gray-300"
+                            },
+                                React.createElement(CheckCircle, {
+                                    className: "w-4 h-4 text-green-400 mr-3"
+                                }),
+                                "Data Broker Removal"
+                            ),
+                            React.createElement('div', {
+                                className: "flex items-center text-sm text-gray-300"
+                            },
+                                React.createElement(CheckCircle, {
+                                    className: "w-4 h-4 text-green-400 mr-3"
+                                }),
+                                "Executive Reports & Analytics"
+                            )
+                        ),
+                        React.createElement('div', {
+                            className: "space-y-4"
+                        },
+                            React.createElement('input', {
+                                type: "password",
+                                value: password,
+                                onChange: (e) => setPassword(e.target.value),
+                                placeholder: "Premium access code",
+                                className: "w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500",
+                                onKeyPress: (e) => e.key === 'Enter' && handlePremiumAuth()
+                            }),
+                            React.createElement('button', {
+                                onClick: handlePremiumAuth,
+                                className: "w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+                            }, "Activate Premium")
+                        ),
+                        React.createElement('button', {
+                            onClick: () => setShowUpgrade(false),
+                            className: "absolute top-4 right-4 text-gray-400 hover:text-white"
+                        },
+                            React.createElement(X, {
+                                className: "w-5 h-5"
+                            })
+                        ),
+                        React.createElement('div', {
+                            className: "mt-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg"
+                        },
+                            React.createElement('p', {
+                                className: "text-purple-400 text-xs text-center"
+                            },
+                                "Demo Code: ",
+                                React.createElement('span', {
+                                    className: "font-mono"
+                                }, "premium2024")
+                            )
+                        )
+                    )
+                )
+            );
 
-            simulateCleanup() {
-                const results = {
-                    summary: {
-                        spaceSaved: (Math.random() * 100 + 10).toFixed(1) + 'MB',
-                        filesProcessed: Math.floor(Math.random() * 50) + 10,
-                        threatsRemoved: Math.floor(Math.random() * 5)
-                    }
-                };
-                this.displayCleanupResults(results);
-                this.showAlert('Cleanup completed!', 'success');
-            }
+            const menuItems = [
+                { id: 'dashboard', label: 'Dashboard', icon: BarChart3, premium: false },
+                { id: 'scan', label: 'Quick Scan', icon: Search, premium: false },
+                { id: 'platforms', label: 'Platform Search', icon: Globe, premium: false },
+                { id: 'removal', label: 'Manual Removal', icon: Trash2, premium: false },
+                { id: 'deep-scan', label: 'Deep Web Scan', icon: Eye, premium: true },
+                { id: 'auto-removal', label: 'Auto Removal', icon: Zap, premium: true },
+                { id: 'monitoring', label: 'Threat Monitor', icon: Shield, premium: true },
+                { id: 'reports', label: 'Executive Reports', icon: Download, premium: true }
+            ];
 
-            simulateEmergencyCleanup() {
-                this.showAlert('Emergency protocols activated!', 'warning');
-                setTimeout(() => {
-                    this.showAlert('Emergency cleanup completed - system secured', 'success');
-                }, 2000);
-            }
+            const renderDashboard = () => React.createElement('div', {
+                className: "space-y-6"
+            },
+                React.createElement('div', {
+                    className: "grid grid-cols-1 md:grid-cols-4 gap-6"
+                },
+                    React.createElement('div', {
+                        className: "bg-red-500/10 border border-red-500/20 rounded-xl p-6"
+                    },
+                        React.createElement('div', {
+                            className: "flex items-center justify-between"
+                        },
+                            React.createElement('div', {},
+                                React.createElement('p', {
+                                    className: "text-red-400 text-sm font-medium"
+                                }, "EXPOSURES FOUND"),
+                                React.createElement('p', {
+                                    className: "text-3xl font-bold text-white mt-1"
+                                }, "2,847")
+                            ),
+                            React.createElement(AlertTriangle, {
+                                className: "w-8 h-8 text-red-400"
+                            })
+                        )
+                    ),
+                    React.createElement('div', {
+                        className: "bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6"
+                    },
+                        React.createElement('div', {
+                            className: "flex items-center justify-between"
+                        },
+                            React.createElement('div', {},
+                                React.createElement('p', {
+                                    className: "text-yellow-400 text-sm font-medium"
+                                }, "PENDING REMOVAL"),
+                                React.createElement('p', {
+                                    className: "text-3xl font-bold text-white mt-1"
+                                }, isPremium ? '43' : '847')
+                            ),
+                            React.createElement(Clock, {
+                                className: "w-8 h-8 text-yellow-400"
+                            })
+                        )
+                    ),
+                    React.createElement('div', {
+                        className: "bg-green-500/10 border border-green-500/20 rounded-xl p-6"
+                    },
+                        React.createElement('div', {
+                            className: "flex items-center justify-between"
+                        },
+                            React.createElement('div', {},
+                                React.createElement('p', {
+                                    className: "text-green-400 text-sm font-medium"
+                                }, "REMOVED"),
+                                React.createElement('p', {
+                                    className: "text-3xl font-bold text-white mt-1"
+                                }, isPremium ? '2,804' : '156')
+                            ),
+                            React.createElement(CheckCircle, {
+                                className: "w-8 h-8 text-green-400"
+                            })
+                        )
+                    ),
+                    React.createElement('div', {
+                        className: "bg-blue-500/10 border border-blue-500/20 rounded-xl p-6"
+                    },
+                        React.createElement('div', {
+                            className: "flex items-center justify-between"
+                        },
+                            React.createElement('div', {},
+                                React.createElement('p', {
+                                    className: "text-blue-400 text-sm font-medium"
+                                }, "PRIVACY SCORE"),
+                                React.createElement('p', {
+                                    className: "text-3xl font-bold text-white mt-1"
+                                }, isPremium ? '94%' : '23%')
+                            ),
+                            React.createElement(Shield, {
+                                className: "w-8 h-8 text-blue-400"
+                            })
+                        )
+                    )
+                ),
+                React.createElement('div', {
+                    className: "bg-white/5 border border-white/10 rounded-xl p-6"
+                },
+                    React.createElement('h3', {
+                        className: "text-xl font-bold text-white mb-4"
+                    }, "Quick Actions"),
+                    React.createElement('div', {
+                        className: "grid grid-cols-1 md:grid-cols-3 gap-4"
+                    },
+                        React.createElement('button', {
+                            onClick: startBasicScan,
+                            className: "flex items-center justify-between p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors"
+                        },
+                            React.createElement('div', {
+                                className: "flex items-center"
+                            },
+                                React.createElement(Search, {
+                                    className: "w-5 h-5 text-blue-400 mr-3"
+                                }),
+                                React.createElement('span', {
+                                    className: "text-white font-medium"
+                                }, "Quick Scan")
+                            ),
+                            React.createElement(ChevronRight, {
+                                className: "w-4 h-4 text-blue-400"
+                            })
+                        ),
+                        React.createElement('button', {
+                            onClick: () => !isPremium ? setShowUpgrade(true) : setActiveTab('deep-scan'),
+                            className: "flex items-center justify-between p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors"
+                        },
+                            React.createElement('div', {
+                                className: "flex items-center"
+                            },
+                                React.createElement(Eye, {
+                                    className: "w-5 h-5 text-purple-400 mr-3"
+                                }),
+                                React.createElement('span', {
+                                    className: "text-white font-medium"
+                                }, "Deep Scan")
+                            ),
+                            !isPremium ? React.createElement(Crown, {
+                                className: "w-4 h-4 text-purple-400"
+                            }) : React.createElement(ChevronRight, {
+                                className: "w-4 h-4 text-purple-400"
+                            })
+                        ),
+                        React.createElement('button', {
+                            onClick: () => !isPremium ? setShowUpgrade(true) : setActiveTab('auto-removal'),
+                            className: "flex items-center justify-between p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors"
+                        },
+                            React.createElement('div', {
+                                className: "flex items-center"
+                            },
+                                React.createElement(Zap, {
+                                    className: "w-5 h-5 text-green-400 mr-3"
+                                }),
+                                React.createElement('span', {
+                                    className: "text-white font-medium"
+                                }, "Auto Remove")
+                            ),
+                            !isPremium ? React.createElement(Crown, {
+                                className: "w-4 h-4 text-green-400"
+                            }) : React.createElement(ChevronRight, {
+                                className: "w-4 h-4 text-green-400"
+                            })
+                        )
+                    )
+                )
+            );
 
-            displayScanResults(results) {
-                const container = document.getElementById('scanResults');
-                if (!container) return;
+            return React.createElement('div', {
+                className: "min-h-screen gradient-bg"
+            },
+                React.createElement(UpgradeModal),
+                React.createElement('div', {
+                    className: "border-b border-white/10 glass-effect"
+                },
+                    React.createElement('div', {
+                        className: "max-w-7xl mx-auto px-6 py-4"
+                    },
+                        React.createElement('div', {
+                            className: "flex items-center justify-between"
+                        },
+                            React.createElement('div', {
+                                className: "flex items-center"
+                            },
+                                React.createElement('div', {
+                                    className: "w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4"
+                                },
+                                    React.createElement(Shield, {
+                                        className: "w-6 h-6 text-white"
+                                    })
+                                ),
+                                React.createElement('div', {},
+                                    React.createElement('h1', {
+                                        className: "text-xl font-bold text-white"
+                                    }, "Digital Footprint Eraser"),
+                                    React.createElement('p', {
+                                        className: "text-sm text-gray-400"
+                                    }, isPremium ? 'Premium Suite' : 'Free Version')
+                                )
+                            ),
+                            React.createElement('div', {
+                                className: "flex items-center space-x-4"
+                            },
+                                !isPremium ? React.createElement('button', {
+                                    onClick: () => setShowUpgrade(true),
+                                    className: "bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center"
+                                },
+                                    React.createElement(Crown, {
+                                        className: "w-4 h-4 mr-2"
+                                    }),
+                                    "Upgrade to Premium"
+                                ) : React.createElement('div', {
+                                    className: "flex items-center bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2"
+                                },
+                                    React.createElement(Crown, {
+                                        className: "w-4 h-4 text-purple-400 mr-2"
+                                    }),
+                                    React.createElement('span', {
+                                        className: "text-purple-400 font-medium"
+                                    }, "Premium Active")
+                                )
+                            )
+                        )
+                    )
+                ),
+                React.createElement('div', {
+                    className: "max-w-7xl mx-auto px-6 py-8"
+                },
+                    React.createElement('div', {
+                        className: "flex flex-col lg:flex-row gap-8"
+                    },
+                        React.createElement('div', {
+                            className: "lg:w-64"
+                        },
+                            React.createElement('nav', {
+                                className: "space-y-2"
+                            },
+                                menuItems.map((item) => 
+                                    React.createElement('button', {
+                                        key: item.id,
+                                        onClick: () => {
+                                            if (item.premium && !isPremium) {
+                                                setShowUpgrade(true);
+                                            } else {
+                                                setActiveTab(item.id);
+                                            }
+                                        },
+                                        className: `w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
+                                            activeTab === item.id
+                                                ? 'bg-blue-500/20 border border-blue-500/30 text-blue-400'
+                                                : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                        }`
+                                    },
+                                        React.createElement('div', {
+                                            className: "flex items-center"
+                                        },
+                                            React.createElement(item.icon, {
+                                                className: `w-5 h-5 mr-3 ${
+                                                    activeTab === item.id ? 'text-blue-400' : 'text-gray-400'
+                                                }`
+                                            }),
+                                            React.createElement('span', {
+                                                className: "font-medium"
+                                            }, item.label)
+                                        ),
+                                        item.premium && !isPremium ? React.createElement(Crown, {
+                                            className: "w-4 h-4 text-purple-400"
+                                        }) : null
+                                    )
+                                )
+                            )
+                        ),
+                        React.createElement('div', {
+                            className: "flex-1"
+                        },
+                            activeTab === 'dashboard' ? renderDashboard() : React.createElement('div', {
+                                className: "text-center py-12"
+                            },
+                                React.createElement('div', {
+                                    className: "inline-flex items-center justify-center w-20 h-20 bg-blue-500/20 rounded-full mb-6"
+                                },
+                                    React.createElement(Search, {
+                                        className: "w-10 h-10 text-blue-400"
+                                    })
+                                ),
+                                React.createElement('h2', {
+                                    className: "text-3xl font-bold text-white mb-4"
+                                }, "Feature Coming Soon"),
+                                React.createElement('p', {
+                                    className: "text-gray-300 mb-8"
+                                }, "This feature is currently under development")
+                            )
+                        )
+                    )
+                )
+            );
+        };
 
-                container.innerHTML = `
-                    <div class="result-item">
-                        <div class="result-header">
-                            <span class="result-type">Scan Summary</span>
-                            <span class="result-severity severity-${this.getSeverityClass(results.scanSummary?.threatsFound || 0)}">
-                                ${results.systemHealth?.overallStatus || 'Unknown'}
-                            </span>
-                        </div>
-                        <p>Files scanned: ${results.scanSummary?.filesScanned || 0}</p>
-                        <p>Threats found: ${results.scanSummary?.threatsFound || 0}</p>
-                        <p>Privacy risks: ${results.scanSummary?.privacyRisks || 0}</p>
-                    </div>
-                `;
-
-                // Update activity feed
-                this.addActivity('Scan Completed', `Found ${results.scanSummary?.threatsFound || 0} threats`, 'medium');
-            }
-
-            displayCleanupResults(results) {
-                const container = document.getElementById('cleanupResults');
-                if (!container) return;
-
-                container.innerHTML = `
-                    <div class="result-item">
-                        <div class="result-header">
-                            <span class="result-type">Cleanup Summary</span>
-                            <span class="result-severity severity-low">Success</span>
-                        </div>
-                        <p>Space saved: ${results.summary?.spaceSaved || '0 Bytes'}</p>
-                        <p>Threats removed: ${results.summary?.threatsRemoved || 0}</p>
-                        <p>Files processed: ${results.summary?.filesProcessed || 0}</p>
-                    </div>
-                `;
-
-                this.addActivity('Cleanup Completed', `Freed ${results.summary?.spaceSaved || '0 Bytes'}`, 'low');
-            }
-
-            updateMetrics() {
-                // Simulate real-time updates
-                const threatLevel = Math.floor(Math.random() * 20);
-                const privacyScore = 100 - threatLevel * 2;
-
-                document.getElementById('threatLevel').textContent = threatLevel;
-                document.getElementById('privacyScore').textContent = privacyScore;
-                document.getElementById('threatProgress').style.width = threatLevel + '%';
-                document.getElementById('privacyProgress').style.width = privacyScore + '%';
-            }
-
-            addActivity(type, description, severity) {
-                const container = document.getElementById('recentActivity');
-                if (!container) return;
-
-                const item = document.createElement('div');
-                item.className = 'result-item';
-                item.innerHTML = `
-                    <div class="result-header">
-                        <span class="result-type">${type}</span>
-                        <span class="result-severity severity-${severity}">${severity.toUpperCase()}</span>
-                    </div>
-                    <p>${description}</p>
-                `;
-
-                container.insertBefore(item, container.firstChild);
-                
-                // Keep only last 5 items
-                while (container.children.length > 5) {
-                    container.removeChild(container.lastChild);
-                }
-            }
-
-            showAlert(message, type = 'info') {
-                const alert = document.createElement('div');
-                alert.className = `alert ${type}`;
-                alert.innerHTML = `
-                    <div class="notification-content">
-                        <span class="notification-message">${message}</span>
-                        <button class="notification-close">&times;</button>
-                    </div>
-                `;
-                
-                alert.querySelector('.notification-close').addEventListener('click', () => {
-                    this.removeAlert(alert);
-                });
-
-                document.body.appendChild(alert);
-
-                setTimeout(() => alert.classList.add('show'), 100);
-                
-                setTimeout(() => {
-                    this.removeAlert(alert);
-                }, 4000);
-            }
-
-            removeAlert(alert) {
-                alert.classList.remove('show');
-                setTimeout(() => {
-                    if (alert.parentNode) {
-                        document.body.removeChild(alert);
-                    }
-                }, 300);
-            }
-
-            getSeverityClass(threatLevel) {
-                if (threatLevel >= 5) return 'high';
-                if (threatLevel >= 2) return 'medium';
-                return 'low';
-            }
-
-            startStatusUpdates() {
-                setInterval(() => {
-                    this.updateMetrics();
-                }, 5000);
-
-                // Update status indicator
-                setInterval(() => {
-                    const indicator = document.getElementById('statusIndicator');
-                    const text = document.getElementById('statusText');
-                    
-                    if (window.digitalFootprintEraser?.getSystemStatus()?.initialized) {
-                        indicator.style.background = 'var(--success-gradient)';
-                        text.textContent = 'System Active';
-                    } else {
-                        indicator.style.background = 'var(--warning-gradient)';
-                        text.textContent = 'Initializing...';
-                    }
-                }, 1000);
-            }
+        ReactDOM.render(React.createElement(DigitalFootprintEraser), document.getElementById('root'));
+    </script>
+    
+    <!-- Babel for JSX transformation -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('SW registered: ', registration);
+                    })
+                    .catch(registrationError => {
+                        console.log('SW registration failed: ', registrationError);
+                    });
+            });
         }
-
-        // Initialize Enhanced UI
-        document.addEventListener('DOMContentLoaded', () => {
-            window.advancedUI = new AdvancedUI();
+    </script>
+    
+    <!-- Analytics and Performance Monitoring -->
+    <script>
+        // Performance monitoring
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                const navigation = performance.getEntriesByType('navigation')[0];
+                console.log('Page Load Time:', navigation.loadEventEnd - navigation.fetchStart, 'ms');
+            }, 0);
         });
     </script>
 </body>
