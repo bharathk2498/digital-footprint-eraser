@@ -54,16 +54,11 @@
             }
         }
         
-        .risk-critical {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-        }
-        
-        .risk-high {
-            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
-        }
-        
-        .risk-medium {
-            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+        .system-grid {
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
     </style>
 </head>
@@ -76,19 +71,43 @@
             Lock, Shield, Trash2, Eye, AlertTriangle, CheckCircle, Clock, Target, 
             BarChart3, Settings, Download, RefreshCw, Zap, Crown, Search, Globe,
             Database, Users, Mail, Camera, FileText, ExternalLink, ChevronRight,
-            TrendingUp, Activity, Layers, Filter, X, Star
+            TrendingUp, Activity, Layers, Filter, X, Star, Home, Cpu, Wifi, Monitor
         } = lucide;
 
         const DigitalFootprintEraser = () => {
+            const [activeView, setActiveView] = useState('welcome');
             const [isPremium, setIsPremium] = useState(false);
             const [password, setPassword] = useState('');
             const [activeTab, setActiveTab] = useState('dashboard');
             const [scanProgress, setScanProgress] = useState(0);
             const [isScanning, setIsScanning] = useState(false);
-            const [selectedPlatforms, setSelectedPlatforms] = useState([]);
             const [showUpgrade, setShowUpgrade] = useState(false);
+            const [systemHealth, setSystemHealth] = useState(0);
+            const [threatLevel, setThreatLevel] = useState(100);
+            const [privacyScore, setPrivacyScore] = useState(0);
 
             const PREMIUM_PASSWORD = 'premium2024';
+
+            // System animation effects
+            useEffect(() => {
+                const healthInterval = setInterval(() => {
+                    setSystemHealth(prev => Math.min(prev + Math.random() * 10, 100));
+                }, 2000);
+
+                const threatInterval = setInterval(() => {
+                    setThreatLevel(prev => Math.max(prev - Math.random() * 5, 0));
+                }, 3000);
+
+                const privacyInterval = setInterval(() => {
+                    setPrivacyScore(prev => Math.min(prev + Math.random() * 8, 100));
+                }, 2500);
+
+                return () => {
+                    clearInterval(healthInterval);
+                    clearInterval(threatInterval);
+                    clearInterval(privacyInterval);
+                };
+            }, []);
 
             const handlePremiumAuth = () => {
                 if (password === PREMIUM_PASSWORD) {
@@ -98,19 +117,6 @@
                     alert('Incorrect password. Try: premium2024');
                 }
             };
-
-            const platforms = [
-                { name: 'Google', icon: '🔍', risk: 'High', findings: 847, premium: false },
-                { name: 'Facebook', icon: '📘', risk: 'Critical', findings: 234, premium: false },
-                { name: 'LinkedIn', icon: '💼', risk: 'Medium', findings: 156, premium: false },
-                { name: 'Twitter/X', icon: '🐦', risk: 'High', findings: 423, premium: false },
-                { name: 'Instagram', icon: '📷', risk: 'Medium', findings: 189, premium: false },
-                { name: 'Data Brokers', icon: '🏢', risk: 'Critical', findings: 1247, premium: true },
-                { name: 'Public Records', icon: '📋', risk: 'High', findings: 567, premium: true },
-                { name: 'Dark Web', icon: '🕳️', risk: 'Critical', findings: 89, premium: true },
-                { name: 'Breach Databases', icon: '💀', risk: 'Critical', findings: 23, premium: true },
-                { name: 'IoT Devices', icon: '📡', risk: 'Medium', findings: 45, premium: true }
-            ];
 
             const startBasicScan = () => {
                 setIsScanning(true);
@@ -127,402 +133,404 @@
                 }, 400);
             };
 
+            // Welcome Page View
+            const renderWelcome = () => (
+                <div className="min-h-screen gradient-bg relative overflow-hidden">
+                    <div className="system-grid absolute inset-0"></div>
+                    
+                    {/* Header */}
+                    <div className="relative z-10 border-b border-blue-500/30 glass-effect">
+                        <div className="max-w-7xl mx-auto px-6 py-4">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center">
+                                    <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                                        <Shield className="w-6 h-6 text-white" />
+                                    </div>
+                                    <div>
+                                        <h1 className="text-xl font-bold text-white">Digital Footprint Eraser</h1>
+                                        <p className="text-sm text-blue-400">Advanced Privacy Protection System v2.0</p>
+                                    </div>
+                                </div>
+                                
+                                <div className="flex items-center space-x-4">
+                                    <div className="flex items-center bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1">
+                                        <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                                        <span className="text-green-400 text-sm font-medium">ONLINE</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Main Content */}
+                    <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
+                        {/* System Status Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                            <div className="glass-effect rounded-xl p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-white font-semibold">System Health</h3>
+                                    <Cpu className="w-5 h-5 text-blue-400" />
+                                </div>
+                                <div className="text-4xl font-bold text-green-400 mb-2">{Math.round(systemHealth)}</div>
+                                <div className="w-full bg-gray-700 rounded-full h-2">
+                                    <div 
+                                        className="bg-green-400 h-2 rounded-full transition-all duration-1000"
+                                        style={{ width: `${systemHealth}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div className="glass-effect rounded-xl p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-white font-semibold">Threat Level</h3>
+                                    <AlertTriangle className="w-5 h-5 text-red-400" />
+                                </div>
+                                <div className="text-4xl font-bold text-red-400 mb-2">{Math.round(threatLevel)}</div>
+                                <div className="w-full bg-gray-700 rounded-full h-2">
+                                    <div 
+                                        className="bg-red-400 h-2 rounded-full transition-all duration-1000"
+                                        style={{ width: `${threatLevel}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+
+                            <div className="glass-effect rounded-xl p-6">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-white font-semibold">Privacy Score</h3>
+                                    <Shield className="w-5 h-5 text-blue-400" />
+                                </div>
+                                <div className="text-4xl font-bold text-blue-400 mb-2">{Math.round(privacyScore)}</div>
+                                <div className="w-full bg-gray-700 rounded-full h-2">
+                                    <div 
+                                        className="bg-blue-400 h-2 rounded-full transition-all duration-1000"
+                                        style={{ width: `${privacyScore}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Quick Actions */}
+                        <div className="glass-effect rounded-xl p-6 mb-8">
+                            <h3 className="text-xl font-bold text-white mb-6">Quick Actions</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                <button 
+                                    onClick={() => setActiveView('advanced')}
+                                    className="p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors group"
+                                >
+                                    <Crown className="w-8 h-8 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
+                                    <h4 className="text-white font-semibold mb-1">Advanced Suite</h4>
+                                    <p className="text-gray-400 text-sm">Premium features & deep scanning</p>
+                                </button>
+
+                                <button className="p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors group">
+                                    <Search className="w-8 h-8 text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
+                                    <h4 className="text-white font-semibold mb-1">Quick Scan</h4>
+                                    <p className="text-gray-400 text-sm">Basic privacy assessment</p>
+                                </button>
+
+                                <button className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors group">
+                                    <Shield className="w-8 h-8 text-green-400 mb-3 group-hover:scale-110 transition-transform" />
+                                    <h4 className="text-white font-semibold mb-1">Real-time Protection</h4>
+                                    <p className="text-gray-400 text-sm">Monitor & protect identity</p>
+                                </button>
+
+                                <button className="p-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg hover:bg-yellow-500/30 transition-colors group">
+                                    <Settings className="w-8 h-8 text-yellow-400 mb-3 group-hover:scale-110 transition-transform" />
+                                    <h4 className="text-white font-semibold mb-1">Settings</h4>
+                                    <p className="text-gray-400 text-sm">Configure privacy preferences</p>
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Recent Activity */}
+                        <div className="glass-effect rounded-xl p-6">
+                            <h3 className="text-xl font-bold text-white mb-6">Recent Activity</h3>
+                            <div className="space-y-3">
+                                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                    <div className="flex items-center">
+                                        <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
+                                        <span className="text-gray-300">System Initialized</span>
+                                    </div>
+                                    <span className="text-xs text-blue-400">Info</span>
+                                </div>
+                                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                                    <div className="flex items-center">
+                                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-3 animate-pulse"></div>
+                                        <span className="text-gray-300">Advanced Digital Footprint Eraser v2.0 ready for operation</span>
+                                    </div>
+                                    <span className="text-xs text-green-400">Ready</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            // Upgrade Modal
             const UpgradeModal = () => (
-                showUpgrade && React.createElement('div', {
-                    className: "fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50"
-                }, 
-                    React.createElement('div', {
-                        className: "bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md border border-purple-500/30"
-                    },
-                        React.createElement('div', {
-                            className: "text-center mb-6"
-                        },
-                            React.createElement('div', {
-                                className: "inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-4"
-                            },
-                                React.createElement(Crown, {
-                                    className: "w-8 h-8 text-purple-400"
-                                })
-                            ),
-                            React.createElement('h2', {
-                                className: "text-2xl font-bold text-white mb-2"
-                            }, "Upgrade to Premium"),
-                            React.createElement('p', {
-                                className: "text-gray-300"
-                            }, "Access advanced enterprise-grade features")
-                        ),
-                        React.createElement('div', {
-                            className: "space-y-4 mb-6"
-                        },
-                            React.createElement('div', {
-                                className: "flex items-center text-sm text-gray-300"
-                            },
-                                React.createElement(CheckCircle, {
-                                    className: "w-4 h-4 text-green-400 mr-3"
-                                }),
-                                "Deep Web & Dark Web Scanning"
-                            ),
-                            React.createElement('div', {
-                                className: "flex items-center text-sm text-gray-300"
-                            },
-                                React.createElement(CheckCircle, {
-                                    className: "w-4 h-4 text-green-400 mr-3"
-                                }),
-                                "Automated Removal Requests"
-                            ),
-                            React.createElement('div', {
-                                className: "flex items-center text-sm text-gray-300"
-                            },
-                                React.createElement(CheckCircle, {
-                                    className: "w-4 h-4 text-green-400 mr-3"
-                                }),
-                                "Data Broker Removal"
-                            ),
-                            React.createElement('div', {
-                                className: "flex items-center text-sm text-gray-300"
-                            },
-                                React.createElement(CheckCircle, {
-                                    className: "w-4 h-4 text-green-400 mr-3"
-                                }),
-                                "Executive Reports & Analytics"
-                            )
-                        ),
-                        React.createElement('div', {
-                            className: "space-y-4"
-                        },
-                            React.createElement('input', {
-                                type: "password",
-                                value: password,
-                                onChange: (e) => setPassword(e.target.value),
-                                placeholder: "Premium access code",
-                                className: "w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500",
-                                onKeyPress: (e) => e.key === 'Enter' && handlePremiumAuth()
-                            }),
-                            React.createElement('button', {
-                                onClick: handlePremiumAuth,
-                                className: "w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
-                            }, "Activate Premium")
-                        ),
-                        React.createElement('button', {
-                            onClick: () => setShowUpgrade(false),
-                            className: "absolute top-4 right-4 text-gray-400 hover:text-white"
-                        },
-                            React.createElement(X, {
-                                className: "w-5 h-5"
-                            })
-                        ),
-                        React.createElement('div', {
-                            className: "mt-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg"
-                        },
-                            React.createElement('p', {
-                                className: "text-purple-400 text-xs text-center"
-                            },
-                                "Demo Code: ",
-                                React.createElement('span', {
-                                    className: "font-mono"
-                                }, "premium2024")
-                            )
-                        )
-                    )
+                showUpgrade && (
+                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md border border-purple-500/30">
+                            <div className="text-center mb-6">
+                                <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-4">
+                                    <Crown className="w-8 h-8 text-purple-400" />
+                                </div>
+                                <h2 className="text-2xl font-bold text-white mb-2">Upgrade to Premium</h2>
+                                <p className="text-gray-300">Access advanced enterprise-grade features</p>
+                            </div>
+                            
+                            <div className="space-y-4 mb-6">
+                                <div className="flex items-center text-sm text-gray-300">
+                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
+                                    Deep Web & Dark Web Scanning
+                                </div>
+                                <div className="flex items-center text-sm text-gray-300">
+                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
+                                    Automated Removal Requests
+                                </div>
+                                <div className="flex items-center text-sm text-gray-300">
+                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
+                                    Data Broker Removal
+                                </div>
+                                <div className="flex items-center text-sm text-gray-300">
+                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
+                                    Executive Reports & Analytics
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <input
+                                    type="password"
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    placeholder="Premium access code"
+                                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                                    onKeyPress={(e) => e.key === 'Enter' && handlePremiumAuth()}
+                                />
+                                <button
+                                    onClick={handlePremiumAuth}
+                                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
+                                >
+                                    Activate Premium
+                                </button>
+                            </div>
+                            
+                            <button
+                                onClick={() => setShowUpgrade(false)}
+                                className="absolute top-4 right-4 text-gray-400 hover:text-white"
+                            >
+                                <X className="w-5 h-5" />
+                            </button>
+                            
+                            <div className="mt-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                                <p className="text-purple-400 text-xs text-center">
+                                    Demo Code: <span className="font-mono">premium2024</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 )
             );
 
-            const menuItems = [
-                { id: 'dashboard', label: 'Dashboard', icon: BarChart3, premium: false },
-                { id: 'scan', label: 'Quick Scan', icon: Search, premium: false },
-                { id: 'platforms', label: 'Platform Search', icon: Globe, premium: false },
-                { id: 'removal', label: 'Manual Removal', icon: Trash2, premium: false },
-                { id: 'deep-scan', label: 'Deep Web Scan', icon: Eye, premium: true },
-                { id: 'auto-removal', label: 'Auto Removal', icon: Zap, premium: true },
-                { id: 'monitoring', label: 'Threat Monitor', icon: Shield, premium: true },
-                { id: 'reports', label: 'Executive Reports', icon: Download, premium: true }
-            ];
+            // Advanced Suite View
+            const renderAdvanced = () => {
+                const menuItems = [
+                    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, premium: false },
+                    { id: 'scan', label: 'Quick Scan', icon: Search, premium: false },
+                    { id: 'platforms', label: 'Platform Search', icon: Globe, premium: false },
+                    { id: 'removal', label: 'Manual Removal', icon: Trash2, premium: false },
+                    { id: 'deep-scan', label: 'Deep Web Scan', icon: Eye, premium: true },
+                    { id: 'auto-removal', label: 'Auto Removal', icon: Zap, premium: true },
+                    { id: 'monitoring', label: 'Threat Monitor', icon: Shield, premium: true },
+                    { id: 'reports', label: 'Executive Reports', icon: Download, premium: true }
+                ];
 
-            const renderDashboard = () => React.createElement('div', {
-                className: "space-y-6"
-            },
-                React.createElement('div', {
-                    className: "grid grid-cols-1 md:grid-cols-4 gap-6"
-                },
-                    React.createElement('div', {
-                        className: "bg-red-500/10 border border-red-500/20 rounded-xl p-6"
-                    },
-                        React.createElement('div', {
-                            className: "flex items-center justify-between"
-                        },
-                            React.createElement('div', {},
-                                React.createElement('p', {
-                                    className: "text-red-400 text-sm font-medium"
-                                }, "EXPOSURES FOUND"),
-                                React.createElement('p', {
-                                    className: "text-3xl font-bold text-white mt-1"
-                                }, "2,847")
-                            ),
-                            React.createElement(AlertTriangle, {
-                                className: "w-8 h-8 text-red-400"
-                            })
-                        )
-                    ),
-                    React.createElement('div', {
-                        className: "bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6"
-                    },
-                        React.createElement('div', {
-                            className: "flex items-center justify-between"
-                        },
-                            React.createElement('div', {},
-                                React.createElement('p', {
-                                    className: "text-yellow-400 text-sm font-medium"
-                                }, "PENDING REMOVAL"),
-                                React.createElement('p', {
-                                    className: "text-3xl font-bold text-white mt-1"
-                                }, isPremium ? '43' : '847')
-                            ),
-                            React.createElement(Clock, {
-                                className: "w-8 h-8 text-yellow-400"
-                            })
-                        )
-                    ),
-                    React.createElement('div', {
-                        className: "bg-green-500/10 border border-green-500/20 rounded-xl p-6"
-                    },
-                        React.createElement('div', {
-                            className: "flex items-center justify-between"
-                        },
-                            React.createElement('div', {},
-                                React.createElement('p', {
-                                    className: "text-green-400 text-sm font-medium"
-                                }, "REMOVED"),
-                                React.createElement('p', {
-                                    className: "text-3xl font-bold text-white mt-1"
-                                }, isPremium ? '2,804' : '156')
-                            ),
-                            React.createElement(CheckCircle, {
-                                className: "w-8 h-8 text-green-400"
-                            })
-                        )
-                    ),
-                    React.createElement('div', {
-                        className: "bg-blue-500/10 border border-blue-500/20 rounded-xl p-6"
-                    },
-                        React.createElement('div', {
-                            className: "flex items-center justify-between"
-                        },
-                            React.createElement('div', {},
-                                React.createElement('p', {
-                                    className: "text-blue-400 text-sm font-medium"
-                                }, "PRIVACY SCORE"),
-                                React.createElement('p', {
-                                    className: "text-3xl font-bold text-white mt-1"
-                                }, isPremium ? '94%' : '23%')
-                            ),
-                            React.createElement(Shield, {
-                                className: "w-8 h-8 text-blue-400"
-                            })
-                        )
-                    )
-                ),
-                React.createElement('div', {
-                    className: "bg-white/5 border border-white/10 rounded-xl p-6"
-                },
-                    React.createElement('h3', {
-                        className: "text-xl font-bold text-white mb-4"
-                    }, "Quick Actions"),
-                    React.createElement('div', {
-                        className: "grid grid-cols-1 md:grid-cols-3 gap-4"
-                    },
-                        React.createElement('button', {
-                            onClick: startBasicScan,
-                            className: "flex items-center justify-between p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors"
-                        },
-                            React.createElement('div', {
-                                className: "flex items-center"
-                            },
-                                React.createElement(Search, {
-                                    className: "w-5 h-5 text-blue-400 mr-3"
-                                }),
-                                React.createElement('span', {
-                                    className: "text-white font-medium"
-                                }, "Quick Scan")
-                            ),
-                            React.createElement(ChevronRight, {
-                                className: "w-4 h-4 text-blue-400"
-                            })
-                        ),
-                        React.createElement('button', {
-                            onClick: () => !isPremium ? setShowUpgrade(true) : setActiveTab('deep-scan'),
-                            className: "flex items-center justify-between p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors"
-                        },
-                            React.createElement('div', {
-                                className: "flex items-center"
-                            },
-                                React.createElement(Eye, {
-                                    className: "w-5 h-5 text-purple-400 mr-3"
-                                }),
-                                React.createElement('span', {
-                                    className: "text-white font-medium"
-                                }, "Deep Scan")
-                            ),
-                            !isPremium ? React.createElement(Crown, {
-                                className: "w-4 h-4 text-purple-400"
-                            }) : React.createElement(ChevronRight, {
-                                className: "w-4 h-4 text-purple-400"
-                            })
-                        ),
-                        React.createElement('button', {
-                            onClick: () => !isPremium ? setShowUpgrade(true) : setActiveTab('auto-removal'),
-                            className: "flex items-center justify-between p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors"
-                        },
-                            React.createElement('div', {
-                                className: "flex items-center"
-                            },
-                                React.createElement(Zap, {
-                                    className: "w-5 h-5 text-green-400 mr-3"
-                                }),
-                                React.createElement('span', {
-                                    className: "text-white font-medium"
-                                }, "Auto Remove")
-                            ),
-                            !isPremium ? React.createElement(Crown, {
-                                className: "w-4 h-4 text-green-400"
-                            }) : React.createElement(ChevronRight, {
-                                className: "w-4 h-4 text-green-400"
-                            })
-                        )
-                    )
-                )
-            );
+                const renderDashboard = () => (
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-red-400 text-sm font-medium">EXPOSURES FOUND</p>
+                                        <p className="text-3xl font-bold text-white mt-1">2,847</p>
+                                    </div>
+                                    <AlertTriangle className="w-8 h-8 text-red-400" />
+                                </div>
+                            </div>
+                            
+                            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-yellow-400 text-sm font-medium">PENDING REMOVAL</p>
+                                        <p className="text-3xl font-bold text-white mt-1">{isPremium ? '43' : '847'}</p>
+                                    </div>
+                                    <Clock className="w-8 h-8 text-yellow-400" />
+                                </div>
+                            </div>
+                            
+                            <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-6">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-green-400 text-sm font-medium">REMOVED</p>
+                                        <p className="text-3xl font-bold text-white mt-1">{isPremium ? '2,804' : '156'}</p>
+                                    </div>
+                                    <CheckCircle className="w-8 h-8 text-green-400" />
+                                </div>
+                            </div>
+                            
+                            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className="text-blue-400 text-sm font-medium">PRIVACY SCORE</p>
+                                        <p className="text-3xl font-bold text-white mt-1">{isPremium ? '94%' : '23%'}</p>
+                                    </div>
+                                    <Shield className="w-8 h-8 text-blue-400" />
+                                </div>
+                            </div>
+                        </div>
 
-            return React.createElement('div', {
-                className: "min-h-screen gradient-bg"
-            },
-                React.createElement(UpgradeModal),
-                React.createElement('div', {
-                    className: "border-b border-white/10 glass-effect"
-                },
-                    React.createElement('div', {
-                        className: "max-w-7xl mx-auto px-6 py-4"
-                    },
-                        React.createElement('div', {
-                            className: "flex items-center justify-between"
-                        },
-                            React.createElement('div', {
-                                className: "flex items-center"
-                            },
-                                React.createElement('div', {
-                                    className: "w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4"
-                                },
-                                    React.createElement(Shield, {
-                                        className: "w-6 h-6 text-white"
-                                    })
-                                ),
-                                React.createElement('div', {},
-                                    React.createElement('h1', {
-                                        className: "text-xl font-bold text-white"
-                                    }, "Digital Footprint Eraser"),
-                                    React.createElement('p', {
-                                        className: "text-sm text-gray-400"
-                                    }, isPremium ? 'Premium Suite' : 'Free Version')
-                                )
-                            ),
-                            React.createElement('div', {
-                                className: "flex items-center space-x-4"
-                            },
-                                !isPremium ? React.createElement('button', {
-                                    onClick: () => setShowUpgrade(true),
-                                    className: "bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center"
-                                },
-                                    React.createElement(Crown, {
-                                        className: "w-4 h-4 mr-2"
-                                    }),
-                                    "Upgrade to Premium"
-                                ) : React.createElement('div', {
-                                    className: "flex items-center bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2"
-                                },
-                                    React.createElement(Crown, {
-                                        className: "w-4 h-4 text-purple-400 mr-2"
-                                    }),
-                                    React.createElement('span', {
-                                        className: "text-purple-400 font-medium"
-                                    }, "Premium Active")
-                                )
-                            )
-                        )
-                    )
-                ),
-                React.createElement('div', {
-                    className: "max-w-7xl mx-auto px-6 py-8"
-                },
-                    React.createElement('div', {
-                        className: "flex flex-col lg:flex-row gap-8"
-                    },
-                        React.createElement('div', {
-                            className: "lg:w-64"
-                        },
-                            React.createElement('nav', {
-                                className: "space-y-2"
-                            },
-                                menuItems.map((item) => 
-                                    React.createElement('button', {
-                                        key: item.id,
-                                        onClick: () => {
-                                            if (item.premium && !isPremium) {
-                                                setShowUpgrade(true);
-                                            } else {
-                                                setActiveTab(item.id);
-                                            }
-                                        },
-                                        className: `w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
-                                            activeTab === item.id
-                                                ? 'bg-blue-500/20 border border-blue-500/30 text-blue-400'
-                                                : 'text-gray-300 hover:text-white hover:bg-white/5'
-                                        }`
-                                    },
-                                        React.createElement('div', {
-                                            className: "flex items-center"
-                                        },
-                                            React.createElement(item.icon, {
-                                                className: `w-5 h-5 mr-3 ${
-                                                    activeTab === item.id ? 'text-blue-400' : 'text-gray-400'
-                                                }`
-                                            }),
-                                            React.createElement('span', {
-                                                className: "font-medium"
-                                            }, item.label)
-                                        ),
-                                        item.premium && !isPremium ? React.createElement(Crown, {
-                                            className: "w-4 h-4 text-purple-400"
-                                        }) : null
-                                    )
-                                )
-                            )
-                        ),
-                        React.createElement('div', {
-                            className: "flex-1"
-                        },
-                            activeTab === 'dashboard' ? renderDashboard() : React.createElement('div', {
-                                className: "text-center py-12"
-                            },
-                                React.createElement('div', {
-                                    className: "inline-flex items-center justify-center w-20 h-20 bg-blue-500/20 rounded-full mb-6"
-                                },
-                                    React.createElement(Search, {
-                                        className: "w-10 h-10 text-blue-400"
-                                    })
-                                ),
-                                React.createElement('h2', {
-                                    className: "text-3xl font-bold text-white mb-4"
-                                }, "Feature Coming Soon"),
-                                React.createElement('p', {
-                                    className: "text-gray-300 mb-8"
-                                }, "This feature is currently under development")
-                            )
-                        )
-                    )
-                )
+                        <div className="bg-white/5 border border-white/10 rounded-xl p-6">
+                            <h3 className="text-xl font-bold text-white mb-4">Quick Actions</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <button
+                                    onClick={startBasicScan}
+                                    className="flex items-center justify-between p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors"
+                                >
+                                    <div className="flex items-center">
+                                        <Search className="w-5 h-5 text-blue-400 mr-3" />
+                                        <span className="text-white font-medium">Quick Scan</span>
+                                    </div>
+                                    <ChevronRight className="w-4 h-4 text-blue-400" />
+                                </button>
+                                
+                                <button
+                                    onClick={() => !isPremium ? setShowUpgrade(true) : setActiveTab('deep-scan')}
+                                    className="flex items-center justify-between p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors"
+                                >
+                                    <div className="flex items-center">
+                                        <Eye className="w-5 h-5 text-purple-400 mr-3" />
+                                        <span className="text-white font-medium">Deep Scan</span>
+                                    </div>
+                                    {!isPremium && <Crown className="w-4 h-4 text-purple-400" />}
+                                    {isPremium && <ChevronRight className="w-4 h-4 text-purple-400" />}
+                                </button>
+                                
+                                <button
+                                    onClick={() => !isPremium ? setShowUpgrade(true) : setActiveTab('auto-removal')}
+                                    className="flex items-center justify-between p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors"
+                                >
+                                    <div className="flex items-center">
+                                        <Zap className="w-5 h-5 text-green-400 mr-3" />
+                                        <span className="text-white font-medium">Auto Remove</span>
+                                    </div>
+                                    {!isPremium && <Crown className="w-4 h-4 text-green-400" />}
+                                    {isPremium && <ChevronRight className="w-4 h-4 text-green-400" />}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                );
+
+                return (
+                    <div className="min-h-screen gradient-bg">
+                        <div className="border-b border-white/10 glass-effect">
+                            <div className="max-w-7xl mx-auto px-6 py-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        <button
+                                            onClick={() => setActiveView('welcome')}
+                                            className="mr-4 p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                        >
+                                            <ChevronRight className="w-5 h-5 text-gray-400 rotate-180" />
+                                        </button>
+                                        <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                                            <Shield className="w-6 h-6 text-white" />
+                                        </div>
+                                        <div>
+                                            <h1 className="text-xl font-bold text-white">Advanced Suite</h1>
+                                            <p className="text-sm text-gray-400">{isPremium ? 'Premium Active' : 'Free Version'}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex items-center space-x-4">
+                                        {!isPremium && (
+                                            <button
+                                                onClick={() => setShowUpgrade(true)}
+                                                className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center"
+                                            >
+                                                <Crown className="w-4 h-4 mr-2" />
+                                                Upgrade to Premium
+                                            </button>
+                                        )}
+                                        {isPremium && (
+                                            <div className="flex items-center bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2">
+                                                <Crown className="w-4 h-4 text-purple-400 mr-2" />
+                                                <span className="text-purple-400 font-medium">Premium Active</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="max-w-7xl mx-auto px-6 py-8">
+                            <div className="flex flex-col lg:flex-row gap-8">
+                                <div className="lg:w-64">
+                                    <nav className="space-y-2">
+                                        {menuItems.map((item) => (
+                                            <button
+                                                key={item.id}
+                                                onClick={() => {
+                                                    if (item.premium && !isPremium) {
+                                                        setShowUpgrade(true);
+                                                    } else {
+                                                        setActiveTab(item.id);
+                                                    }
+                                                }}
+                                                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
+                                                    activeTab === item.id
+                                                        ? 'bg-blue-500/20 border border-blue-500/30 text-blue-400'
+                                                        : 'text-gray-300 hover:text-white hover:bg-white/5'
+                                                }`}
+                                            >
+                                                <div className="flex items-center">
+                                                    <item.icon className={`w-5 h-5 mr-3 ${
+                                                        activeTab === item.id ? 'text-blue-400' : 'text-gray-400'
+                                                    }`} />
+                                                    <span className="font-medium">{item.label}</span>
+                                                </div>
+                                                {item.premium && !isPremium && <Crown className="w-4 h-4 text-purple-400" />}
+                                            </button>
+                                        ))}
+                                    </nav>
+                                </div>
+
+                                <div className="flex-1">
+                                    {activeTab === 'dashboard' ? renderDashboard() : (
+                                        <div className="text-center py-12">
+                                            <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-500/20 rounded-full mb-6">
+                                                <Search className="w-10 h-10 text-blue-400" />
+                                            </div>
+                                            <h2 className="text-3xl font-bold text-white mb-4">Feature Coming Soon</h2>
+                                            <p className="text-gray-300 mb-8">This feature is currently under development</p>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                );
+            };
+
+            return (
+                <div>
+                    <UpgradeModal />
+                    {activeView === 'welcome' ? renderWelcome() : renderAdvanced()}
+                </div>
             );
         };
 
-        ReactDOM.render(React.createElement(DigitalFootprintEraser), document.getElementById('root'));
+        ReactDOM.render(<DigitalFootprintEraser />, document.getElementById('root'));
     </script>
     
     <!-- Babel for JSX transformation -->
