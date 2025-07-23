@@ -539,8 +539,8 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="#" onclick="showPage('main')">Home</a></li>
                 <li><a href="#" onclick="showPage('tools')">Free Tools</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#features">Features</a></li>
+                <li><a href="#" onclick="goToAbout()">About Us</a></li>
+                <li><a href="#" onclick="showPage('main', '#features')">Features</a></li>
                 <li><a href="#" onclick="showPage('advanced')" class="btn btn-primary">Advanced Security</a></li>
             </ul>
             <div class="mobile-menu" onclick="toggleMobileMenu()">
@@ -976,7 +976,7 @@
 
     <script>
         // Page Navigation
-        function showPage(page) {
+        function showPage(page, scrollToSection = null) {
             const mainPage = document.getElementById('mainPage');
             const advancedPage = document.getElementById('advancedPage');
             const toolsPage = document.getElementById('toolsPage');
@@ -992,6 +992,23 @@
             } else if (page === 'tools') {
                 toolsPage.style.display = 'block';
             }
+            
+            // If we need to scroll to a specific section, do it after a brief delay
+            if (scrollToSection) {
+                setTimeout(() => {
+                    const target = document.querySelector(scrollToSection);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }, 100);
+            }
+        }
+
+        // Function to navigate to About Us from any page
+        function goToAbout() {
+            showPage('main', '#about');
         }
 
         // Mobile Menu Toggle
