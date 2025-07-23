@@ -4,18 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Footprint Eraser - Professional Privacy Suite</title>
-    <meta name="description" content="Enterprise-grade digital footprint removal and privacy protection. Free basic tools, premium advanced features.">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Enterprise-grade digital footprint removal and privacy protection">
     
     <style>
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        .gradient-bg {
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+            color: white;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        .system-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            pointer-events: none;
         }
         
         .glass-effect {
@@ -24,405 +41,822 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .system-grid {
-            background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
-            background-size: 20px 20px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 10;
         }
-
-        .progress-bar {
-            transition: width 1s ease-in-out;
+        
+        .header {
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 16px 0;
+            margin-bottom: 32px;
         }
-
-        .card-hover:hover {
-            transform: scale(1.05);
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+        }
+        
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        
+        .subtitle {
+            font-size: 14px;
+            color: #60a5fa;
+        }
+        
+        .status-badge {
+            display: flex;
+            align-items: center;
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 20px;
+            padding: 4px 12px;
+        }
+        
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .metric-card {
+            padding: 24px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(16px);
+        }
+        
+        .metric-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+        
+        .metric-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .metric-bar {
+            width: 100%;
+            height: 8px;
+            background: #374151;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .metric-progress {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 2s ease-in-out;
+        }
+        
+        .health-color { color: #22c55e; }
+        .health-bg { background: #22c55e; }
+        .threat-color { color: #ef4444; }
+        .threat-bg { background: #ef4444; }
+        .privacy-color { color: #3b82f6; }
+        .privacy-bg { background: #3b82f6; }
+        
+        .actions-section {
+            margin-bottom: 32px;
+        }
+        
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 24px;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+        
+        .action-card {
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .action-icon {
+            font-size: 32px;
+            margin-bottom: 16px;
+            display: block;
+        }
+        
+        .action-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .action-desc {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        .purple-card {
+            background: rgba(147, 51, 234, 0.2);
+            border-color: rgba(147, 51, 234, 0.3);
+        }
+        
+        .blue-card {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        .green-card {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+        
+        .yellow-card {
+            background: rgba(234, 179, 8, 0.2);
+            border-color: rgba(234, 179, 8, 0.3);
+        }
+        
+        .activity-section {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 24px;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .activity-left {
+            display: flex;
+            align-items: center;
+        }
+        
+        .activity-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 12px;
+            animation: pulse 2s infinite;
+        }
+        
+        .advanced-page {
+            display: none;
+        }
+        
+        .back-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-right: 16px;
+            transition: background 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .premium-btn {
+            background: linear-gradient(135deg, #9333ea, #3b82f6);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
             transition: transform 0.3s ease;
         }
+        
+        .premium-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        
+        .stat-card {
+            padding: 24px;
+            border-radius: 12px;
+            border: 1px solid;
+        }
+        
+        .red-stat { 
+            background: rgba(239, 68, 68, 0.1);
+            border-color: rgba(239, 68, 68, 0.2);
+        }
+        
+        .yellow-stat { 
+            background: rgba(234, 179, 8, 0.1);
+            border-color: rgba(234, 179, 8, 0.2);
+        }
+        
+        .green-stat { 
+            background: rgba(34, 197, 94, 0.1);
+            border-color: rgba(34, 197, 94, 0.2);
+        }
+        
+        .blue-stat { 
+            background: rgba(59, 130, 246, 0.1);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+        
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-value {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        
+        .upgrade-cta {
+            text-align: center;
+            padding: 48px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+        }
+        
+        .cta-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+        
+        .cta-desc {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 24px;
+        }
+        
+        .cta-btn {
+            background: #9333ea;
+            border: none;
+            color: white;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        .cta-btn:hover {
+            background: #7c3aed;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border: 1px solid rgba(147, 51, 234, 0.3);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(147, 51, 234, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            font-size: 24px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .modal-subtitle {
+            opacity: 0.8;
+        }
+        
+        .feature-list {
+            margin-bottom: 24px;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .feature-check {
+            color: #22c55e;
+            margin-right: 12px;
+        }
+        
+        .modal-form {
+            margin-bottom: 16px;
+        }
+        
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 16px;
+        }
+        
+        .modal-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .modal-input:focus {
+            outline: none;
+            border-color: #9333ea;
+            box-shadow: 0 0 0 2px rgba(147, 51, 234, 0.2);
+        }
+        
+        .modal-btn {
+            width: 100%;
+            padding: 12px;
+            background: #9333ea;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        .modal-btn:hover {
+            background: #7c3aed;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 20px;
+            cursor: pointer;
+        }
+        
+        .close-btn:hover {
+            color: white;
+        }
+        
+        .demo-note {
+            background: rgba(147, 51, 234, 0.1);
+            border: 1px solid rgba(147, 51, 234, 0.2);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            margin-top: 16px;
+        }
+        
+        .demo-code {
+            font-family: monospace;
+            color: #a855f7;
+        }
 
-        .hidden { display: none !important; }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="app">
-        <!-- Welcome Page -->
-        <div id="welcome-page" class="min-h-screen gradient-bg relative overflow-hidden">
-            <div class="system-grid absolute inset-0"></div>
+    <div class="system-grid"></div>
+    
+    <!-- Welcome Page -->
+    <div id="welcome-page">
+        <div class="glass-effect header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <div class="logo">
+                            <span style="color: white; font-size: 20px;">🛡️</span>
+                        </div>
+                        <div>
+                            <div class="title">Digital Footprint Eraser</div>
+                            <div class="subtitle">Advanced Privacy Protection System v2.0</div>
+                        </div>
+                    </div>
+                    <div class="status-badge glass-effect">
+                        <div class="status-dot"></div>
+                        <span style="color: #22c55e; font-size: 14px; font-weight: 600;">ONLINE</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">System Health</span>
+                        <span style="font-size: 20px;">💻</span>
+                    </div>
+                    <div id="health-value" class="metric-value health-color">0</div>
+                    <div class="metric-bar">
+                        <div id="health-bar" class="metric-progress health-bg" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Threat Level</span>
+                        <span style="font-size: 20px;">⚠️</span>
+                    </div>
+                    <div id="threat-value" class="metric-value threat-color">100</div>
+                    <div class="metric-bar">
+                        <div id="threat-bar" class="metric-progress threat-bg" style="width: 100%"></div>
+                    </div>
+                </div>
+
+                <div class="metric-card">
+                    <div class="metric-header">
+                        <span class="metric-title">Privacy Score</span>
+                        <span style="font-size: 20px;">🔒</span>
+                    </div>
+                    <div id="privacy-value" class="metric-value privacy-color">0</div>
+                    <div class="metric-bar">
+                        <div id="privacy-bar" class="metric-progress privacy-bg" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-section">
+                <h2 class="section-title">Quick Actions</h2>
+                <div class="actions-grid">
+                    <div class="action-card purple-card" onclick="showAdvanced()">
+                        <span class="action-icon">👑</span>
+                        <div class="action-title" style="color: #a855f7;">Advanced Suite</div>
+                        <div class="action-desc">Premium features & deep scanning</div>
+                    </div>
+
+                    <div class="action-card blue-card">
+                        <span class="action-icon">🔍</span>
+                        <div class="action-title" style="color: #60a5fa;">Quick Scan</div>
+                        <div class="action-desc">Basic privacy assessment</div>
+                    </div>
+
+                    <div class="action-card green-card">
+                        <span class="action-icon">🛡️</span>
+                        <div class="action-title" style="color: #34d399;">Real-time Protection</div>
+                        <div class="action-desc">Monitor & protect identity</div>
+                    </div>
+
+                    <div class="action-card yellow-card">
+                        <span class="action-icon">⚙️</span>
+                        <div class="action-title" style="color: #fbbf24;">Settings</div>
+                        <div class="action-desc">Configure privacy preferences</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <h3 class="section-title">Recent Activity</h3>
+                <div class="activity-item">
+                    <div class="activity-left">
+                        <div class="activity-dot health-bg"></div>
+                        <span>System Initialized</span>
+                    </div>
+                    <span style="font-size: 12px; opacity: 0.6;">Info</span>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-left">
+                        <div class="activity-dot privacy-bg"></div>
+                        <span>Advanced Digital Footprint Eraser v2.0 ready for operation</span>
+                    </div>
+                    <span style="font-size: 12px; color: #22c55e;">Ready</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Page -->
+    <div id="advanced-page" class="advanced-page">
+        <div class="glass-effect header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo-section">
+                        <button class="back-btn" onclick="showWelcome()">
+                            <span style="font-size: 16px;">←</span>
+                        </button>
+                        <div class="logo">
+                            <span style="color: white; font-size: 20px;">🛡️</span>
+                        </div>
+                        <div>
+                            <div class="title">Advanced Suite</div>
+                            <div id="version-status" class="subtitle">Free Version</div>
+                        </div>
+                    </div>
+                    <button id="upgrade-btn" class="premium-btn" onclick="showModal()">
+                        <span style="margin-right: 8px;">👑</span>
+                        Upgrade to Premium
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card red-stat">
+                    <div class="stat-header">
+                        <span class="stat-label" style="color: #ef4444;">Exposures Found</span>
+                        <span style="font-size: 24px;">⚠️</span>
+                    </div>
+                    <div class="stat-value" style="color: #ef4444;">2,847</div>
+                </div>
+
+                <div class="stat-card yellow-stat">
+                    <div class="stat-header">
+                        <span class="stat-label" style="color: #eab308;">Pending Removal</span>
+                        <span style="font-size: 24px;">⏱️</span>
+                    </div>
+                    <div id="pending-value" class="stat-value" style="color: #eab308;">847</div>
+                </div>
+
+                <div class="stat-card green-stat">
+                    <div class="stat-header">
+                        <span class="stat-label" style="color: #22c55e;">Removed</span>
+                        <span style="font-size: 24px;">✅</span>
+                    </div>
+                    <div id="removed-value" class="stat-value" style="color: #22c55e;">156</div>
+                </div>
+
+                <div class="stat-card blue-stat">
+                    <div class="stat-header">
+                        <span class="stat-label" style="color: #3b82f6;">Privacy Score</span>
+                        <span style="font-size: 24px;">🔒</span>
+                    </div>
+                    <div id="score-value" class="stat-value" style="color: #3b82f6;">23%</div>
+                </div>
+            </div>
+
+            <div class="upgrade-cta">
+                <h2 class="cta-title">🚀 Advanced Features Available</h2>
+                <p class="cta-desc">Unlock premium scanning, automated removal, and enterprise reporting</p>
+                <button class="cta-btn" onclick="showModal()">Access Premium Features</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upgrade Modal -->
+    <div id="upgrade-modal" class="modal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="hideModal()">×</button>
             
-            <!-- Header -->
-            <div class="relative z-10 border-b border-blue-500/30 glass-effect">
-                <div class="max-w-7xl mx-auto px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h1 class="text-xl font-bold text-white">Digital Footprint Eraser</h1>
-                                <p class="text-sm text-blue-400">Advanced Privacy Protection System v2.0</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center space-x-4">
-                            <div class="flex items-center bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1">
-                                <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                                <span class="text-green-400 text-sm font-medium">ONLINE</span>
-                            </div>
-                        </div>
-                    </div>
+            <div class="modal-header">
+                <div class="modal-icon">👑</div>
+                <h2 class="modal-title">Upgrade to Premium</h2>
+                <p class="modal-subtitle">Access advanced enterprise-grade features</p>
+            </div>
+            
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-check">✓</span>
+                    <span>Deep Web & Dark Web Scanning</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-check">✓</span>
+                    <span>Automated Removal Requests</span>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-check">✓</span>
+                    <span>Executive Reports & Analytics</span>
                 </div>
             </div>
-
-            <!-- Main Content -->
-            <div class="relative z-10 max-w-7xl mx-auto px-6 py-8">
-                <!-- System Status Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="glass-effect rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-white font-semibold">System Health</h3>
-                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
-                            </svg>
-                        </div>
-                        <div id="health-score" class="text-4xl font-bold text-green-400 mb-2">0</div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div id="health-bar" class="bg-green-400 h-2 rounded-full progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <div class="glass-effect rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-white font-semibold">Threat Level</h3>
-                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                            </svg>
-                        </div>
-                        <div id="threat-score" class="text-4xl font-bold text-red-400 mb-2">100</div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div id="threat-bar" class="bg-red-400 h-2 rounded-full progress-bar" style="width: 100%"></div>
-                        </div>
-                    </div>
-
-                    <div class="glass-effect rounded-xl p-6">
-                        <div class="flex items-center justify-between mb-4">
-                            <h3 class="text-white font-semibold">Privacy Score</h3>
-                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                        <div id="privacy-score" class="text-4xl font-bold text-blue-400 mb-2">0</div>
-                        <div class="w-full bg-gray-700 rounded-full h-2">
-                            <div id="privacy-bar" class="bg-blue-400 h-2 rounded-full progress-bar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Quick Actions -->
-                <div class="glass-effect rounded-xl p-6 mb-8">
-                    <h3 class="text-xl font-bold text-white mb-6">Quick Actions</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        <button onclick="showAdvanced()" class="p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors group card-hover">
-                            <svg class="w-8 h-8 text-purple-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
-                            </svg>
-                            <h4 class="text-white font-semibold mb-1">Advanced Suite</h4>
-                            <p class="text-gray-400 text-sm">Premium features & deep scanning</p>
-                        </button>
-
-                        <button class="p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors group card-hover">
-                            <svg class="w-8 h-8 text-blue-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                            </svg>
-                            <h4 class="text-white font-semibold mb-1">Quick Scan</h4>
-                            <p class="text-gray-400 text-sm">Basic privacy assessment</p>
-                        </button>
-
-                        <button class="p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors group card-hover">
-                            <svg class="w-8 h-8 text-green-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                            <h4 class="text-white font-semibold mb-1">Real-time Protection</h4>
-                            <p class="text-gray-400 text-sm">Monitor & protect identity</p>
-                        </button>
-
-                        <button class="p-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg hover:bg-yellow-500/30 transition-colors group card-hover">
-                            <svg class="w-8 h-8 text-yellow-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                            </svg>
-                            <h4 class="text-white font-semibold mb-1">Settings</h4>
-                            <p class="text-gray-400 text-sm">Configure privacy preferences</p>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Recent Activity -->
-                <div class="glass-effect rounded-xl p-6">
-                    <h3 class="text-xl font-bold text-white mb-6">Recent Activity</h3>
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
-                                <span class="text-gray-300">System Initialized</span>
-                            </div>
-                            <span class="text-xs text-blue-400">Info</span>
-                        </div>
-                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                            <div class="flex items-center">
-                                <div class="w-2 h-2 bg-blue-400 rounded-full mr-3 animate-pulse"></div>
-                                <span class="text-gray-300">Advanced Digital Footprint Eraser v2.0 ready for operation</span>
-                            </div>
-                            <span class="text-xs text-green-400">Ready</span>
-                        </div>
-                    </div>
-                </div>
+            
+            <div class="modal-form">
+                <input type="password" id="password-input" class="modal-input" placeholder="Premium access code">
+                <button class="modal-btn" onclick="activatePremium()">Activate Premium</button>
             </div>
-        </div>
-
-        <!-- Advanced Suite Page -->
-        <div id="advanced-page" class="min-h-screen gradient-bg hidden">
-            <div class="border-b border-white/10 glass-effect">
-                <div class="max-w-7xl mx-auto px-6 py-4">
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <button onclick="showWelcome()" class="mr-4 p-2 hover:bg-white/10 rounded-lg transition-colors">
-                                <svg class="w-5 h-5 text-gray-400 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                                </svg>
-                            </button>
-                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                                </svg>
-                            </div>
-                            <div>
-                                <h1 class="text-xl font-bold text-white">Advanced Suite</h1>
-                                <p id="version-status" class="text-sm text-gray-400">Free Version</p>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center space-x-4">
-                            <button id="upgrade-btn" onclick="showUpgradeModal()" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center">
-                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
-                                </svg>
-                                Upgrade to Premium
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="max-w-7xl mx-auto px-6 py-8">
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-                    <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-red-400 text-sm font-medium">EXPOSURES FOUND</p>
-                                <p class="text-3xl font-bold text-white mt-1">2,847</p>
-                            </div>
-                            <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-yellow-400 text-sm font-medium">PENDING REMOVAL</p>
-                                <p id="pending-count" class="text-3xl font-bold text-white mt-1">847</p>
-                            </div>
-                            <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-green-400 text-sm font-medium">REMOVED</p>
-                                <p id="removed-count" class="text-3xl font-bold text-white mt-1">156</p>
-                            </div>
-                            <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <p class="text-blue-400 text-sm font-medium">PRIVACY SCORE</p>
-                                <p id="advanced-privacy-score" class="text-3xl font-bold text-white mt-1">23%</p>
-                            </div>
-                            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
-                    <h3 class="text-2xl font-bold text-white mb-4">🚀 Advanced Features Available</h3>
-                    <p class="text-gray-300 mb-6">Unlock premium scanning, automated removal, and enterprise reporting</p>
-                    <button onclick="showUpgradeModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold">
-                        Access Premium Features
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Upgrade Modal -->
-        <div id="upgrade-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
-            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md border border-purple-500/30">
-                <div class="text-center mb-6">
-                    <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-4">
-                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
-                        </svg>
-                    </div>
-                    <h2 class="text-2xl font-bold text-white mb-2">Upgrade to Premium</h2>
-                    <p class="text-gray-300">Access advanced enterprise-grade features</p>
-                </div>
-                
-                <div class="space-y-4 mb-6">
-                    <div class="flex items-center text-sm text-gray-300">
-                        <svg class="w-4 h-4 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Deep Web & Dark Web Scanning
-                    </div>
-                    <div class="flex items-center text-sm text-gray-300">
-                        <svg class="w-4 h-4 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Automated Removal Requests
-                    </div>
-                    <div class="flex items-center text-sm text-gray-300">
-                        <svg class="w-4 h-4 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Executive Reports & Analytics
-                    </div>
-                </div>
-
-                <div class="space-y-4">
-                    <input
-                        type="password"
-                        id="password-input"
-                        placeholder="Premium access code"
-                        class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                    />
-                    <button onclick="activatePremium()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
-                        Activate Premium
-                    </button>
-                </div>
-                
-                <button onclick="hideUpgradeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-                
-                <div class="mt-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
-                    <p class="text-purple-400 text-xs text-center">
-                        Demo Code: <span class="font-mono">premium2024</span>
-                    </p>
-                </div>
+            
+            <div class="demo-note">
+                <small style="color: #a855f7;">Demo Code: <span class="demo-code">premium2024</span></small>
             </div>
         </div>
     </div>
 
     <script>
         // Global state
-        let currentView = 'welcome';
         let systemHealth = 0;
         let threatLevel = 100;
         let privacyScore = 0;
         let isPremium = false;
 
-        // Animation intervals
-        let healthInterval, threatInterval, privacyInterval;
+        // Animation functions
+        function animateMetrics() {
+            // System Health Animation
+            const healthInterval = setInterval(() => {
+                if (systemHealth < 100) {
+                    systemHealth += Math.random() * 8;
+                    systemHealth = Math.min(systemHealth, 100);
+                    document.getElementById('health-value').textContent = Math.round(systemHealth);
+                    document.getElementById('health-bar').style.width = systemHealth + '%';
+                }
+            }, 1500);
 
-        // Initialize the app
-        function init() {
-            startAnimations();
-        }
-
-        function startAnimations() {
-            // Animate system health
-            healthInterval = setInterval(() => {
-                systemHealth = Math.min(systemHealth + Math.random() * 10, 100);
-                document.getElementById('health-score').textContent = Math.round(systemHealth);
-                document.getElementById('health-bar').style.width = systemHealth + '%';
+            // Threat Level Animation (decreasing)
+            const threatInterval = setInterval(() => {
+                if (threatLevel > 0) {
+                    threatLevel -= Math.random() * 4;
+                    threatLevel = Math.max(threatLevel, 0);
+                    document.getElementById('threat-value').textContent = Math.round(threatLevel);
+                    document.getElementById('threat-bar').style.width = threatLevel + '%';
+                }
             }, 2000);
 
-            // Animate threat level (decreasing)
-            threatInterval = setInterval(() => {
-                threatLevel = Math.max(threatLevel - Math.random() * 5, 0);
-                document.getElementById('threat-score').textContent = Math.round(threatLevel);
-                document.getElementById('threat-bar').style.width = threatLevel + '%';
-            }, 3000);
-
-            // Animate privacy score
-            privacyInterval = setInterval(() => {
-                privacyScore = Math.min(privacyScore + Math.random() * 8, 100);
-                document.getElementById('privacy-score').textContent = Math.round(privacyScore);
-                document.getElementById('privacy-bar').style.width = privacyScore + '%';
-            }, 2500);
+            // Privacy Score Animation
+            const privacyInterval = setInterval(() => {
+                if (privacyScore < 100) {
+                    privacyScore += Math.random() * 6;
+                    privacyScore = Math.min(privacyScore, 100);
+                    document.getElementById('privacy-value').textContent = Math.round(privacyScore);
+                    document.getElementById('privacy-bar').style.width = privacyScore + '%';
+                }
+            }, 1800);
         }
 
+        // Navigation functions
         function showWelcome() {
-            document.getElementById('welcome-page').classList.remove('hidden');
-            document.getElementById('advanced-page').classList.add('hidden');
-            currentView = 'welcome';
+            document.getElementById('welcome-page').style.display = 'block';
+            document.getElementById('advanced-page').style.display = 'none';
         }
 
         function showAdvanced() {
-            document.getElementById('welcome-page').classList.add('hidden');
-            document.getElementById('advanced-page').classList.remove('hidden');
-            currentView = 'advanced';
+            document.getElementById('welcome-page').style.display = 'none';
+            document.getElementById('advanced-page').style.display = 'block';
         }
 
-        function showUpgradeModal() {
-            document.getElementById('upgrade-modal').classList.remove('hidden');
+        // Modal functions
+        function showModal() {
+            document.getElementById('upgrade-modal').style.display = 'flex';
         }
 
-        function hideUpgradeModal() {
-            document.getElementById('upgrade-modal').classList.add('hidden');
+        function hideModal() {
+            document.getElementById('upgrade-modal').style.display = 'none';
         }
 
+        // Premium activation
         function activatePremium() {
             const password = document.getElementById('password-input').value;
             if (password === 'premium2024') {
                 isPremium = true;
-                alert('✅ Premium activated! 🎉');
-                hideUpgradeModal();
+                alert('✅ Premium activated successfully! 🎉');
                 
-                // Update UI for premium
+                // Update UI
                 document.getElementById('version-status').textContent = 'Premium Active';
-                document.getElementById('pending-count').textContent = '43';
-                document.getElementById('removed-count').textContent = '2,804';
-                document.getElementById('advanced-privacy-score').textContent = '94%';
-                
-                // Hide upgrade button
+                document.getElementById('pending-value').textContent = '43';
+                document.getElementById('removed-value').textContent = '2,804';
+                document.getElementById('score-value').textContent = '94%';
                 document.getElementById('upgrade-btn').style.display = 'none';
+                
+                hideModal();
             } else {
                 alert('❌ Incorrect password. Try: premium2024');
             }
         }
 
-        // Initialize app when page loads
-        document.addEventListener('DOMContentLoaded', init);
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            animateMetrics();
+        });
 
-        // Handle enter key in password input
+        // Handle Enter key in password input
         document.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter' && !document.getElementById('upgrade-modal').classList.contains('hidden')) {
+            if (e.key === 'Enter' && document.getElementById('upgrade-modal').style.display === 'flex') {
                 activatePremium();
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('upgrade-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                hideModal();
             }
         });
     </script>
