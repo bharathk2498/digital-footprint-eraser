@@ -5,26 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Footprint Eraser - Professional Privacy Suite</title>
     <meta name="description" content="Enterprise-grade digital footprint removal and privacy protection. Free basic tools, premium advanced features.">
-    <meta name="keywords" content="digital footprint, privacy, cybersecurity, data removal, GDPR, CCPA">
-    
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Digital Footprint Eraser - Professional Privacy Suite">
-    <meta property="og:description" content="Enterprise-grade digital footprint removal and privacy protection">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://bharathk2498.github.io/digital-footprint-eraser">
-    
-    <!-- Security Headers -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' https://unpkg.com https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com">
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React and ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Lucide React Icons -->
-    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
     
     <style>
         body {
@@ -41,524 +24,406 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
-        .animate-pulse-slow {
-            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: .7;
-            }
-        }
-        
         .system-grid {
             background-image: 
                 linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
             background-size: 20px 20px;
         }
+
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+
+        .card-hover:hover {
+            transform: scale(1.05);
+            transition: transform 0.3s ease;
+        }
+
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
-    <div id="root"></div>
-    
-    <script type="text/babel">
-        const { useState, useEffect } = React;
-        const { 
-            Lock, Shield, Trash2, Eye, AlertTriangle, CheckCircle, Clock, Target, 
-            BarChart3, Settings, Download, RefreshCw, Zap, Crown, Search, Globe,
-            Database, Users, Mail, Camera, FileText, ExternalLink, ChevronRight,
-            TrendingUp, Activity, Layers, Filter, X, Star, Home, Cpu, Wifi, Monitor
-        } = lucide;
-
-        const DigitalFootprintEraser = () => {
-            const [activeView, setActiveView] = useState('welcome');
-            const [isPremium, setIsPremium] = useState(false);
-            const [password, setPassword] = useState('');
-            const [activeTab, setActiveTab] = useState('dashboard');
-            const [scanProgress, setScanProgress] = useState(0);
-            const [isScanning, setIsScanning] = useState(false);
-            const [showUpgrade, setShowUpgrade] = useState(false);
-            const [systemHealth, setSystemHealth] = useState(0);
-            const [threatLevel, setThreatLevel] = useState(100);
-            const [privacyScore, setPrivacyScore] = useState(0);
-
-            const PREMIUM_PASSWORD = 'premium2024';
-
-            // System animation effects
-            useEffect(() => {
-                const healthInterval = setInterval(() => {
-                    setSystemHealth(prev => Math.min(prev + Math.random() * 10, 100));
-                }, 2000);
-
-                const threatInterval = setInterval(() => {
-                    setThreatLevel(prev => Math.max(prev - Math.random() * 5, 0));
-                }, 3000);
-
-                const privacyInterval = setInterval(() => {
-                    setPrivacyScore(prev => Math.min(prev + Math.random() * 8, 100));
-                }, 2500);
-
-                return () => {
-                    clearInterval(healthInterval);
-                    clearInterval(threatInterval);
-                    clearInterval(privacyInterval);
-                };
-            }, []);
-
-            const handlePremiumAuth = () => {
-                if (password === PREMIUM_PASSWORD) {
-                    setIsPremium(true);
-                    setShowUpgrade(false);
-                } else {
-                    alert('Incorrect password. Try: premium2024');
-                }
-            };
-
-            const startBasicScan = () => {
-                setIsScanning(true);
-                setScanProgress(0);
-                const interval = setInterval(() => {
-                    setScanProgress(prev => {
-                        if (prev >= 100) {
-                            clearInterval(interval);
-                            setIsScanning(false);
-                            return 100;
-                        }
-                        return prev + Math.random() * 12;
-                    });
-                }, 400);
-            };
-
-            // Welcome Page View
-            const renderWelcome = () => (
-                <div className="min-h-screen gradient-bg relative overflow-hidden">
-                    <div className="system-grid absolute inset-0"></div>
-                    
-                    {/* Header */}
-                    <div className="relative z-10 border-b border-blue-500/30 glass-effect">
-                        <div className="max-w-7xl mx-auto px-6 py-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center">
-                                    <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
-                                        <Shield className="w-6 h-6 text-white" />
-                                    </div>
-                                    <div>
-                                        <h1 className="text-xl font-bold text-white">Digital Footprint Eraser</h1>
-                                        <p className="text-sm text-blue-400">Advanced Privacy Protection System v2.0</p>
-                                    </div>
-                                </div>
-                                
-                                <div className="flex items-center space-x-4">
-                                    <div className="flex items-center bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1">
-                                        <div className="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
-                                        <span className="text-green-400 text-sm font-medium">ONLINE</span>
-                                    </div>
-                                </div>
+    <div id="app">
+        <!-- Welcome Page -->
+        <div id="welcome-page" class="min-h-screen gradient-bg relative overflow-hidden">
+            <div class="system-grid absolute inset-0"></div>
+            
+            <!-- Header -->
+            <div class="relative z-10 border-b border-blue-500/30 glass-effect">
+                <div class="max-w-7xl mx-auto px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h1 class="text-xl font-bold text-white">Digital Footprint Eraser</h1>
+                                <p class="text-sm text-blue-400">Advanced Privacy Protection System v2.0</p>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Main Content */}
-                    <div className="relative z-10 max-w-7xl mx-auto px-6 py-8">
-                        {/* System Status Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                            <div className="glass-effect rounded-xl p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-white font-semibold">System Health</h3>
-                                    <Cpu className="w-5 h-5 text-blue-400" />
-                                </div>
-                                <div className="text-4xl font-bold text-green-400 mb-2">{Math.round(systemHealth)}</div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div 
-                                        className="bg-green-400 h-2 rounded-full transition-all duration-1000"
-                                        style={{ width: `${systemHealth}%` }}
-                                    ></div>
-                                </div>
-                            </div>
-
-                            <div className="glass-effect rounded-xl p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-white font-semibold">Threat Level</h3>
-                                    <AlertTriangle className="w-5 h-5 text-red-400" />
-                                </div>
-                                <div className="text-4xl font-bold text-red-400 mb-2">{Math.round(threatLevel)}</div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div 
-                                        className="bg-red-400 h-2 rounded-full transition-all duration-1000"
-                                        style={{ width: `${threatLevel}%` }}
-                                    ></div>
-                                </div>
-                            </div>
-
-                            <div className="glass-effect rounded-xl p-6">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-white font-semibold">Privacy Score</h3>
-                                    <Shield className="w-5 h-5 text-blue-400" />
-                                </div>
-                                <div className="text-4xl font-bold text-blue-400 mb-2">{Math.round(privacyScore)}</div>
-                                <div className="w-full bg-gray-700 rounded-full h-2">
-                                    <div 
-                                        className="bg-blue-400 h-2 rounded-full transition-all duration-1000"
-                                        style={{ width: `${privacyScore}%` }}
-                                    ></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Quick Actions */}
-                        <div className="glass-effect rounded-xl p-6 mb-8">
-                            <h3 className="text-xl font-bold text-white mb-6">Quick Actions</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                                <button 
-                                    onClick={() => setActiveView('advanced')}
-                                    className="p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors group"
-                                >
-                                    <Crown className="w-8 h-8 text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
-                                    <h4 className="text-white font-semibold mb-1">Advanced Suite</h4>
-                                    <p className="text-gray-400 text-sm">Premium features & deep scanning</p>
-                                </button>
-
-                                <button className="p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors group">
-                                    <Search className="w-8 h-8 text-blue-400 mb-3 group-hover:scale-110 transition-transform" />
-                                    <h4 className="text-white font-semibold mb-1">Quick Scan</h4>
-                                    <p className="text-gray-400 text-sm">Basic privacy assessment</p>
-                                </button>
-
-                                <button className="p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors group">
-                                    <Shield className="w-8 h-8 text-green-400 mb-3 group-hover:scale-110 transition-transform" />
-                                    <h4 className="text-white font-semibold mb-1">Real-time Protection</h4>
-                                    <p className="text-gray-400 text-sm">Monitor & protect identity</p>
-                                </button>
-
-                                <button className="p-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg hover:bg-yellow-500/30 transition-colors group">
-                                    <Settings className="w-8 h-8 text-yellow-400 mb-3 group-hover:scale-110 transition-transform" />
-                                    <h4 className="text-white font-semibold mb-1">Settings</h4>
-                                    <p className="text-gray-400 text-sm">Configure privacy preferences</p>
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* Recent Activity */}
-                        <div className="glass-effect rounded-xl p-6">
-                            <h3 className="text-xl font-bold text-white mb-6">Recent Activity</h3>
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                                    <div className="flex items-center">
-                                        <div className="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
-                                        <span className="text-gray-300">System Initialized</span>
-                                    </div>
-                                    <span className="text-xs text-blue-400">Info</span>
-                                </div>
-                                <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
-                                    <div className="flex items-center">
-                                        <div className="w-2 h-2 bg-blue-400 rounded-full mr-3 animate-pulse"></div>
-                                        <span className="text-gray-300">Advanced Digital Footprint Eraser v2.0 ready for operation</span>
-                                    </div>
-                                    <span className="text-xs text-green-400">Ready</span>
-                                </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <div class="flex items-center bg-green-500/20 border border-green-500/30 rounded-full px-3 py-1">
+                                <div class="w-2 h-2 bg-green-400 rounded-full mr-2 animate-pulse"></div>
+                                <span class="text-green-400 text-sm font-medium">ONLINE</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            );
+            </div>
 
-            // Upgrade Modal
-            const UpgradeModal = () => (
-                showUpgrade && (
-                    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                        <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md border border-purple-500/30">
-                            <div className="text-center mb-6">
-                                <div className="inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-4">
-                                    <Crown className="w-8 h-8 text-purple-400" />
-                                </div>
-                                <h2 className="text-2xl font-bold text-white mb-2">Upgrade to Premium</h2>
-                                <p className="text-gray-300">Access advanced enterprise-grade features</p>
-                            </div>
-                            
-                            <div className="space-y-4 mb-6">
-                                <div className="flex items-center text-sm text-gray-300">
-                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
-                                    Deep Web & Dark Web Scanning
-                                </div>
-                                <div className="flex items-center text-sm text-gray-300">
-                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
-                                    Automated Removal Requests
-                                </div>
-                                <div className="flex items-center text-sm text-gray-300">
-                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
-                                    Data Broker Removal
-                                </div>
-                                <div className="flex items-center text-sm text-gray-300">
-                                    <CheckCircle className="w-4 h-4 text-green-400 mr-3" />
-                                    Executive Reports & Analytics
-                                </div>
-                            </div>
+            <!-- Main Content -->
+            <div class="relative z-10 max-w-7xl mx-auto px-6 py-8">
+                <!-- System Status Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <div class="glass-effect rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-white font-semibold">System Health</h3>
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                            </svg>
+                        </div>
+                        <div id="health-score" class="text-4xl font-bold text-green-400 mb-2">0</div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="health-bar" class="bg-green-400 h-2 rounded-full progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
 
-                            <div className="space-y-4">
-                                <input
-                                    type="password"
-                                    value={password}
-                                    onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Premium access code"
-                                    className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                                    onKeyPress={(e) => e.key === 'Enter' && handlePremiumAuth()}
-                                />
-                                <button
-                                    onClick={handlePremiumAuth}
-                                    className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors"
-                                >
-                                    Activate Premium
-                                </button>
+                    <div class="glass-effect rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-white font-semibold">Threat Level</h3>
+                            <svg class="w-5 h-5 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                        <div id="threat-score" class="text-4xl font-bold text-red-400 mb-2">100</div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="threat-bar" class="bg-red-400 h-2 rounded-full progress-bar" style="width: 100%"></div>
+                        </div>
+                    </div>
+
+                    <div class="glass-effect rounded-xl p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-white font-semibold">Privacy Score</h3>
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                        <div id="privacy-score" class="text-4xl font-bold text-blue-400 mb-2">0</div>
+                        <div class="w-full bg-gray-700 rounded-full h-2">
+                            <div id="privacy-bar" class="bg-blue-400 h-2 rounded-full progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="glass-effect rounded-xl p-6 mb-8">
+                    <h3 class="text-xl font-bold text-white mb-6">Quick Actions</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <button onclick="showAdvanced()" class="p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors group card-hover">
+                            <svg class="w-8 h-8 text-purple-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
+                            </svg>
+                            <h4 class="text-white font-semibold mb-1">Advanced Suite</h4>
+                            <p class="text-gray-400 text-sm">Premium features & deep scanning</p>
+                        </button>
+
+                        <button class="p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors group card-hover">
+                            <svg class="w-8 h-8 text-blue-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                            </svg>
+                            <h4 class="text-white font-semibold mb-1">Quick Scan</h4>
+                            <p class="text-gray-400 text-sm">Basic privacy assessment</p>
+                        </button>
+
+                        <button class="p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors group card-hover">
+                            <svg class="w-8 h-8 text-green-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            <h4 class="text-white font-semibold mb-1">Real-time Protection</h4>
+                            <p class="text-gray-400 text-sm">Monitor & protect identity</p>
+                        </button>
+
+                        <button class="p-4 bg-yellow-500/20 border border-yellow-500/30 rounded-lg hover:bg-yellow-500/30 transition-colors group card-hover">
+                            <svg class="w-8 h-8 text-yellow-400 mb-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                            <h4 class="text-white font-semibold mb-1">Settings</h4>
+                            <p class="text-gray-400 text-sm">Configure privacy preferences</p>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="glass-effect rounded-xl p-6">
+                    <h3 class="text-xl font-bold text-white mb-6">Recent Activity</h3>
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-green-400 rounded-full mr-3 animate-pulse"></div>
+                                <span class="text-gray-300">System Initialized</span>
                             </div>
-                            
-                            <button
-                                onClick={() => setShowUpgrade(false)}
-                                className="absolute top-4 right-4 text-gray-400 hover:text-white"
-                            >
-                                <X className="w-5 h-5" />
+                            <span class="text-xs text-blue-400">Info</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+                            <div class="flex items-center">
+                                <div class="w-2 h-2 bg-blue-400 rounded-full mr-3 animate-pulse"></div>
+                                <span class="text-gray-300">Advanced Digital Footprint Eraser v2.0 ready for operation</span>
+                            </div>
+                            <span class="text-xs text-green-400">Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Advanced Suite Page -->
+        <div id="advanced-page" class="min-h-screen gradient-bg hidden">
+            <div class="border-b border-white/10 glass-effect">
+                <div class="max-w-7xl mx-auto px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <button onclick="showWelcome()" class="mr-4 p-2 hover:bg-white/10 rounded-lg transition-colors">
+                                <svg class="w-5 h-5 text-gray-400 rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                                </svg>
                             </button>
-                            
-                            <div className="mt-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
-                                <p className="text-purple-400 text-xs text-center">
-                                    Demo Code: <span className="font-mono">premium2024</span>
-                                </p>
+                            <div class="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                                </svg>
                             </div>
+                            <div>
+                                <h1 class="text-xl font-bold text-white">Advanced Suite</h1>
+                                <p id="version-status" class="text-sm text-gray-400">Free Version</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center space-x-4">
+                            <button id="upgrade-btn" onclick="showUpgradeModal()" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
+                                </svg>
+                                Upgrade to Premium
+                            </button>
                         </div>
                     </div>
-                )
-            );
-
-            // Advanced Suite View
-            const renderAdvanced = () => {
-                const menuItems = [
-                    { id: 'dashboard', label: 'Dashboard', icon: BarChart3, premium: false },
-                    { id: 'scan', label: 'Quick Scan', icon: Search, premium: false },
-                    { id: 'platforms', label: 'Platform Search', icon: Globe, premium: false },
-                    { id: 'removal', label: 'Manual Removal', icon: Trash2, premium: false },
-                    { id: 'deep-scan', label: 'Deep Web Scan', icon: Eye, premium: true },
-                    { id: 'auto-removal', label: 'Auto Removal', icon: Zap, premium: true },
-                    { id: 'monitoring', label: 'Threat Monitor', icon: Shield, premium: true },
-                    { id: 'reports', label: 'Executive Reports', icon: Download, premium: true }
-                ];
-
-                const renderDashboard = () => (
-                    <div className="space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                            <div className="bg-red-500/10 border border-red-500/20 rounded-xl p-6">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-red-400 text-sm font-medium">EXPOSURES FOUND</p>
-                                        <p className="text-3xl font-bold text-white mt-1">2,847</p>
-                                    </div>
-                                    <AlertTriangle className="w-8 h-8 text-red-400" />
-                                </div>
-                            </div>
-                            
-                            <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-yellow-400 text-sm font-medium">PENDING REMOVAL</p>
-                                        <p className="text-3xl font-bold text-white mt-1">{isPremium ? '43' : '847'}</p>
-                                    </div>
-                                    <Clock className="w-8 h-8 text-yellow-400" />
-                                </div>
-                            </div>
-                            
-                            <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-6">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-green-400 text-sm font-medium">REMOVED</p>
-                                        <p className="text-3xl font-bold text-white mt-1">{isPremium ? '2,804' : '156'}</p>
-                                    </div>
-                                    <CheckCircle className="w-8 h-8 text-green-400" />
-                                </div>
-                            </div>
-                            
-                            <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-blue-400 text-sm font-medium">PRIVACY SCORE</p>
-                                        <p className="text-3xl font-bold text-white mt-1">{isPremium ? '94%' : '23%'}</p>
-                                    </div>
-                                    <Shield className="w-8 h-8 text-blue-400" />
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="bg-white/5 border border-white/10 rounded-xl p-6">
-                            <h3 className="text-xl font-bold text-white mb-4">Quick Actions</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <button
-                                    onClick={startBasicScan}
-                                    className="flex items-center justify-between p-4 bg-blue-500/20 border border-blue-500/30 rounded-lg hover:bg-blue-500/30 transition-colors"
-                                >
-                                    <div className="flex items-center">
-                                        <Search className="w-5 h-5 text-blue-400 mr-3" />
-                                        <span className="text-white font-medium">Quick Scan</span>
-                                    </div>
-                                    <ChevronRight className="w-4 h-4 text-blue-400" />
-                                </button>
-                                
-                                <button
-                                    onClick={() => !isPremium ? setShowUpgrade(true) : setActiveTab('deep-scan')}
-                                    className="flex items-center justify-between p-4 bg-purple-500/20 border border-purple-500/30 rounded-lg hover:bg-purple-500/30 transition-colors"
-                                >
-                                    <div className="flex items-center">
-                                        <Eye className="w-5 h-5 text-purple-400 mr-3" />
-                                        <span className="text-white font-medium">Deep Scan</span>
-                                    </div>
-                                    {!isPremium && <Crown className="w-4 h-4 text-purple-400" />}
-                                    {isPremium && <ChevronRight className="w-4 h-4 text-purple-400" />}
-                                </button>
-                                
-                                <button
-                                    onClick={() => !isPremium ? setShowUpgrade(true) : setActiveTab('auto-removal')}
-                                    className="flex items-center justify-between p-4 bg-green-500/20 border border-green-500/30 rounded-lg hover:bg-green-500/30 transition-colors"
-                                >
-                                    <div className="flex items-center">
-                                        <Zap className="w-5 h-5 text-green-400 mr-3" />
-                                        <span className="text-white font-medium">Auto Remove</span>
-                                    </div>
-                                    {!isPremium && <Crown className="w-4 h-4 text-green-400" />}
-                                    {isPremium && <ChevronRight className="w-4 h-4 text-green-400" />}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                );
-
-                return (
-                    <div className="min-h-screen gradient-bg">
-                        <div className="border-b border-white/10 glass-effect">
-                            <div className="max-w-7xl mx-auto px-6 py-4">
-                                <div className="flex items-center justify-between">
-                                    <div className="flex items-center">
-                                        <button
-                                            onClick={() => setActiveView('welcome')}
-                                            className="mr-4 p-2 hover:bg-white/10 rounded-lg transition-colors"
-                                        >
-                                            <ChevronRight className="w-5 h-5 text-gray-400 rotate-180" />
-                                        </button>
-                                        <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center mr-4">
-                                            <Shield className="w-6 h-6 text-white" />
-                                        </div>
-                                        <div>
-                                            <h1 className="text-xl font-bold text-white">Advanced Suite</h1>
-                                            <p className="text-sm text-gray-400">{isPremium ? 'Premium Active' : 'Free Version'}</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div className="flex items-center space-x-4">
-                                        {!isPremium && (
-                                            <button
-                                                onClick={() => setShowUpgrade(true)}
-                                                className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg font-medium flex items-center"
-                                            >
-                                                <Crown className="w-4 h-4 mr-2" />
-                                                Upgrade to Premium
-                                            </button>
-                                        )}
-                                        {isPremium && (
-                                            <div className="flex items-center bg-purple-500/20 border border-purple-500/30 rounded-full px-4 py-2">
-                                                <Crown className="w-4 h-4 text-purple-400 mr-2" />
-                                                <span className="text-purple-400 font-medium">Premium Active</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="max-w-7xl mx-auto px-6 py-8">
-                            <div className="flex flex-col lg:flex-row gap-8">
-                                <div className="lg:w-64">
-                                    <nav className="space-y-2">
-                                        {menuItems.map((item) => (
-                                            <button
-                                                key={item.id}
-                                                onClick={() => {
-                                                    if (item.premium && !isPremium) {
-                                                        setShowUpgrade(true);
-                                                    } else {
-                                                        setActiveTab(item.id);
-                                                    }
-                                                }}
-                                                className={`w-full flex items-center justify-between px-4 py-3 rounded-lg text-left transition-colors ${
-                                                    activeTab === item.id
-                                                        ? 'bg-blue-500/20 border border-blue-500/30 text-blue-400'
-                                                        : 'text-gray-300 hover:text-white hover:bg-white/5'
-                                                }`}
-                                            >
-                                                <div className="flex items-center">
-                                                    <item.icon className={`w-5 h-5 mr-3 ${
-                                                        activeTab === item.id ? 'text-blue-400' : 'text-gray-400'
-                                                    }`} />
-                                                    <span className="font-medium">{item.label}</span>
-                                                </div>
-                                                {item.premium && !isPremium && <Crown className="w-4 h-4 text-purple-400" />}
-                                            </button>
-                                        ))}
-                                    </nav>
-                                </div>
-
-                                <div className="flex-1">
-                                    {activeTab === 'dashboard' ? renderDashboard() : (
-                                        <div className="text-center py-12">
-                                            <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-500/20 rounded-full mb-6">
-                                                <Search className="w-10 h-10 text-blue-400" />
-                                            </div>
-                                            <h2 className="text-3xl font-bold text-white mb-4">Feature Coming Soon</h2>
-                                            <p className="text-gray-300 mb-8">This feature is currently under development</p>
-                                        </div>
-                                    )}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                );
-            };
-
-            return (
-                <div>
-                    <UpgradeModal />
-                    {activeView === 'welcome' ? renderWelcome() : renderAdvanced()}
                 </div>
-            );
-        };
+            </div>
 
-        ReactDOM.render(<DigitalFootprintEraser />, document.getElementById('root'));
-    </script>
-    
-    <!-- Babel for JSX transformation -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Service Worker Registration -->
+            <div class="max-w-7xl mx-auto px-6 py-8">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-red-500/10 border border-red-500/20 rounded-xl p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-red-400 text-sm font-medium">EXPOSURES FOUND</p>
+                                <p class="text-3xl font-bold text-white mt-1">2,847</p>
+                            </div>
+                            <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.864-.833-2.634 0L4.18 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-xl p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-yellow-400 text-sm font-medium">PENDING REMOVAL</p>
+                                <p id="pending-count" class="text-3xl font-bold text-white mt-1">847</p>
+                            </div>
+                            <svg class="w-8 h-8 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-green-500/10 border border-green-500/20 rounded-xl p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-green-400 text-sm font-medium">REMOVED</p>
+                                <p id="removed-count" class="text-3xl font-bold text-white mt-1">156</p>
+                            </div>
+                            <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-blue-500/10 border border-blue-500/20 rounded-xl p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-blue-400 text-sm font-medium">PRIVACY SCORE</p>
+                                <p id="advanced-privacy-score" class="text-3xl font-bold text-white mt-1">23%</p>
+                            </div>
+                            <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white/5 border border-white/10 rounded-xl p-6 text-center">
+                    <h3 class="text-2xl font-bold text-white mb-4">🚀 Advanced Features Available</h3>
+                    <p class="text-gray-300 mb-6">Unlock premium scanning, automated removal, and enterprise reporting</p>
+                    <button onclick="showUpgradeModal()" class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 rounded-lg font-semibold">
+                        Access Premium Features
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upgrade Modal -->
+        <div id="upgrade-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-8 w-full max-w-md border border-purple-500/30">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-purple-500/20 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3l14 9-14 9V3z"></path>
+                        </svg>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white mb-2">Upgrade to Premium</h2>
+                    <p class="text-gray-300">Access advanced enterprise-grade features</p>
+                </div>
+                
+                <div class="space-y-4 mb-6">
+                    <div class="flex items-center text-sm text-gray-300">
+                        <svg class="w-4 h-4 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Deep Web & Dark Web Scanning
+                    </div>
+                    <div class="flex items-center text-sm text-gray-300">
+                        <svg class="w-4 h-4 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Automated Removal Requests
+                    </div>
+                    <div class="flex items-center text-sm text-gray-300">
+                        <svg class="w-4 h-4 text-green-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Executive Reports & Analytics
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <input
+                        type="password"
+                        id="password-input"
+                        placeholder="Premium access code"
+                        class="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                    />
+                    <button onclick="activatePremium()" class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                        Activate Premium
+                    </button>
+                </div>
+                
+                <button onclick="hideUpgradeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+                
+                <div class="mt-4 p-3 bg-purple-500/10 border border-purple-500/20 rounded-lg">
+                    <p class="text-purple-400 text-xs text-center">
+                        Demo Code: <span class="font-mono">premium2024</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(registration => {
-                        console.log('SW registered: ', registration);
-                    })
-                    .catch(registrationError => {
-                        console.log('SW registration failed: ', registrationError);
-                    });
-            });
+        // Global state
+        let currentView = 'welcome';
+        let systemHealth = 0;
+        let threatLevel = 100;
+        let privacyScore = 0;
+        let isPremium = false;
+
+        // Animation intervals
+        let healthInterval, threatInterval, privacyInterval;
+
+        // Initialize the app
+        function init() {
+            startAnimations();
         }
-    </script>
-    
-    <!-- Analytics and Performance Monitoring -->
-    <script>
-        // Performance monitoring
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                const navigation = performance.getEntriesByType('navigation')[0];
-                console.log('Page Load Time:', navigation.loadEventEnd - navigation.fetchStart, 'ms');
-            }, 0);
+
+        function startAnimations() {
+            // Animate system health
+            healthInterval = setInterval(() => {
+                systemHealth = Math.min(systemHealth + Math.random() * 10, 100);
+                document.getElementById('health-score').textContent = Math.round(systemHealth);
+                document.getElementById('health-bar').style.width = systemHealth + '%';
+            }, 2000);
+
+            // Animate threat level (decreasing)
+            threatInterval = setInterval(() => {
+                threatLevel = Math.max(threatLevel - Math.random() * 5, 0);
+                document.getElementById('threat-score').textContent = Math.round(threatLevel);
+                document.getElementById('threat-bar').style.width = threatLevel + '%';
+            }, 3000);
+
+            // Animate privacy score
+            privacyInterval = setInterval(() => {
+                privacyScore = Math.min(privacyScore + Math.random() * 8, 100);
+                document.getElementById('privacy-score').textContent = Math.round(privacyScore);
+                document.getElementById('privacy-bar').style.width = privacyScore + '%';
+            }, 2500);
+        }
+
+        function showWelcome() {
+            document.getElementById('welcome-page').classList.remove('hidden');
+            document.getElementById('advanced-page').classList.add('hidden');
+            currentView = 'welcome';
+        }
+
+        function showAdvanced() {
+            document.getElementById('welcome-page').classList.add('hidden');
+            document.getElementById('advanced-page').classList.remove('hidden');
+            currentView = 'advanced';
+        }
+
+        function showUpgradeModal() {
+            document.getElementById('upgrade-modal').classList.remove('hidden');
+        }
+
+        function hideUpgradeModal() {
+            document.getElementById('upgrade-modal').classList.add('hidden');
+        }
+
+        function activatePremium() {
+            const password = document.getElementById('password-input').value;
+            if (password === 'premium2024') {
+                isPremium = true;
+                alert('✅ Premium activated! 🎉');
+                hideUpgradeModal();
+                
+                // Update UI for premium
+                document.getElementById('version-status').textContent = 'Premium Active';
+                document.getElementById('pending-count').textContent = '43';
+                document.getElementById('removed-count').textContent = '2,804';
+                document.getElementById('advanced-privacy-score').textContent = '94%';
+                
+                // Hide upgrade button
+                document.getElementById('upgrade-btn').style.display = 'none';
+            } else {
+                alert('❌ Incorrect password. Try: premium2024');
+            }
+        }
+
+        // Initialize app when page loads
+        document.addEventListener('DOMContentLoaded', init);
+
+        // Handle enter key in password input
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('upgrade-modal').classList.contains('hidden')) {
+                activatePremium();
+            }
         });
     </script>
 </body>
