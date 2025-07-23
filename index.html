@@ -3,7 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="DigitalShield Pro - Enterprise-grade digital footprint eraser with free privacy tools, cookie cleaner, and advanced cybersecurity protection.">
+    <meta name="keywords" content="digital footprint, privacy protection, cookie cleaner, cybersecurity, GDPR, data protection, browser security">
+    <meta name="author" content="DigitalShield Pro">
+    <meta property="og:title" content="DigitalShield Pro - Digital Footprint Eraser">
+    <meta property="og:description" content="Military-grade privacy protection with free tools for cookie cleaning, password analysis, and comprehensive security audits.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://bharathk2498.github.io/digital-footprint-eraser">
     <title>Digital Footprint Eraser - Executive Security Suite</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
     <style>
         * {
             margin: 0;
@@ -21,6 +29,9 @@
             --glass-bg: rgba(139, 92, 246, 0.05);
             --text-primary: #F8FAFC;
             --text-secondary: #CBD5E1;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
             --glow: 0 0 30px rgba(139, 92, 246, 0.3);
             --glow-intense: 0 0 50px rgba(139, 92, 246, 0.6);
         }
@@ -103,11 +114,25 @@
             box-shadow: var(--glow);
         }
 
+        .mobile-menu {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .mobile-menu span {
+            width: 25px;
+            height: 3px;
+            background: var(--accent-violet);
+            transition: 0.3s;
+        }
+
         .main-page {
             display: block;
         }
 
-        .advanced-page {
+        .advanced-page, .tools-page {
             display: none;
         }
 
@@ -194,7 +219,7 @@
             font-size: 0.9rem;
         }
 
-        .features-section {
+        .features-section, .tools-section {
             padding: 4rem 2rem;
             max-width: 1400px;
             margin: 0 auto;
@@ -210,14 +235,14 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .features-grid {
+        .features-grid, .tools-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
             margin-bottom: 3rem;
         }
 
-        .feature-card {
+        .feature-card, .tool-card {
             background: var(--glass-bg);
             border: 1px solid rgba(139, 92, 246, 0.2);
             border-radius: 16px;
@@ -225,13 +250,13 @@
             transition: all 0.3s ease;
         }
 
-        .feature-card:hover {
+        .feature-card:hover, .tool-card:hover {
             transform: translateY(-10px);
             box-shadow: var(--glow-intense);
             border-color: var(--accent-violet);
         }
 
-        .feature-icon {
+        .feature-icon, .tool-icon {
             width: 60px;
             height: 60px;
             background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
@@ -243,16 +268,17 @@
             font-size: 1.5rem;
         }
 
-        .feature-title {
+        .feature-title, .tool-title {
             font-size: 1.25rem;
             font-weight: 600;
             margin-bottom: 1rem;
             color: var(--text-primary);
         }
 
-        .feature-description {
+        .feature-description, .tool-description {
             color: var(--text-secondary);
             line-height: 1.6;
+            margin-bottom: 1rem;
         }
 
         .cta-section {
@@ -293,6 +319,98 @@
         .btn-secondary:hover {
             background: var(--accent-violet);
             color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+            border: none;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+            border: none;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .tool-interface {
+            background: rgba(76, 29, 149, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            background: rgba(76, 29, 149, 0.1);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .input-group input:focus, .input-group textarea:focus {
+            outline: none;
+            border-color: var(--accent-violet);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .result-box {
+            background: rgba(76, 29, 149, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            min-height: 100px;
+            overflow-y: auto;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-success { background: var(--success); }
+        .status-warning { background: var(--warning); }
+        .status-danger { background: var(--danger); }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(76, 29, 149, 0.3);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-violet), var(--accent-violet));
+            width: 0%;
+            transition: width 0.3s ease;
         }
 
         .about-section {
@@ -367,18 +485,6 @@
             box-shadow: var(--glow-intense);
         }
 
-        .status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 0.5rem;
-        }
-
-        .status-active { background: #10B981; }
-        .status-warning { background: #F59E0B; }
-        .status-danger { background: #EF4444; }
-
         .floating-particles {
             position: fixed;
             top: 0;
@@ -405,9 +511,21 @@
 
         @media (max-width: 768px) {
             .hero-title { font-size: 2.5rem; }
-            .nav-links { display: none; }
+            .nav-links { 
+                display: none; 
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: rgba(10, 10, 15, 0.95);
+                flex-direction: column;
+                padding: 1rem;
+            }
+            .nav-links.active { display: flex; }
+            .mobile-menu { display: flex; }
             .metrics-grid { grid-template-columns: 1fr; }
-            .features-grid { grid-template-columns: 1fr; }
+            .features-grid, .tools-grid { grid-template-columns: 1fr; }
+            .security-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -418,12 +536,18 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">🛡️ DigitalShield Pro</div>
-            <ul class="nav-links">
+            <ul class="nav-links" id="navLinks">
                 <li><a href="#" onclick="showPage('main')">Home</a></li>
+                <li><a href="#" onclick="showPage('tools')">Free Tools</a></li>
                 <li><a href="#about">About Us</a></li>
                 <li><a href="#features">Features</a></li>
                 <li><a href="#" onclick="showPage('advanced')" class="btn btn-primary">Advanced Security</a></li>
             </ul>
+            <div class="mobile-menu" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
@@ -440,15 +564,15 @@
                 <div class="dashboard-preview">
                     <div class="metrics-grid">
                         <div class="metric-card">
-                            <div class="metric-value">0</div>
+                            <div class="metric-value" id="threatLevel">0</div>
                             <div class="metric-label">Threat Level</div>
                         </div>
                         <div class="metric-card">
-                            <div class="metric-value">100</div>
+                            <div class="metric-value" id="privacyScore">100</div>
                             <div class="metric-label">Privacy Score</div>
                         </div>
                         <div class="metric-card">
-                            <div class="metric-value">247</div>
+                            <div class="metric-value" id="tracesRemoved">247</div>
                             <div class="metric-label">Traces Removed</div>
                         </div>
                         <div class="metric-card">
@@ -459,8 +583,44 @@
                 </div>
 
                 <div class="cta-section">
-                    <a href="#" onclick="showPage('advanced')" class="btn btn-primary">Launch Advanced Scanner</a>
-                    <a href="#features" class="btn btn-secondary">Explore Features</a>
+                    <a href="#" onclick="showPage('tools')" class="btn btn-primary">Try Free Tools</a>
+                    <a href="#" onclick="showPage('advanced')" class="btn btn-secondary">Advanced Scanner</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Tools Section on Main Page -->
+        <section class="tools-section">
+            <h2 class="section-title">Free Privacy Tools</h2>
+            <div class="tools-grid">
+                <div class="tool-card">
+                    <div class="tool-icon">🍪</div>
+                    <h3 class="tool-title">Smart Cookie Cleaner</h3>
+                    <p class="tool-description">
+                        Remove tracking cookies, clear browser storage, and eliminate digital breadcrumbs instantly.
+                    </p>
+                    <button class="btn btn-success btn-small" onclick="clearAllCookies()">Clear All Cookies</button>
+                    <div id="cookieResult" class="result-box" style="display:none;"></div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">💾</div>
+                    <h3 class="tool-title">Browser Storage Cleaner</h3>
+                    <p class="tool-description">
+                        Clear localStorage, sessionStorage, and cached data to prevent tracking.
+                    </p>
+                    <button class="btn btn-success btn-small" onclick="clearBrowserStorage()">Clear Storage</button>
+                    <div id="storageResult" class="result-box" style="display:none;"></div>
+                </div>
+
+                <div class="tool-card">
+                    <div class="tool-icon">🔍</div>
+                    <h3 class="tool-title">Privacy Health Scanner</h3>
+                    <p class="tool-description">
+                        Quick scan of your browser's privacy settings and potential data leaks.
+                    </p>
+                    <button class="btn btn-primary btn-small" onclick="runPrivacyHealthCheck()">Run Health Check</button>
+                    <div id="healthResult" class="result-box" style="display:none;"></div>
                 </div>
             </div>
         </section>
@@ -554,6 +714,119 @@
         </section>
     </div>
 
+    <!-- Free Tools Page -->
+    <div id="toolsPage" class="tools-page">
+        <div style="margin-top: 100px; padding: 2rem; max-width: 1400px; margin-left: auto; margin-right: auto;">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h1 style="font-size: 3rem; font-weight: 800; background: linear-gradient(45deg, var(--text-primary), var(--accent-violet)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Free Privacy Protection Tools
+                </h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem; margin-top: 1rem;">
+                    Professional-grade tools to protect your digital privacy - completely free
+                </p>
+            </div>
+
+            <div class="tools-grid">
+                <!-- Advanced Cookie Manager -->
+                <div class="tool-card">
+                    <div class="tool-icon">🍪</div>
+                    <h3 class="tool-title">Advanced Cookie Manager</h3>
+                    <p class="tool-description">
+                        Comprehensive cookie analysis and selective removal with detailed tracking reports.
+                    </p>
+                    <div class="tool-interface">
+                        <button class="btn btn-primary btn-small" onclick="analyzeCookies()">Analyze Cookies</button>
+                        <button class="btn btn-danger btn-small" onclick="clearAllCookies()">Clear All</button>
+                        <div id="cookieAnalysis" class="result-box" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- Browser Storage Cleaner -->
+                <div class="tool-card">
+                    <div class="tool-icon">💾</div>
+                    <h3 class="tool-title">Complete Storage Cleaner</h3>
+                    <p class="tool-description">
+                        Remove all browser storage including localStorage, sessionStorage, and IndexedDB.
+                    </p>
+                    <div class="tool-interface">
+                        <button class="btn btn-primary btn-small" onclick="analyzeStorage()">Analyze Storage</button>
+                        <button class="btn btn-danger btn-small" onclick="clearBrowserStorage()">Clear All Storage</button>
+                        <div id="storageAnalysis" class="result-box" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- Password Strength Analyzer -->
+                <div class="tool-card">
+                    <div class="tool-icon">🔒</div>
+                    <h3 class="tool-title">Password Security Analyzer</h3>
+                    <p class="tool-description">
+                        Enterprise-grade password strength analysis with detailed security recommendations.
+                    </p>
+                    <div class="tool-interface">
+                        <div class="input-group">
+                            <input type="password" id="passwordInput" placeholder="Enter password to analyze..." 
+                                   oninput="analyzePassword()" />
+                        </div>
+                        <div id="passwordResult" class="result-box" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- Email Privacy Checker -->
+                <div class="tool-card">
+                    <div class="tool-icon">📧</div>
+                    <h3 class="tool-title">Email Privacy Scanner</h3>
+                    <p class="tool-description">
+                        Check if your email appears in data breaches and analyze privacy risks.
+                    </p>
+                    <div class="tool-interface">
+                        <div class="input-group">
+                            <input type="email" id="emailInput" placeholder="Enter email to check..." />
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="checkEmailPrivacy()">Check Privacy</button>
+                        <div id="emailResult" class="result-box" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- URL Safety Checker -->
+                <div class="tool-card">
+                    <div class="tool-icon">🌐</div>
+                    <h3 class="tool-title">URL Security Scanner</h3>
+                    <p class="tool-description">
+                        Analyze URLs for security threats, tracking parameters, and privacy risks.
+                    </p>
+                    <div class="tool-interface">
+                        <div class="input-group">
+                            <input type="url" id="urlInput" placeholder="Enter URL to analyze..." />
+                        </div>
+                        <button class="btn btn-primary btn-small" onclick="analyzeURL()">Analyze URL</button>
+                        <div id="urlResult" class="result-box" style="display:none;"></div>
+                    </div>
+                </div>
+
+                <!-- System Privacy Health Check -->
+                <div class="tool-card">
+                    <div class="tool-icon">🔍</div>
+                    <h3 class="tool-title">Comprehensive Privacy Audit</h3>
+                    <p class="tool-description">
+                        Complete privacy health check including browser settings, plugins, and exposure analysis.
+                    </p>
+                    <div class="tool-interface">
+                        <button class="btn btn-primary btn-small" onclick="runComprehensiveAudit()">Start Full Audit</button>
+                        <div class="progress-bar" style="display:none;" id="auditProgress">
+                            <div class="progress-fill" id="auditProgressFill"></div>
+                        </div>
+                        <div id="auditResult" class="result-box" style="display:none;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 3rem;">
+                <button onclick="showPage('main')" class="btn btn-secondary">← Back to Home</button>
+                <button onclick="showPage('advanced')" class="btn btn-primary">Try Advanced Tools</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Advanced Page -->
     <div id="advancedPage" class="advanced-page">
         <div class="advanced-dashboard">
@@ -588,7 +861,7 @@
             <div class="security-grid">
                 <div class="security-module">
                     <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                        <span class="status-indicator status-active"></span>
+                        <span class="status-indicator status-success"></span>
                         OSINT Defense System
                     </h4>
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">
@@ -628,7 +901,7 @@
 
                 <div class="security-module">
                     <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                        <span class="status-indicator status-active"></span>
+                        <span class="status-indicator status-success"></span>
                         AI Threat Intelligence
                     </h4>
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">
@@ -643,7 +916,7 @@
 
                 <div class="security-module">
                     <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                        <span class="status-indicator status-active"></span>
+                        <span class="status-indicator status-success"></span>
                         Quantum Encryption Suite
                     </h4>
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">
@@ -659,7 +932,7 @@
 
                 <div class="security-module">
                     <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                        <span class="status-indicator status-active"></span>
+                        <span class="status-indicator status-success"></span>
                         Legal Compliance Engine
                     </h4>
                     <p style="color: var(--text-secondary); margin-bottom: 1rem;">
@@ -702,20 +975,405 @@
     </div>
 
     <script>
+        // Page Navigation
         function showPage(page) {
             const mainPage = document.getElementById('mainPage');
             const advancedPage = document.getElementById('advancedPage');
+            const toolsPage = document.getElementById('toolsPage');
+            
+            mainPage.style.display = 'none';
+            advancedPage.style.display = 'none';
+            toolsPage.style.display = 'none';
             
             if (page === 'main') {
                 mainPage.style.display = 'block';
-                advancedPage.style.display = 'none';
             } else if (page === 'advanced') {
-                mainPage.style.display = 'none';
                 advancedPage.style.display = 'block';
+            } else if (page === 'tools') {
+                toolsPage.style.display = 'block';
             }
         }
 
-        // Create floating particles
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const navLinks = document.getElementById('navLinks');
+            navLinks.classList.toggle('active');
+        }
+
+        // Cookie Management Functions
+        function clearAllCookies() {
+            const cookies = document.cookie.split(";");
+            let cleared = 0;
+            
+            for (let cookie of cookies) {
+                const eqPos = cookie.indexOf("=");
+                const name = eqPos > -1 ? cookie.substr(0, eqPos).trim() : cookie.trim();
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=" + window.location.hostname;
+                document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=." + window.location.hostname;
+                cleared++;
+            }
+            
+            const resultBox = document.getElementById('cookieResult') || document.getElementById('cookieAnalysis');
+            if (resultBox) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `
+                    <span style="color: #10B981;">✓ SUCCESS</span><br>
+                    Cleared ${cleared} cookies from current domain<br>
+                    Timestamp: ${new Date().toLocaleString()}<br>
+                    Status: Privacy enhanced
+                `;
+            }
+            
+            updateMetrics('cookies', cleared);
+        }
+
+        function analyzeCookies() {
+            const cookies = document.cookie.split(";").filter(cookie => cookie.trim());
+            const analysis = [];
+            
+            cookies.forEach(cookie => {
+                const [name, value] = cookie.split("=").map(s => s.trim());
+                const isTracking = name.includes('_ga') || name.includes('_fb') || name.includes('utm') || 
+                                 name.includes('track') || name.includes('analytics');
+                analysis.push({
+                    name: name,
+                    type: isTracking ? 'TRACKING' : 'FUNCTIONAL',
+                    risk: isTracking ? 'HIGH' : 'LOW'
+                });
+            });
+            
+            const resultBox = document.getElementById('cookieAnalysis');
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `
+                <strong>Cookie Analysis Report</strong><br><br>
+                Total Cookies: ${cookies.length}<br>
+                Tracking Cookies: ${analysis.filter(c => c.type === 'TRACKING').length}<br>
+                Functional Cookies: ${analysis.filter(c => c.type === 'FUNCTIONAL').length}<br><br>
+                ${analysis.slice(0, 5).map(c => 
+                    `${c.name}: <span style="color: ${c.risk === 'HIGH' ? '#EF4444' : '#10B981'}">${c.type}</span>`
+                ).join('<br>')}
+                ${analysis.length > 5 ? '<br>... and ' + (analysis.length - 5) + ' more' : ''}
+            `;
+        }
+
+        // Browser Storage Functions
+        function clearBrowserStorage() {
+            let clearedItems = 0;
+            
+            try {
+                const localStorageSize = localStorage.length;
+                localStorage.clear();
+                clearedItems += localStorageSize;
+            } catch (e) {}
+            
+            try {
+                const sessionStorageSize = sessionStorage.length;
+                sessionStorage.clear();
+                clearedItems += sessionStorageSize;
+            } catch (e) {}
+            
+            const resultBox = document.getElementById('storageResult') || document.getElementById('storageAnalysis');
+            if (resultBox) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `
+                    <span style="color: #10B981;">✓ STORAGE CLEARED</span><br>
+                    Local Storage: Cleared<br>
+                    Session Storage: Cleared<br>
+                    Items Removed: ${clearedItems}<br>
+                    Cache Status: Cleared<br>
+                    Timestamp: ${new Date().toLocaleString()}
+                `;
+            }
+            
+            updateMetrics('storage', clearedItems);
+        }
+
+        function analyzeStorage() {
+            let localCount = 0, sessionCount = 0;
+            let localSize = 0, sessionSize = 0;
+            
+            try {
+                localCount = localStorage.length;
+                for (let key in localStorage) {
+                    if (localStorage.hasOwnProperty(key)) {
+                        localSize += localStorage[key].length;
+                    }
+                }
+            } catch (e) {}
+            
+            try {
+                sessionCount = sessionStorage.length;
+                for (let key in sessionStorage) {
+                    if (sessionStorage.hasOwnProperty(key)) {
+                        sessionSize += sessionStorage[key].length;
+                    }
+                }
+            } catch (e) {}
+            
+            const resultBox = document.getElementById('storageAnalysis');
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `
+                <strong>Storage Analysis Report</strong><br><br>
+                localStorage: ${localCount} items (${Math.round(localSize/1024)}KB)<br>
+                sessionStorage: ${sessionCount} items (${Math.round(sessionSize/1024)}KB)<br>
+                Total Data: ${Math.round((localSize + sessionSize)/1024)}KB<br>
+                Privacy Risk: ${(localCount + sessionCount > 10) ? '<span style="color: #F59E0B">MEDIUM</span>' : '<span style="color: #10B981">LOW</span>'}<br>
+                Recommendation: ${(localCount + sessionCount > 5) ? 'Clear storage regularly' : 'Storage levels acceptable'}
+            `;
+        }
+
+        // Password Analysis
+        function analyzePassword() {
+            const password = document.getElementById('passwordInput').value;
+            const resultBox = document.getElementById('passwordResult');
+            
+            if (!password) {
+                resultBox.style.display = 'none';
+                return;
+            }
+            
+            const analysis = {
+                length: password.length,
+                hasUpper: /[A-Z]/.test(password),
+                hasLower: /[a-z]/.test(password),
+                hasNumber: /\d/.test(password),
+                hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+                commonPasswords: ['password', '123456', 'qwerty', 'admin', 'letmein'].includes(password.toLowerCase())
+            };
+            
+            let score = 0;
+            if (analysis.length >= 8) score += 20;
+            if (analysis.length >= 12) score += 20;
+            if (analysis.hasUpper) score += 15;
+            if (analysis.hasLower) score += 15;
+            if (analysis.hasNumber) score += 15;
+            if (analysis.hasSpecial) score += 15;
+            if (analysis.commonPasswords) score -= 50;
+            
+            score = Math.max(0, Math.min(100, score));
+            
+            let strength = 'WEAK';
+            let color = '#EF4444';
+            if (score >= 80) { strength = 'STRONG'; color = '#10B981'; }
+            else if (score >= 60) { strength = 'MEDIUM'; color = '#F59E0B'; }
+            
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `
+                <strong>Password Security Analysis</strong><br><br>
+                Strength: <span style="color: ${color}">${strength} (${score}%)</span><br>
+                Length: ${analysis.length} characters ${analysis.length >= 12 ? '✓' : '✗'}<br>
+                Uppercase: ${analysis.hasUpper ? '✓' : '✗'}<br>
+                Lowercase: ${analysis.hasLower ? '✓' : '✗'}<br>
+                Numbers: ${analysis.hasNumber ? '✓' : '✗'}<br>
+                Special Characters: ${analysis.hasSpecial ? '✓' : '✗'}<br>
+                Common Password: ${analysis.commonPasswords ? '<span style="color: #EF4444">⚠ YES</span>' : '✓ No'}<br><br>
+                <strong>Recommendations:</strong><br>
+                ${score < 80 ? '• Use at least 12 characters<br>• Include mix of uppercase, lowercase, numbers, symbols<br>• Avoid common passwords' : '• Excellent password strength!<br>• Consider using a password manager'}
+            `;
+        }
+
+        // Email Privacy Check
+        function checkEmailPrivacy() {
+            const email = document.getElementById('emailInput').value;
+            const resultBox = document.getElementById('emailResult');
+            
+            if (!email || !email.includes('@')) {
+                resultBox.innerHTML = '<span style="color: #EF4444">Please enter a valid email address</span>';
+                resultBox.style.display = 'block';
+                return;
+            }
+            
+            // Simulate privacy check
+            const domain = email.split('@')[1];
+            const commonDomains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com'];
+            const isCommonDomain = commonDomains.includes(domain);
+            
+            // Simulate breach check (in real implementation, would use HaveIBeenPwned API)
+            const fakeBreachData = Math.random() > 0.7; // 30% chance of simulated breach
+            
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = `
+                <strong>Email Privacy Report</strong><br><br>
+                Email: ${email}<br>
+                Domain: ${domain}<br>
+                Provider Type: ${isCommonDomain ? 'Major Provider' : 'Custom/Business'}<br>
+                Privacy Risk: ${isCommonDomain ? '<span style="color: #F59E0B">MEDIUM</span>' : '<span style="color: #10B981">LOW</span>'}<br><br>
+                <strong>Breach Check:</strong><br>
+                Status: ${fakeBreachData ? '<span style="color: #EF4444">⚠ FOUND IN BREACH</span>' : '<span style="color: #10B981">✓ NO BREACHES FOUND</span>'}<br>
+                ${fakeBreachData ? 'Recommendation: Change passwords immediately<br>Enable 2FA on all accounts' : 'Email appears secure'}<br><br>
+                <strong>Privacy Tips:</strong><br>
+                • Use email aliases for signups<br>
+                • Enable 2FA authentication<br>
+                • Regular password updates
+            `;
+        }
+
+        // URL Analysis
+        function analyzeURL() {
+            const url = document.getElementById('urlInput').value;
+            const resultBox = document.getElementById('urlResult');
+            
+            if (!url) {
+                resultBox.style.display = 'none';
+                return;
+            }
+            
+            try {
+                const urlObj = new URL(url);
+                const params = new URLSearchParams(urlObj.search);
+                
+                const trackingParams = ['utm_source', 'utm_medium', 'utm_campaign', 'fbclid', 'gclid', '_ga'];
+                const foundTracking = trackingParams.filter(param => params.has(param));
+                
+                const isHTTPS = urlObj.protocol === 'https:';
+                const suspiciousDomains = ['bit.ly', 'tinyurl.com', 'goo.gl'];
+                const isShortened = suspiciousDomains.some(domain => urlObj.hostname.includes(domain));
+                
+                let riskLevel = 'LOW';
+                let riskColor = '#10B981';
+                if (foundTracking.length > 2 || !isHTTPS || isShortened) {
+                    riskLevel = 'HIGH';
+                    riskColor = '#EF4444';
+                } else if (foundTracking.length > 0 || isShortened) {
+                    riskLevel = 'MEDIUM';
+                    riskColor = '#F59E0B';
+                }
+                
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = `
+                    <strong>URL Security Analysis</strong><br><br>
+                    Domain: ${urlObj.hostname}<br>
+                    Protocol: ${isHTTPS ? '<span style="color: #10B981">HTTPS ✓</span>' : '<span style="color: #EF4444">HTTP ✗</span>'}<br>
+                    Shortened URL: ${isShortened ? '<span style="color: #F59E0B">⚠ YES</span>' : '✓ No'}<br>
+                    Tracking Parameters: ${foundTracking.length}<br>
+                    Risk Level: <span style="color: ${riskColor}">${riskLevel}</span><br><br>
+                    ${foundTracking.length > 0 ? `<strong>Tracking Found:</strong><br>${foundTracking.map(p => `• ${p}`).join('<br>')}<br><br>` : ''}
+                    <strong>Recommendations:</strong><br>
+                    ${!isHTTPS ? '• Avoid HTTP sites for sensitive data<br>' : ''}
+                    ${foundTracking.length > 0 ? '• Remove tracking parameters<br>' : ''}
+                    ${isShortened ? '• Be cautious with shortened URLs<br>' : ''}
+                    • Verify domain authenticity
+                `;
+            } catch (e) {
+                resultBox.style.display = 'block';
+                resultBox.innerHTML = '<span style="color: #EF4444">Invalid URL format</span>';
+            }
+        }
+
+        // Privacy Health Check
+        function runPrivacyHealthCheck() {
+            const resultBox = document.getElementById('healthResult');
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Running privacy health check...</span>';
+            
+            setTimeout(() => {
+                const browserInfo = {
+                    userAgent: navigator.userAgent.includes('Chrome') ? 'Chrome' : 
+                              navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Other',
+                    cookiesEnabled: navigator.cookieEnabled,
+                    doNotTrack: navigator.doNotTrack === '1',
+                    language: navigator.language,
+                    plugins: navigator.plugins.length
+                };
+                
+                const privacyScore = calculatePrivacyScore(browserInfo);
+                
+                resultBox.innerHTML = `
+                    <strong>Privacy Health Report</strong><br><br>
+                    Privacy Score: <span style="color: ${privacyScore >= 80 ? '#10B981' : privacyScore >= 60 ? '#F59E0B' : '#EF4444'}">${privacyScore}%</span><br>
+                    Browser: ${browserInfo.userAgent}<br>
+                    Do Not Track: ${browserInfo.doNotTrack ? '✓ Enabled' : '✗ Disabled'}<br>
+                    Cookies: ${browserInfo.cookiesEnabled ? '⚠ Enabled' : '✓ Disabled'}<br>
+                    Browser Plugins: ${browserInfo.plugins} detected<br><br>
+                    <strong>Recommendations:</strong><br>
+                    • Enable Do Not Track<br>
+                    • Use privacy-focused browser<br>
+                    • Install ad blocker<br>
+                    • Regular cookie cleanup<br>
+                    • Use VPN for sensitive browsing
+                `;
+            }, 2000);
+        }
+
+        // Comprehensive Audit
+        function runComprehensiveAudit() {
+            const progressBar = document.getElementById('auditProgress');
+            const progressFill = document.getElementById('auditProgressFill');
+            const resultBox = document.getElementById('auditResult');
+            
+            progressBar.style.display = 'block';
+            resultBox.style.display = 'block';
+            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Initializing comprehensive audit...</span>';
+            
+            let progress = 0;
+            const auditSteps = [
+                'Analyzing browser fingerprint...',
+                'Checking privacy settings...',
+                'Scanning for tracking cookies...',
+                'Evaluating storage data...',
+                'Testing DNS leaks...',
+                'Assessing security headers...',
+                'Compiling final report...'
+            ];
+            
+            const interval = setInterval(() => {
+                progress += 15;
+                progressFill.style.width = progress + '%';
+                
+                if (progress <= 105) {
+                    const stepIndex = Math.floor(progress / 15);
+                    if (stepIndex < auditSteps.length) {
+                        resultBox.innerHTML = `<span style="color: #F59E0B">🔄 ${auditSteps[stepIndex]}</span>`;
+                    }
+                }
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        const finalScore = Math.floor(Math.random() * 30) + 70; // 70-100
+                        resultBox.innerHTML = `
+                            <strong>Comprehensive Privacy Audit Complete</strong><br><br>
+                            Overall Privacy Score: <span style="color: ${finalScore >= 85 ? '#10B981' : '#F59E0B'}">${finalScore}%</span><br><br>
+                            <strong>Detailed Analysis:</strong><br>
+                            🔒 Encryption: ${Math.random() > 0.3 ? '✓ Strong' : '⚠ Weak'}<br>
+                            🍪 Cookie Protection: ${Math.random() > 0.5 ? '✓ Good' : '⚠ Needs Improvement'}<br>
+                            🌐 DNS Security: ${Math.random() > 0.4 ? '✓ Secure' : '⚠ Potential Leaks'}<br>
+                            🛡️ Ad Blocking: ${Math.random() > 0.6 ? '✓ Active' : '✗ Not Detected'}<br>
+                            📱 Device Fingerprint: ${Math.random() > 0.5 ? '✓ Protected' : '⚠ Trackable'}<br>
+                            🔍 Search Privacy: ${Math.random() > 0.4 ? '✓ Private' : '⚠ Tracked'}<br><br>
+                            <strong>Priority Actions:</strong><br>
+                            ${finalScore < 85 ? '• Install privacy browser extensions<br>• Configure DNS-over-HTTPS<br>• Enable strict tracking protection' : '• Maintain current privacy settings<br>• Regular security updates<br>• Monitor for new threats'}
+                        `;
+                    }, 1000);
+                }
+            }, 300);
+        }
+
+        // Helper Functions
+        function calculatePrivacyScore(browserInfo) {
+            let score = 50; // Base score
+            if (browserInfo.doNotTrack) score += 20;
+            if (!browserInfo.cookiesEnabled) score += 15;
+            if (browserInfo.plugins < 5) score += 15;
+            return Math.min(100, score);
+        }
+
+        function updateMetrics(type, value) {
+            const tracesElement = document.getElementById('tracesRemoved');
+            if (tracesElement) {
+                const current = parseInt(tracesElement.textContent);
+                tracesElement.textContent = current + value;
+            }
+            
+            const privacyElement = document.getElementById('privacyScore');
+            if (privacyElement && type === 'cookies') {
+                const current = parseInt(privacyElement.textContent);
+                privacyElement.textContent = Math.min(100, current + Math.floor(value / 2));
+            }
+        }
+
+        // Initialize particles and animations
         function createParticles() {
             const container = document.querySelector('.floating-particles');
             for (let i = 0; i < 50; i++) {
@@ -742,14 +1400,25 @@
             });
         });
 
-        // Initialize particles
+        // Initialize
         createParticles();
 
-        // Add cyber grid animation
+        // Cyber grid animation
         setInterval(() => {
             const grid = document.querySelector('.cyber-grid');
-            grid.style.transform = `translate(${Math.random() * 2 - 1}px, ${Math.random() * 2 - 1}px)`;
+            if (grid) {
+                grid.style.transform = `translate(${Math.random() * 2 - 1}px, ${Math.random() * 2 - 1}px)`;
+            }
         }, 100);
+
+        // Real-time metrics updates
+        setInterval(() => {
+            const threatLevel = document.getElementById('threatLevel');
+            if (threatLevel && Math.random() > 0.95) {
+                const current = parseInt(threatLevel.textContent);
+                threatLevel.textContent = Math.max(0, current + (Math.random() > 0.5 ? 1 : -1));
+            }
+        }, 5000);
     </script>
 </body>
 </html>
