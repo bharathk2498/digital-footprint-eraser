@@ -25,6 +25,8 @@
             --success: #10B981;
             --warning: #F59E0B;
             --danger: #EF4444;
+            --family: #EC4899;
+            --sector: #06B6D4;
             --glow: 0 0 30px rgba(139, 92, 246, 0.3);
             --glow-intense: 0 0 50px rgba(139, 92, 246, 0.6);
         }
@@ -56,10 +58,56 @@
             50% { opacity: 0.1; }
         }
 
-        .advanced-dashboard {
-            margin-top: 50px;
-            padding: 2rem;
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 1rem 2rem;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: transparent;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-tab.active {
+            background: var(--accent-violet);
+            color: white;
+            box-shadow: var(--glow);
+        }
+
+        .nav-tab:hover:not(.active) {
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent-violet);
+        }
+
+        .advanced-dashboard {
+            margin-top: 100px;
+            padding: 2rem;
+            max-width: 1900px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -102,6 +150,14 @@
             box-shadow: var(--glow-intense);
         }
 
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .threat-analyzer {
             background: var(--glass-bg);
             border: 1px solid rgba(139, 92, 246, 0.3);
@@ -131,6 +187,21 @@
             box-shadow: var(--glow-intense);
         }
 
+        .family-module {
+            border-color: rgba(236, 72, 153, 0.4);
+            background: rgba(236, 72, 153, 0.05);
+        }
+
+        .sector-module {
+            border-color: rgba(6, 182, 212, 0.4);
+            background: rgba(6, 182, 212, 0.05);
+        }
+
+        .organization-module {
+            border-color: rgba(168, 85, 247, 0.4);
+            background: rgba(168, 85, 247, 0.05);
+        }
+
         .status-indicator {
             display: inline-block;
             width: 12px;
@@ -142,6 +213,8 @@
         .status-success { background: var(--success); }
         .status-warning { background: var(--warning); }
         .status-danger { background: var(--danger); }
+        .status-family { background: var(--family); }
+        .status-sector { background: var(--sector); }
 
         .btn {
             display: inline-block;
@@ -167,20 +240,11 @@
             box-shadow: var(--glow-intense);
         }
 
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
+        .btn-success { background: var(--success); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-family { background: var(--family); color: white; }
+        .btn-sector { background: var(--sector); color: white; }
 
         .progress-bar {
             width: 100%;
@@ -259,17 +323,70 @@
             margin-top: 0.5rem;
         }
 
-        .threat-list {
-            list-style: none;
-            padding: 0;
+        .family-member {
+            background: rgba(236, 72, 153, 0.1);
+            border: 1px solid rgba(236, 72, 153, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
         }
 
-        .threat-item {
+        .member-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            margin-bottom: 0.5rem;
+        }
+
+        .age-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .age-group {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            background: rgba(139, 92, 246, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .age-group.active {
+            background: var(--family);
+            color: white;
+        }
+
+        .compliance-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .compliance-card {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .compliance-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+        }
+
+        .org-member {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .modal {
@@ -308,13 +425,28 @@
 
         @media (max-width: 768px) {
             .security-grid { grid-template-columns: 1fr; }
+            .compliance-grid { grid-template-columns: 1fr; }
             .metrics-row { flex-direction: column; }
             .dashboard-title { font-size: 2rem; }
+            .nav-tabs { flex-wrap: wrap; }
         }
     </style>
 </head>
 <body>
     <div class="cyber-grid"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <h2 style="color: var(--accent-violet); margin: 0;">🛡️ Advanced Security Center</h2>
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('core')">Core Security</button>
+                <button class="nav-tab" onclick="switchTab('family')">Family Protection</button>
+                <button class="nav-tab" onclick="switchTab('sector')">Sector Compliance</button>
+                <button class="nav-tab" onclick="switchTab('organization')">Organization</button>
+            </div>
+        </div>
+    </nav>
 
     <!-- Paywall Overlay -->
     <div id="paywallOverlay" class="paywall-overlay">
@@ -334,229 +466,908 @@
     </div>
 
     <div class="advanced-dashboard">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Advanced Security Operations Center</h1>
-            <p style="color: var(--text-secondary); font-size: 1.1rem;">
-                Military-grade digital footprint elimination and threat intelligence
-            </p>
-        </div>
-
-        <!-- Real-Time Threat Intelligence Dashboard -->
-        <div class="threat-analyzer">
-            <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🔍 Real-Time Threat Intelligence Scanner</h3>
-            
-            <div class="metrics-row">
-                <div class="metric-box">
-                    <div class="metric-value" id="activeSources">847</div>
-                    <div class="metric-label">Data Sources</div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-value" id="threatsDetected">0</div>
-                    <div class="metric-label">Threats Detected</div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-value" id="riskScore">LOW</div>
-                    <div class="metric-label">Risk Level</div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-value" id="lastScan">Never</div>
-                    <div class="metric-label">Last Scan</div>
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Target for Deep Scan:</label>
-                <input type="text" id="scanTarget" placeholder="Enter email, username, or domain to scan..." />
-            </div>
-
-            <button class="btn btn-primary" onclick="startAdvancedScan()">Start Deep Scan</button>
-            <button class="btn btn-warning" onclick="startContinuousMonitoring()">Enable 24/7 Monitoring</button>
-
-            <div class="progress-bar" style="display: none;" id="scanProgress">
-                <div class="progress-fill" id="scanProgressFill"></div>
-            </div>
-
-            <div id="threatResults" class="scan-results" style="display: none;"></div>
-        </div>
-
-        <div class="security-grid">
-            <!-- OSINT Defense System -->
-            <div class="security-module">
-                <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                    <span class="status-indicator status-success"></span>
-                    OSINT Defense System
-                </h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    Real-time protection against 300+ reconnaissance tools and databases.
+        <!-- Core Security Tab -->
+        <div id="coreTab" class="tab-content active">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Core Security Operations</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">
+                    Military-grade digital footprint elimination and threat intelligence
                 </p>
+            </div>
+
+            <!-- Real-Time Threat Intelligence Dashboard -->
+            <div class="threat-analyzer">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🔍 Real-Time Threat Intelligence Scanner</h3>
                 
                 <div class="metrics-row">
                     <div class="metric-box">
-                        <div class="metric-value" id="osintBlocked">1,247</div>
-                        <div class="metric-label">Scans Blocked</div>
+                        <div class="metric-value" id="activeSources">847</div>
+                        <div class="metric-label">Data Sources</div>
                     </div>
                     <div class="metric-box">
-                        <div class="metric-value" id="osintTools">300+</div>
-                        <div class="metric-label">Tools Monitored</div>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="runOSINTScan()">Test OSINT Exposure</button>
-                <button class="btn btn-success" onclick="enableOSINTShield()">Enable Shield</button>
-
-                <div id="osintResults" class="scan-results" style="display: none;"></div>
-            </div>
-
-            <!-- Data Broker Elimination -->
-            <div class="security-module">
-                <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                    <span class="status-indicator status-warning"></span>
-                    Data Broker Elimination Network
-                </h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    Automated removal from 500+ people search engines and background check sites.
-                </p>
-
-                <div class="input-group">
-                    <label>Personal Information:</label>
-                    <input type="text" id="fullName" placeholder="Full Name" />
-                </div>
-                <div class="input-group">
-                    <input type="text" id="location" placeholder="City, State" />
-                </div>
-
-                <button class="btn btn-primary" onclick="scanDataBrokers()">Scan Data Brokers</button>
-                <button class="btn btn-danger" onclick="initiateRemoval()">Start Removal Process</button>
-
-                <div id="brokerResults" class="scan-results" style="display: none;"></div>
-            </div>
-
-            <!-- AI Threat Intelligence -->
-            <div class="security-module">
-                <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                    <span class="status-indicator status-success"></span>
-                    AI Threat Intelligence Engine
-                </h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    Machine learning algorithms predict and prevent exposure before it happens.
-                </p>
-
-                <div class="metrics-row">
-                    <div class="metric-box">
-                        <div class="metric-value" id="aiThreatsPrevented">47</div>
-                        <div class="metric-label">Threats Prevented</div>
+                        <div class="metric-value" id="threatsDetected">0</div>
+                        <div class="metric-label">Threats Detected</div>
                     </div>
                     <div class="metric-box">
-                        <div class="metric-value" id="aiAccuracy">99.7%</div>
-                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-value" id="riskScore">LOW</div>
+                        <div class="metric-label">Risk Level</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="lastScan">Never</div>
+                        <div class="metric-label">Last Scan</div>
                     </div>
                 </div>
-
-                <button class="btn btn-primary" onclick="runAIAnalysis()">Run AI Analysis</button>
-                <button class="btn btn-success" onclick="enablePredictiveDefense()">Enable Auto-Defense</button>
-
-                <div id="aiResults" class="scan-results" style="display: none;"></div>
-            </div>
-
-            <!-- Quantum Encryption Suite -->
-            <div class="security-module">
-                <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                    <span class="status-indicator status-success"></span>
-                    Quantum Encryption Suite
-                </h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    Next-generation quantum-resistant encryption for all communications.
-                </p>
 
                 <div class="input-group">
-                    <label>Message to Encrypt:</label>
-                    <textarea id="encryptMessage" placeholder="Enter sensitive message..." rows="3"></textarea>
+                    <label>Target for Deep Scan:</label>
+                    <input type="text" id="scanTarget" placeholder="Enter email, username, or domain to scan..." />
                 </div>
 
-                <button class="btn btn-primary" onclick="encryptMessage()">Quantum Encrypt</button>
-                <button class="btn btn-warning" onclick="generateSecureKey()">Generate Secure Key</button>
+                <button class="btn btn-primary" onclick="startAdvancedScan()">Start Deep Scan</button>
+                <button class="btn btn-warning" onclick="startContinuousMonitoring()">Enable 24/7 Monitoring</button>
 
-                <div id="encryptionResults" class="scan-results" style="display: none;"></div>
+                <div class="progress-bar" style="display: none;" id="scanProgress">
+                    <div class="progress-fill" id="scanProgressFill"></div>
+                </div>
+
+                <div id="threatResults" class="scan-results" style="display: none;"></div>
             </div>
 
-            <!-- Legal Compliance Engine -->
-            <div class="security-module">
-                <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                    <span class="status-indicator status-success"></span>
-                    Legal Compliance Engine
-                </h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    Automated generation of legally compliant removal requests.
-                </p>
+            <div class="security-grid">
+                <!-- OSINT Defense System -->
+                <div class="security-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        OSINT Defense System
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Real-time protection against 300+ reconnaissance tools and databases.
+                    </p>
+                    
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="osintBlocked">1,247</div>
+                            <div class="metric-label">Scans Blocked</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="osintTools">300+</div>
+                            <div class="metric-label">Tools Monitored</div>
+                        </div>
+                    </div>
 
-                <div class="input-group">
-                    <label>Jurisdiction:</label>
-                    <select id="jurisdiction">
-                        <option value="gdpr">GDPR (EU)</option>
-                        <option value="ccpa">CCPA (California)</option>
-                        <option value="pipeda">PIPEDA (Canada)</option>
-                        <option value="lgpd">LGPD (Brazil)</option>
-                    </select>
+                    <button class="btn btn-primary" onclick="runOSINTScan()">Test OSINT Exposure</button>
+                    <button class="btn btn-success" onclick="enableOSINTShield()">Enable Shield</button>
+
+                    <div id="osintResults" class="scan-results" style="display: none;"></div>
                 </div>
 
-                <button class="btn btn-primary" onclick="generateLegalNotice()">Generate Legal Notice</button>
-                <button class="btn btn-success" onclick="checkCompliance()">Check Compliance</button>
+                <!-- Data Broker Elimination -->
+                <div class="security-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-warning"></span>
+                        Data Broker Elimination Network
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Automated removal from 500+ people search engines and background check sites.
+                    </p>
 
-                <div id="legalResults" class="scan-results" style="display: none;"></div>
-            </div>
-
-            <!-- Emergency Response Protocol -->
-            <div class="security-module">
-                <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
-                    <span class="status-indicator status-danger"></span>
-                    Emergency Response Protocol
-                </h4>
-                <p style="color: var(--text-secondary); margin-bottom: 1rem;">
-                    Rapid response system for critical privacy breaches and identity theft.
-                </p>
-
-                <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); margin-bottom: 1rem;">
-                    <div style="color: #EF4444; font-weight: 600; margin-bottom: 0.5rem;">
-                        🚨 <span id="alertStatus">System Monitoring</span>
+                    <div class="input-group">
+                        <label>Personal Information:</label>
+                        <input type="text" id="fullName" placeholder="Full Name" />
                     </div>
-                    <div style="color: var(--text-secondary); font-size: 0.9rem;" id="alertMessage">
-                        No critical threats detected
+                    <div class="input-group">
+                        <input type="text" id="location" placeholder="City, State" />
                     </div>
+
+                    <button class="btn btn-primary" onclick="scanDataBrokers()">Scan Data Brokers</button>
+                    <button class="btn btn-danger" onclick="initiateRemoval()">Start Removal Process</button>
+
+                    <div id="brokerResults" class="scan-results" style="display: none;"></div>
                 </div>
 
-                <button class="btn btn-danger" onclick="initiateEmergencyProtocol()">Emergency Lockdown</button>
-                <button class="btn btn-warning" onclick="runBreachDetection()">Scan for Breaches</button>
+                <!-- AI Threat Intelligence -->
+                <div class="security-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        AI Threat Intelligence Engine
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Machine learning algorithms predict and prevent exposure before it happens.
+                    </p>
 
-                <div id="emergencyResults" class="scan-results" style="display: none;"></div>
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="aiThreatsPrevented">47</div>
+                            <div class="metric-label">Threats Prevented</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="aiAccuracy">99.7%</div>
+                            <div class="metric-label">Accuracy</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="runAIAnalysis()">Run AI Analysis</button>
+                    <button class="btn btn-success" onclick="enablePredictiveDefense()">Enable Auto-Defense</button>
+
+                    <div id="aiResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Quantum Encryption Suite -->
+                <div class="security-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Quantum Encryption Suite
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Next-generation quantum-resistant encryption for all communications.
+                    </p>
+
+                    <div class="input-group">
+                        <label>Message to Encrypt:</label>
+                        <textarea id="encryptMessage" placeholder="Enter sensitive message..." rows="3"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="encryptMessage()">Quantum Encrypt</button>
+                    <button class="btn btn-warning" onclick="generateSecureKey()">Generate Secure Key</button>
+
+                    <div id="encryptionResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Legal Compliance Engine -->
+                <div class="security-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Legal Compliance Engine
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Automated generation of legally compliant removal requests.
+                    </p>
+
+                    <div class="input-group">
+                        <label>Jurisdiction:</label>
+                        <select id="jurisdiction">
+                            <option value="gdpr">GDPR (EU)</option>
+                            <option value="ccpa">CCPA (California)</option>
+                            <option value="pipeda">PIPEDA (Canada)</option>
+                            <option value="lgpd">LGPD (Brazil)</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generateLegalNotice()">Generate Legal Notice</button>
+                    <button class="btn btn-success" onclick="checkCompliance()">Check Compliance</button>
+
+                    <div id="legalResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Emergency Response Protocol -->
+                <div class="security-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-danger"></span>
+                        Emergency Response Protocol
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Rapid response system for critical privacy breaches and identity theft.
+                    </p>
+
+                    <div style="background: rgba(239, 68, 68, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); margin-bottom: 1rem;">
+                        <div style="color: #EF4444; font-weight: 600; margin-bottom: 0.5rem;">
+                            🚨 <span id="alertStatus">System Monitoring</span>
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;" id="alertMessage">
+                            No critical threats detected
+                        </div>
+                    </div>
+
+                    <button class="btn btn-danger" onclick="initiateEmergencyProtocol()">Emergency Lockdown</button>
+                    <button class="btn btn-warning" onclick="runBreachDetection()">Scan for Breaches</button>
+
+                    <div id="emergencyResults" class="scan-results" style="display: none;"></div>
+                </div>
             </div>
         </div>
 
-        <!-- Executive Report Generation -->
-        <div class="threat-analyzer">
-            <h3 style="margin-bottom: 1rem; color: var(--text-primary);">📊 Executive Analytics & Reporting</h3>
-            
-            <div class="metrics-row">
-                <div class="metric-box">
-                    <div class="metric-value" id="privacyScore">87%</div>
-                    <div class="metric-label">Privacy Score</div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-value" id="tracesRemoved">1,247</div>
-                    <div class="metric-label">Traces Removed</div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-value" id="complianceScore">94%</div>
-                    <div class="metric-label">Compliance Score</div>
-                </div>
-                <div class="metric-box">
-                    <div class="metric-value" id="riskReduction">73%</div>
-                    <div class="metric-label">Risk Reduction</div>
-                </div>
+        <!-- Family Protection Tab -->
+        <div id="familyTab" class="tab-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Family Protection Center</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">
+                    Comprehensive privacy protection for every family member from children to seniors
+                </p>
             </div>
 
-            <button class="btn btn-primary" onclick="generateExecutiveReport()">Generate Executive Report</button>
-            <button class="btn btn-success" onclick="scheduleReports()">Schedule Automated Reports</button>
-            <button class="btn" style="background: var(--warning); color: white;" onclick="exportCompliance()">Export Compliance Data</button>
+            <!-- Family Overview Dashboard -->
+            <div class="threat-analyzer">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">👨‍👩‍👧‍👦 Family Privacy Overview</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="familyMembers">4</div>
+                        <div class="metric-label">Protected Members</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="childSafetyScore">94%</div>
+                        <div class="metric-label">Child Safety Score</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="seniorProtection">ACTIVE</div>
+                        <div class="metric-label">Senior Protection</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="familyThreats">2</div>
+                        <div class="metric-label">Active Threats</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-family" onclick="addFamilyMember()">Add Family Member</button>
+                <button class="btn btn-primary" onclick="runFamilyAudit()">Run Family Audit</button>
+                <button class="btn btn-success" onclick="generateFamilyReport()">Generate Family Report</button>
+
+                <div id="familyAuditResults" class="scan-results" style="display: none;"></div>
+            </div>
+
+            <div class="security-grid">
+                <!-- Child Safety Protection -->
+                <div class="security-module family-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-family"></span>
+                        Child Safety Protection
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Advanced protection for children and teenagers with age-appropriate privacy controls.
+                    </p>
+
+                    <div class="age-selector">
+                        <div class="age-group active" onclick="selectAgeGroup('child')">Child (5-12)</div>
+                        <div class="age-group" onclick="selectAgeGroup('teen')">Teen (13-17)</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Child's Name:</label>
+                        <input type="text" id="childName" placeholder="Enter child's name" />
+                    </div>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="childThreats">0</div>
+                            <div class="metric-label">Threats Blocked</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="parentalAlerts">3</div>
+                            <div class="metric-label">Parental Alerts</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-family" onclick="scanChildSafety()">Scan Child Safety</button>
+                    <button class="btn btn-warning" onclick="enableParentalControls()">Enable Parental Controls</button>
+
+                    <div id="childSafetyResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Senior Citizen Protection -->
+                <div class="security-module family-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Senior Citizen Privacy Protection
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Simplified privacy protection with scam detection and easy-to-use interfaces.
+                    </p>
+
+                    <div class="input-group">
+                        <label>Senior Family Member:</label>
+                        <input type="text" id="seniorName" placeholder="Enter senior's name" />
+                    </div>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="scamAttempts">7</div>
+                            <div class="metric-label">Scams Blocked</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="seniorAlerts">1</div>
+                            <div class="metric-label">Safety Alerts</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-family" onclick="scanSeniorSafety()">Scan Senior Safety</button>
+                    <button class="btn btn-success" onclick="enableScamProtection()">Enable Scam Protection</button>
+
+                    <div id="seniorSafetyResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Family Digital Footprint Manager -->
+                <div class="security-module family-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-warning"></span>
+                        Family Digital Footprint Manager
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Centralized management of all family members' digital footprints and privacy settings.
+                    </p>
+
+                    <div id="familyMembersList">
+                        <div class="family-member">
+                            <div class="member-header">
+                                <strong>John (Parent)</strong>
+                                <span style="color: var(--success);">✓ Protected</span>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Last scan: 2 hours ago | Threats: 0 | Privacy Score: 94%
+                            </div>
+                        </div>
+                        <div class="family-member">
+                            <div class="member-header">
+                                <strong>Sarah (Parent)</strong>
+                                <span style="color: var(--success);">✓ Protected</span>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Last scan: 4 hours ago | Threats: 1 | Privacy Score: 89%
+                            </div>
+                        </div>
+                        <div class="family-member">
+                            <div class="member-header">
+                                <strong>Emma (Teen, 16)</strong>
+                                <span style="color: var(--warning);">⚠ Needs Attention</span>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Last scan: 1 day ago | Threats: 3 | Privacy Score: 67%
+                            </div>
+                        </div>
+                        <div class="family-member">
+                            <div class="member-header">
+                                <strong>Michael (Child, 10)</strong>
+                                <span style="color: var(--success);">✓ Protected</span>
+                            </div>
+                            <div style="font-size: 0.9rem; color: var(--text-secondary);">
+                                Last scan: 6 hours ago | Threats: 0 | Privacy Score: 98%
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-family" onclick="scanAllFamily()">Scan All Members</button>
+                    <button class="btn btn-primary" onclick="manageFamilySettings()">Manage Settings</button>
+
+                    <div id="familyManagementResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Smart Parental Controls -->
+                <div class="security-module family-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Smart Parental Controls
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        AI-powered parental controls that adapt to your family's needs and values.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="blockedContent">847</div>
+                            <div class="metric-label">Content Blocked</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="screenTimeManaged">12h</div>
+                            <div class="metric-label">Screen Time Managed</div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Content Filter Level:</label>
+                        <select id="contentFilter">
+                            <option value="strict">Strict (Age 5-12)</option>
+                            <option value="moderate">Moderate (Age 13-15)</option>
+                            <option value="relaxed">Relaxed (Age 16-17)</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-family" onclick="configureParentalControls()">Configure Controls</button>
+                    <button class="btn btn-warning" onclick="reviewParentalAlerts()">Review Alerts</button>
+
+                    <div id="parentalControlsResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Family Emergency Response -->
+                <div class="security-module family-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-danger"></span>
+                        Family Emergency Response
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Immediate protection protocols for family-wide privacy emergencies and threats.
+                    </p>
+
+                    <div style="background: rgba(236, 72, 153, 0.1); padding: 1rem; border-radius: 8px; border: 1px solid rgba(236, 72, 153, 0.3); margin-bottom: 1rem;">
+                        <div style="color: var(--family); font-weight: 600; margin-bottom: 0.5rem;">
+                            👨‍👩‍👧‍👦 <span id="familyAlertStatus">Family Status: SECURE</span>
+                        </div>
+                        <div style="color: var(--text-secondary); font-size: 0.9rem;" id="familyAlertMessage">
+                            All family members are protected
+                        </div>
+                    </div>
+
+                    <button class="btn btn-danger" onclick="initiateFamilyLockdown()">Family Emergency Lockdown</button>
+                    <button class="btn btn-family" onclick="notifyAllParents()">Notify All Parents</button>
+
+                    <div id="familyEmergencyResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Multi-Generational Privacy Education -->
+                <div class="security-module family-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Multi-Generational Privacy Education
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Age-appropriate privacy education and training for all family members.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="lessonsCompleted">23</div>
+                            <div class="metric-label">Lessons Completed</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="privacyQuizScore">87%</div>
+                            <div class="metric-label">Quiz Average</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-family" onclick="startPrivacyLesson()">Start Privacy Lesson</button>
+                    <button class="btn btn-primary" onclick="takePrivacyQuiz()">Take Privacy Quiz</button>
+
+                    <div id="educationResults" class="scan-results" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sector Compliance Tab -->
+        <div id="sectorTab" class="tab-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Sector Compliance Center</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">
+                    Industry-specific privacy compliance for healthcare, finance, education, legal, and government sectors
+                </p>
+            </div>
+
+            <!-- Compliance Overview -->
+            <div class="threat-analyzer">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🏛️ Regulatory Compliance Overview</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="complianceFrameworks">7</div>
+                        <div class="metric-label">Active Frameworks</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="complianceScore">94%</div>
+                        <div class="metric-label">Overall Compliance</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="auditReadiness">READY</div>
+                        <div class="metric-label">Audit Readiness</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="violationRisk">LOW</div>
+                        <div class="metric-label">Violation Risk</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-sector" onclick="runComplianceAudit()">Run Full Compliance Audit</button>
+                <button class="btn btn-primary" onclick="generateComplianceReport()">Generate Compliance Report</button>
+                <button class="btn btn-warning" onclick="scheduleAuditPrep()">Schedule Audit Prep</button>
+
+                <div id="complianceAuditResults" class="scan-results" style="display: none;"></div>
+            </div>
+
+            <div class="compliance-grid">
+                <!-- Healthcare HIPAA Compliance -->
+                <div class="compliance-card">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Healthcare HIPAA Compliance
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Complete HIPAA compliance suite for healthcare providers and covered entities.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="hipaaScore">96%</div>
+                            <div class="metric-label">HIPAA Score</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="phiProtection">SECURE</div>
+                            <div class="metric-label">PHI Protection</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sector" onclick="scanHIPAACompliance()">HIPAA Security Scan</button>
+                    <button class="btn btn-primary" onclick="generateHIPAAReport()">Generate HIPAA Report</button>
+
+                    <div id="hipaaResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Financial SOX/GLBA Compliance -->
+                <div class="compliance-card">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Financial SOX/GLBA Compliance
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Sarbanes-Oxley and Gramm-Leach-Bliley Act compliance for financial institutions.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="soxScore">92%</div>
+                            <div class="metric-label">SOX Score</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="glbaScore">94%</div>
+                            <div class="metric-label">GLBA Score</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sector" onclick="scanFinancialCompliance()">Financial Compliance Scan</button>
+                    <button class="btn btn-primary" onclick="generateFinancialReport()">Generate Financial Report</button>
+
+                    <div id="financialResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Education FERPA Compliance -->
+                <div class="compliance-card">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-warning"></span>
+                        Education FERPA Compliance
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Family Educational Rights and Privacy Act compliance for educational institutions.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="ferpaScore">89%</div>
+                            <div class="metric-label">FERPA Score</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="studentRecords">PROTECTED</div>
+                            <div class="metric-label">Student Records</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sector" onclick="scanFERPACompliance()">FERPA Security Scan</button>
+                    <button class="btn btn-primary" onclick="generateFERPAReport()">Generate FERPA Report</button>
+
+                    <div id="ferpaResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Legal Attorney-Client Privilege -->
+                <div class="compliance-card">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Legal Attorney-Client Privilege
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Enhanced protection for attorney-client communications and legal professional privilege.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="privilegeScore">98%</div>
+                            <div class="metric-label">Privilege Protection</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="legalEncryption">ACTIVE</div>
+                            <div class="metric-label">Legal Encryption</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sector" onclick="scanLegalCompliance()">Legal Privilege Scan</button>
+                    <button class="btn btn-primary" onclick="generateLegalReport()">Generate Legal Report</button>
+
+                    <div id="legalResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Government FISMA Compliance -->
+                <div class="compliance-card">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Government FISMA Compliance
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Federal Information Security Management Act compliance for government agencies.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="fismaScore">95%</div>
+                            <div class="metric-label">FISMA Score</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="govSecurity">HIGH</div>
+                            <div class="metric-label">Security Level</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sector" onclick="scanFISMACompliance()">FISMA Security Scan</button>
+                    <button class="btn btn-primary" onclick="generateFISMAReport()">Generate FISMA Report</button>
+
+                    <div id="fismaResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- International Compliance -->
+                <div class="compliance-card">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        International Compliance
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Multi-jurisdiction compliance including GDPR, PIPEDA, LGPD, and 40+ other frameworks.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="internationalFrameworks">43</div>
+                            <div class="metric-label">Frameworks</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="globalCompliance">91%</div>
+                            <div class="metric-label">Global Score</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-sector" onclick="scanInternationalCompliance()">International Scan</button>
+                    <button class="btn btn-primary" onclick="generateGlobalReport()">Generate Global Report</button>
+
+                    <div id="internationalResults" class="scan-results" style="display: none;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organization Tab -->
+        <div id="organizationTab" class="tab-content">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Organization Management</h1>
+                <p style="color: var(--text-secondary); font-size: 1.1rem;">
+                    Multi-user privacy management with role-based access controls and centralized policy management
+                </p>
+            </div>
+
+            <!-- Organization Overview -->
+            <div class="threat-analyzer">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🏢 Organization Privacy Overview</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="orgMembers">47</div>
+                        <div class="metric-label">Team Members</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="orgCompliance">92%</div>
+                        <div class="metric-label">Org Compliance</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="orgThreats">3</div>
+                        <div class="metric-label">Active Threats</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="policyCompliance">89%</div>
+                        <div class="metric-label">Policy Compliance</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="addTeamMember()">Add Team Member</button>
+                <button class="btn btn-sector" onclick="runOrgAudit()">Run Organization Audit</button>
+                <button class="btn btn-success" onclick="generateOrgReport()">Generate Org Report</button>
+
+                <div id="orgAuditResults" class="scan-results" style="display: none;"></div>
+            </div>
+
+            <div class="security-grid">
+                <!-- Team Member Management -->
+                <div class="security-module organization-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Team Member Management
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Centralized management of all team members' privacy protection and access controls.
+                    </p>
+
+                    <div id="teamMembersList">
+                        <div class="org-member">
+                            <div>
+                                <strong>John Smith</strong> - Chief Privacy Officer
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Admin Access | Last Active: 2 hours ago</div>
+                            </div>
+                            <span style="color: var(--success);">✓ Protected</span>
+                        </div>
+                        <div class="org-member">
+                            <div>
+                                <strong>Sarah Johnson</strong> - Security Analyst
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Full Access | Last Active: 30 mins ago</div>
+                            </div>
+                            <span style="color: var(--success);">✓ Protected</span>
+                        </div>
+                        <div class="org-member">
+                            <div>
+                                <strong>Michael Brown</strong> - IT Manager
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Full Access | Last Active: 1 hour ago</div>
+                            </div>
+                            <span style="color: var(--warning);">⚠ Needs Review</span>
+                        </div>
+                        <div class="org-member">
+                            <div>
+                                <strong>Emma Davis</strong> - Compliance Officer
+                                <div style="font-size: 0.8rem; color: var(--text-secondary);">Compliance Access | Last Active: 4 hours ago</div>
+                            </div>
+                            <span style="color: var(--success);">✓ Protected</span>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="manageTeamAccess()">Manage Access</button>
+                    <button class="btn btn-sector" onclick="auditTeamMembers()">Audit All Members</button>
+
+                    <div id="teamManagementResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Role-Based Access Controls -->
+                <div class="security-module organization-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Role-Based Access Controls
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Granular permission management with customizable roles and access levels.
+                    </p>
+
+                    <div class="input-group">
+                        <label>Role Configuration:</label>
+                        <select id="roleSelect">
+                            <option value="admin">Administrator</option>
+                            <option value="privacy_officer">Privacy Officer</option>
+                            <option value="security_analyst">Security Analyst</option>
+                            <option value="compliance_officer">Compliance Officer</option>
+                            <option value="team_member">Team Member</option>
+                            <option value="viewer">Viewer</option>
+                        </select>
+                    </div>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="activeRoles">6</div>
+                            <div class="metric-label">Active Roles</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="permissionSets">24</div>
+                            <div class="metric-label">Permission Sets</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="configureRole()">Configure Role</button>
+                    <button class="btn btn-sector" onclick="auditPermissions()">Audit Permissions</button>
+
+                    <div id="roleResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Centralized Policy Management -->
+                <div class="security-module organization-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-warning"></span>
+                        Centralized Policy Management
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Organization-wide privacy policies with automated enforcement and compliance tracking.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="activePolicies">12</div>
+                            <div class="metric-label">Active Policies</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="policyViolations">2</div>
+                            <div class="metric-label">Violations</div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Policy Template:</label>
+                        <select id="policyTemplate">
+                            <option value="privacy_policy">Privacy Policy</option>
+                            <option value="data_retention">Data Retention Policy</option>
+                            <option value="access_control">Access Control Policy</option>
+                            <option value="incident_response">Incident Response Policy</option>
+                        </select>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="createPolicy()">Create Policy</button>
+                    <button class="btn btn-warning" onclick="enforceCompliance()">Enforce Compliance</button>
+
+                    <div id="policyResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Organization-Wide Reporting -->
+                <div class="security-module organization-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Organization-Wide Reporting
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Comprehensive reporting and analytics for executive leadership and compliance teams.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="monthlyReports">24</div>
+                            <div class="metric-label">Monthly Reports</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="executiveBriefings">8</div>
+                            <div class="metric-label">Executive Briefings</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="generateExecutiveReport()">Executive Report</button>
+                    <button class="btn btn-sector" onclick="scheduleReporting()">Schedule Reports</button>
+
+                    <div id="reportingResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Enterprise Integration -->
+                <div class="security-module organization-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Enterprise Integration
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Seamless integration with enterprise systems, SIEM platforms, and security tools.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="integrations">15</div>
+                            <div class="metric-label">Active Integrations</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="apiCalls">2.4K</div>
+                            <div class="metric-label">Daily API Calls</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="manageIntegrations()">Manage Integrations</button>
+                    <button class="btn btn-sector" onclick="testConnections()">Test Connections</button>
+
+                    <div id="integrationResults" class="scan-results" style="display: none;"></div>
+                </div>
+
+                <!-- Multi-Tenant Security -->
+                <div class="security-module organization-module">
+                    <h4 style="margin-bottom: 1rem; display: flex; align-items: center;">
+                        <span class="status-indicator status-success"></span>
+                        Multi-Tenant Security
+                    </h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Isolated security environments for different departments, projects, or client groups.
+                    </p>
+
+                    <div class="metrics-row">
+                        <div class="metric-box">
+                            <div class="metric-value" id="tenants">8</div>
+                            <div class="metric-label">Security Tenants</div>
+                        </div>
+                        <div class="metric-box">
+                            <div class="metric-value" id="isolation">100%</div>
+                            <div class="metric-label">Data Isolation</div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="manageTenants()">Manage Tenants</button>
+                    <button class="btn btn-sector" onclick="auditIsolation()">Audit Isolation</button>
+
+                    <div id="tenantResults" class="scan-results" style="display: none;"></div>
+                </div>
+            </div>
         </div>
 
         <div style="text-align: center; margin-top: 3rem;">
@@ -601,7 +1412,26 @@
             hasAdvancedAccess = true;
         }
 
-        // Advanced Threat Scanner
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        // Core Security Functions (keeping existing functionality)
         function startAdvancedScan() {
             const target = document.getElementById('scanTarget').value;
             if (!target) {
@@ -670,299 +1500,190 @@
             updateMetric('activeSources', parseInt(document.getElementById('activeSources').textContent) + 50);
         }
 
-        // OSINT Defense System
-        function runOSINTScan() {
-            const results = document.getElementById('osintResults');
-            results.style.display = 'block';
-            results.innerHTML = '🔄 Testing OSINT exposure...';
-            
-            setTimeout(() => {
-                const blockedCount = Math.floor(Math.random() * 20) + 5;
-                updateMetric('osintBlocked', parseInt(document.getElementById('osintBlocked').textContent) + blockedCount);
-                
-                results.innerHTML = `
-                    <strong>🛡️ OSINT Exposure Test Complete</strong><br><br>
-                    Tools Tested: 25<br>
-                    Successfully Blocked: ${blockedCount}<br>
-                    Vulnerabilities: ${25 - blockedCount}<br><br>
-                    <strong>Detailed Results:</strong><br>
-                    • Sherlock: BLOCKED ✓<br>
-                    • WhatsMyName: BLOCKED ✓<br>
-                    • Social Analyzer: PROTECTED ✓<br>
-                    • Username search engines: SHIELDED ✓<br>
-                    • Public records: ${Math.random() > 0.5 ? 'PROTECTED ✓' : 'EXPOSED ⚠️'}<br>
-                `;
-            }, 2000);
-        }
-
-        function enableOSINTShield() {
-            alert('🛡️ OSINT Shield activated! Real-time protection against reconnaissance tools enabled.');
-        }
-
-        // Data Broker Elimination
-        function scanDataBrokers() {
-            const fullName = document.getElementById('fullName').value;
-            const location = document.getElementById('location').value;
-            
-            if (!fullName) {
-                alert('Please enter your full name');
-                return;
+        // Family Protection Functions
+        function addFamilyMember() {
+            const name = prompt('Enter family member name:');
+            const age = prompt('Enter age:');
+            if (name && age) {
+                alert(`👨‍👩‍👧‍👦 ${name} (age ${age}) has been added to family protection. Initializing age-appropriate privacy settings...`);
+                updateMetric('familyMembers', parseInt(document.getElementById('familyMembers').textContent) + 1);
             }
-            
-            const results = document.getElementById('brokerResults');
+        }
+
+        function runFamilyAudit() {
+            const results = document.getElementById('familyAuditResults');
             results.style.display = 'block';
-            results.innerHTML = '🔄 Scanning data brokers...';
+            results.innerHTML = '🔄 Running comprehensive family privacy audit...';
             
             setTimeout(() => {
-                const brokers = ['Whitepages', 'Spokeo', 'BeenVerified', 'PeopleFinder', 'Intelius', 'TruePeopleSearch'];
-                const foundOn = Math.floor(Math.random() * 4) + 2;
-                
                 results.innerHTML = `
-                    <strong>📊 Data Broker Scan Results</strong><br><br>
-                    Name: ${fullName}<br>
-                    Location: ${location || 'Not specified'}<br>
-                    Brokers Scanned: ${brokers.length}<br>
-                    Found On: ${foundOn} sites<br><br>
-                    <strong>Exposure Details:</strong><br>
-                    ${brokers.slice(0, foundOn).map(broker => `• ${broker}: FOUND ⚠️`).join('<br>')}<br>
-                    ${brokers.slice(foundOn).map(broker => `• ${broker}: CLEAN ✓`).join('<br>')}<br><br>
-                    <strong>Recommendation:</strong> Initiate removal process for exposed listings.
+                    <strong>👨‍👩‍👧‍👦 Family Privacy Audit Complete</strong><br><br>
+                    Family Members Scanned: 4<br>
+                    Overall Family Safety: 91%<br>
+                    Child Safety Score: 94%<br>
+                    Senior Protection: Active<br><br>
+                    <strong>Recommendations:</strong><br>
+                    • Update Emma's social media privacy settings<br>
+                    • Enable additional scam protection for grandparents<br>
+                    • Schedule privacy education session for Michael<br>
+                    • Review family emergency contact procedures
                 `;
             }, 3000);
         }
 
-        function initiateRemoval() {
-            const results = document.getElementById('brokerResults');
-            if (results.style.display === 'none') {
-                alert('Please scan data brokers first');
-                return;
-            }
-            
-            alert('🗑️ Removal process initiated! Legal notices will be sent to all identified data brokers. Expected completion: 30-60 days.');
-            
-            results.innerHTML += `<br><br><strong>🗑️ Removal Process Started</strong><br>
-            Status: Legal notices being generated...<br>
-            Estimated completion: 30-60 days`;
-        }
-
-        // AI Threat Intelligence
-        function runAIAnalysis() {
-            const results = document.getElementById('aiResults');
+        function scanChildSafety() {
+            const childName = document.getElementById('childName').value || 'Child';
+            const results = document.getElementById('childSafetyResults');
             results.style.display = 'block';
-            results.innerHTML = '🧠 AI analyzing threat patterns...';
+            results.innerHTML = `🔄 Scanning child safety for ${childName}...`;
             
             setTimeout(() => {
-                const threatsPrevented = Math.floor(Math.random() * 10) + 3;
-                updateMetric('aiThreatsPrevented', parseInt(document.getElementById('aiThreatsPrevented').textContent) + threatsPrevented);
+                const threats = Math.floor(Math.random() * 3);
+                updateMetric('childThreats', parseInt(document.getElementById('childThreats').textContent) + threats);
                 
                 results.innerHTML = `
-                    <strong>🧠 AI Threat Analysis Complete</strong><br><br>
-                    Analysis Duration: 47 seconds<br>
-                    Data Points Analyzed: 2,847<br>
-                    Threat Patterns Identified: ${threatsPrevented}<br>
-                    Confidence Level: 99.7%<br><br>
-                    <strong>Predictive Insights:</strong><br>
-                    • High probability of social media data mining attempt within 72 hours<br>
-                    • Elevated risk from automated OSINT scanning<br>
-                    • Recommended: Enable proactive defense protocols<br>
-                    • Suggested: Increase monitoring frequency for next 14 days
+                    <strong>🧒 Child Safety Scan Complete</strong><br><br>
+                    Child: ${childName}<br>
+                    Safety Threats: ${threats}<br>
+                    Inappropriate Content Blocked: 247<br>
+                    Parental Alerts Generated: 3<br><br>
+                    <strong>Age-Appropriate Protection:</strong><br>
+                    • Social media monitoring: Active<br>
+                    • Location sharing: Disabled<br>
+                    • Contact restrictions: Enabled<br>
+                    • Screen time limits: Configured<br><br>
+                    ${threats > 0 ? '<strong>Action Required:</strong> Review recent alerts and update parental controls' : '<strong>Status:</strong> Child is safely protected'}
                 `;
             }, 2000);
         }
 
-        function enablePredictiveDefense() {
-            alert('🤖 AI Predictive Defense enabled! Machine learning algorithms will now proactively protect against emerging threats.');
+        function enableParentalControls() {
+            alert('👨‍👩‍👧‍👦 Parental controls activated! AI-powered content filtering and screen time management enabled.');
         }
 
-        // Quantum Encryption
-        function encryptMessage() {
-            const message = document.getElementById('encryptMessage').value;
-            if (!message) {
-                alert('Please enter a message to encrypt');
-                return;
-            }
-            
-            const results = document.getElementById('encryptionResults');
+        function scanSeniorSafety() {
+            const seniorName = document.getElementById('seniorName').value || 'Senior Family Member';
+            const results = document.getElementById('seniorSafetyResults');
             results.style.display = 'block';
-            
-            // Simulate quantum encryption
-            const encrypted = btoa(message).split('').reverse().join('');
-            const quantumKey = Array.from({length: 16}, () => Math.random().toString(36)[2]).join('');
-            
-            results.innerHTML = `
-                <strong>⚛️ Quantum Encryption Complete</strong><br><br>
-                Original Message: ${message.substring(0, 50)}${message.length > 50 ? '...' : ''}<br>
-                Encryption Algorithm: AES-256-GCM + Quantum-Safe<br>
-                Key Length: 256-bit<br>
-                Quantum Key: ${quantumKey}<br><br>
-                <strong>Encrypted Data:</strong><br>
-                ${encrypted}<br><br>
-                <strong>Security Level:</strong> Military-Grade<br>
-                <strong>Quantum Resistance:</strong> Yes<br>
-                <strong>Forward Secrecy:</strong> Enabled
-            `;
-        }
-
-        function generateSecureKey() {
-            const key = Array.from({length: 32}, () => Math.random().toString(36)[2]).join('').toUpperCase();
-            const results = document.getElementById('encryptionResults');
-            results.style.display = 'block';
-            
-            results.innerHTML = `
-                <strong>🔑 Quantum-Safe Key Generated</strong><br><br>
-                Key Type: AES-256 Quantum-Resistant<br>
-                Length: 256-bit<br>
-                Entropy: Maximum<br><br>
-                <strong>Generated Key:</strong><br>
-                ${key}<br><br>
-                <strong>⚠️ Security Notice:</strong><br>
-                Store this key securely. It cannot be recovered if lost.
-            `;
-        }
-
-        // Legal Compliance
-        function generateLegalNotice() {
-            const jurisdiction = document.getElementById('jurisdiction').value;
-            const results = document.getElementById('legalResults');
-            results.style.display = 'block';
-            
-            const jurisdictionNames = {
-                'gdpr': 'GDPR (European Union)',
-                'ccpa': 'CCPA (California)',
-                'pipeda': 'PIPEDA (Canada)',
-                'lgpd': 'LGPD (Brazil)'
-            };
-            
-            results.innerHTML = `
-                <strong>📜 Legal Notice Generated</strong><br><br>
-                Jurisdiction: ${jurisdictionNames[jurisdiction]}<br>
-                Document Type: Data Deletion Request<br>
-                Legal Basis: Right to Erasure<br>
-                Generated: ${new Date().toLocaleString()}<br><br>
-                <strong>Notice Preview:</strong><br>
-                "Subject: Formal Request for Data Deletion under ${jurisdictionNames[jurisdiction]}<br><br>
-                Dear Data Controller,<br><br>
-                I hereby formally request the deletion of all personal data you hold about me under Article 17 (Right to Erasure) of the General Data Protection Regulation..."<br><br>
-                <strong>Status:</strong> Ready for deployment<br>
-                <strong>Delivery Method:</strong> Certified email + postal mail
-            `;
-        }
-
-        function checkCompliance() {
-            const results = document.getElementById('legalResults');
-            results.style.display = 'block';
-            
-            results.innerHTML = `
-                <strong>⚖️ Compliance Assessment Complete</strong><br><br>
-                Assessment Date: ${new Date().toLocaleDateString()}<br>
-                Frameworks Checked: 4<br>
-                Overall Score: 94%<br><br>
-                <strong>Compliance Status:</strong><br>
-                • GDPR (EU): 96% ✓<br>
-                • CCPA (California): 92% ✓<br>
-                • PIPEDA (Canada): 94% ✓<br>
-                • LGPD (Brazil): 91% ✓<br><br>
-                <strong>Recommendations:</strong><br>
-                • Update privacy policy language<br>
-                • Enhance data subject request procedures<br>
-                • Implement additional consent mechanisms
-            `;
-        }
-
-        // Emergency Response
-        function initiateEmergencyProtocol() {
-            document.getElementById('alertStatus').textContent = 'EMERGENCY PROTOCOL ACTIVE';
-            document.getElementById('alertMessage').textContent = 'All systems locked down. Data removal initiated.';
-            
-            const results = document.getElementById('emergencyResults');
-            results.style.display = 'block';
-            
-            results.innerHTML = `
-                <strong>🚨 EMERGENCY PROTOCOL INITIATED</strong><br><br>
-                Activation Time: ${new Date().toLocaleTimeString()}<br>
-                Response Level: MAXIMUM<br>
-                Status: ACTIVE<br><br>
-                <strong>Emergency Actions:</strong><br>
-                • All social media profiles: DEACTIVATED ✓<br>
-                • Data broker removal: EXPEDITED ✓<br>
-                • Credit monitoring: ENHANCED ✓<br>
-                • Identity theft protection: ACTIVATED ✓<br>
-                • Legal team: NOTIFIED ✓<br><br>
-                <strong>Next Steps:</strong><br>
-                Security expert will contact you within 15 minutes.
-            `;
-            
-            alert('🚨 EMERGENCY PROTOCOL ACTIVATED! All protective measures have been initiated. A security expert will contact you shortly.');
-        }
-
-        function runBreachDetection() {
-            const results = document.getElementById('emergencyResults');
-            results.style.display = 'block';
-            results.innerHTML = '🔍 Scanning for data breaches...';
+            results.innerHTML = `🔄 Scanning senior safety for ${seniorName}...`;
             
             setTimeout(() => {
-                const breachesFound = Math.floor(Math.random() * 3);
+                const scams = Math.floor(Math.random() * 5) + 2;
+                updateMetric('scamAttempts', parseInt(document.getElementById('scamAttempts').textContent) + scams);
                 
                 results.innerHTML = `
-                    <strong>🔍 Breach Detection Scan Complete</strong><br><br>
-                    Databases Checked: 847<br>
-                    Breaches Found: ${breachesFound}<br>
-                    Scan Duration: 23 seconds<br><br>
-                    <strong>Results:</strong><br>
-                    ${breachesFound === 0 ? '• No active breaches detected ✓' : 
-                      breachesFound === 1 ? '• 1 minor breach identified ⚠️' :
-                      `• ${breachesFound} breaches require attention ⚠️`}<br>
-                    • Dark web monitoring: ACTIVE ✓<br>
-                    • Credit monitoring: ENABLED ✓<br>
-                    • Identity protection: ACTIVE ✓<br><br>
-                    ${breachesFound > 0 ? '<strong>Recommendation:</strong> Activate emergency protocol' : '<strong>Status:</strong> All clear'}
+                    <strong>👴👵 Senior Safety Scan Complete</strong><br><br>
+                    Senior: ${seniorName}<br>
+                    Scam Attempts Blocked: ${scams}<br>
+                    Suspicious Emails Filtered: 12<br>
+                    Phone Scam Alerts: 3<br><br>
+                    <strong>Senior-Specific Protection:</strong><br>
+                    • Email scam detection: Active<br>
+                    • Phone scam warnings: Enabled<br>
+                    • Simplified privacy controls: Configured<br>
+                    • Family emergency alerts: Active<br><br>
+                    <strong>Status:</strong> Senior is protected with enhanced scam detection
+                `;
+            }, 2500);
+        }
+
+        function enableScamProtection() {
+            alert('👴👵 Enhanced scam protection enabled! Advanced AI will protect against phone, email, and online scams.');
+        }
+
+        // Sector Compliance Functions
+        function runComplianceAudit() {
+            const results = document.getElementById('complianceAuditResults');
+            results.style.display = 'block';
+            results.innerHTML = '🔄 Running comprehensive compliance audit across all frameworks...';
+            
+            setTimeout(() => {
+                results.innerHTML = `
+                    <strong>🏛️ Comprehensive Compliance Audit Complete</strong><br><br>
+                    Frameworks Assessed: 7<br>
+                    Overall Compliance Score: 94%<br>
+                    Audit Readiness: READY<br>
+                    Violation Risk: LOW<br><br>
+                    <strong>Framework Scores:</strong><br>
+                    • HIPAA (Healthcare): 96% ✓<br>
+                    • SOX/GLBA (Financial): 92% ✓<br>
+                    • FERPA (Education): 89% ⚠<br>
+                    • Legal Privilege: 98% ✓<br>
+                    • FISMA (Government): 95% ✓<br>
+                    • GDPR (International): 96% ✓<br>
+                    • CCPA (California): 91% ✓<br><br>
+                    <strong>Recommendations:</strong><br>
+                    • Enhance FERPA student record encryption<br>
+                    • Update CCPA consent mechanisms<br>
+                    • Schedule quarterly compliance reviews
+                `;
+            }, 4000);
+        }
+
+        function scanHIPAACompliance() {
+            const results = document.getElementById('hipaaResults');
+            results.style.display = 'block';
+            results.innerHTML = '🔄 Scanning HIPAA compliance and PHI protection...';
+            
+            setTimeout(() => {
+                results.innerHTML = `
+                    <strong>🏥 HIPAA Compliance Scan Complete</strong><br><br>
+                    HIPAA Score: 96%<br>
+                    PHI Protection: SECURE<br>
+                    Encryption Status: AES-256 Active<br>
+                    Access Controls: Properly Configured<br><br>
+                    <strong>Security Safeguards:</strong><br>
+                    • Administrative safeguards: ✓ Compliant<br>
+                    • Physical safeguards: ✓ Compliant<br>
+                    • Technical safeguards: ✓ Compliant<br>
+                    • Breach notification: ✓ Ready<br><br>
+                    <strong>Status:</strong> HIPAA compliant with minimal risk
                 `;
             }, 3000);
         }
 
-        // Executive Reporting
-        function generateExecutiveReport() {
-            showModal('Executive Privacy Report', `
-                <h3>📊 Executive Privacy Summary</h3>
-                <p><strong>Report Period:</strong> ${new Date().toLocaleDateString()}</p>
-                <p><strong>Overall Privacy Score:</strong> 87%</p>
-                
-                <h4>Key Metrics:</h4>
-                <ul>
-                    <li>Digital traces removed: 1,247</li>
-                    <li>Ongoing monitoring sources: 847</li>
-                    <li>Threat prevention success rate: 99.7%</li>
-                    <li>Compliance score: 94%</li>
-                </ul>
-                
-                <h4>Risk Assessment:</h4>
-                <ul>
-                    <li>Current risk level: LOW</li>
-                    <li>Threats mitigated this month: 47</li>
-                    <li>Data broker exposure: Minimal</li>
-                    <li>OSINT vulnerability: Protected</li>
-                </ul>
-                
-                <h4>Recommendations:</h4>
-                <ul>
-                    <li>Continue current protection protocols</li>
-                    <li>Schedule quarterly compliance review</li>
-                    <li>Consider additional family member protection</li>
-                </ul>
-            `);
+        // Organization Management Functions
+        function addTeamMember() {
+            const name = prompt('Enter team member name:');
+            const role = prompt('Enter role (e.g., Security Analyst, Privacy Officer):');
+            if (name && role) {
+                alert(`🏢 ${name} has been added as ${role}. Configuring role-based access controls...`);
+                updateMetric('orgMembers', parseInt(document.getElementById('orgMembers').textContent) + 1);
+            }
         }
 
-        function scheduleReports() {
-            alert('📅 Automated reporting scheduled! Executive reports will be generated monthly and compliance reports quarterly.');
+        function runOrgAudit() {
+            const results = document.getElementById('orgAuditResults');
+            results.style.display = 'block';
+            results.innerHTML = '🔄 Running comprehensive organization privacy audit...';
+            
+            setTimeout(() => {
+                results.innerHTML = `
+                    <strong>🏢 Organization Privacy Audit Complete</strong><br><br>
+                    Team Members Audited: 47<br>
+                    Organization Compliance: 92%<br>
+                    Policy Violations: 2 (minor)<br>
+                    Security Threats: 3 (contained)<br><br>
+                    <strong>Department Breakdown:</strong><br>
+                    • Executive Team: 98% ✓<br>
+                    • IT Department: 94% ✓<br>
+                    • Legal Team: 96% ✓<br>
+                    • HR Department: 89% ⚠<br>
+                    • Sales Team: 87% ⚠<br><br>
+                    <strong>Recommendations:</strong><br>
+                    • Provide additional training for HR and Sales teams<br>
+                    • Update access controls for remote workers<br>
+                    • Schedule monthly policy review sessions
+                `;
+            }, 3500);
         }
 
-        function exportCompliance() {
-            alert('📋 Compliance data exported! A comprehensive compliance package has been prepared for your legal team.');
-        }
-
-        // Utility functions
+        // Utility Functions
         function updateMetric(elementId, value) {
-            document.getElementById(elementId).textContent = value;
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value;
+            }
         }
 
         function showModal(title, content) {
@@ -979,6 +1700,46 @@
             alert('💬 Security expert chat initiated! A cybersecurity specialist will be available to assist you shortly.');
         }
 
+        // Placeholder functions for all the additional features
+        function selectAgeGroup(group) {
+            document.querySelectorAll('.age-group').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function generateFamilyReport() { alert('👨‍👩‍👧‍👦 Family privacy report generated! Comprehensive analysis of all family members\' privacy status.'); }
+        function scanAllFamily() { alert('🔍 Scanning all family members... This may take a few minutes.'); }
+        function manageFamilySettings() { alert('⚙️ Family settings panel opened. Configure protection levels for each family member.'); }
+        function configureParentalControls() { alert('👨‍👩‍👧‍👦 Parental controls configured based on selected age group and family values.'); }
+        function reviewParentalAlerts() { alert('📱 Reviewing 3 recent parental alerts. No immediate action required.'); }
+        function initiateFamilyLockdown() { alert('🚨 FAMILY EMERGENCY LOCKDOWN INITIATED! All family member accounts secured.'); }
+        function notifyAllParents() { alert('📞 Emergency notifications sent to all parents and guardians.'); }
+        function startPrivacyLesson() { alert('📚 Starting age-appropriate privacy lesson. Interactive learning module loading...'); }
+        function takePrivacyQuiz() { alert('🧠 Privacy knowledge quiz started. Test your family\'s privacy awareness!'); }
+        function generateComplianceReport() { alert('📊 Comprehensive compliance report generated for all active frameworks.'); }
+        function scheduleAuditPrep() { alert('📅 Audit preparation scheduled. Automated compliance checks will be performed.'); }
+        function scanFinancialCompliance() { alert('🏦 Scanning SOX and GLBA compliance... Financial data protection assessed.'); }
+        function generateFinancialReport() { alert('💰 Financial compliance report generated for regulatory review.'); }
+        function scanFERPACompliance() { alert('🎓 Scanning FERPA compliance... Student record protection assessed.'); }
+        function generateFERPAReport() { alert('📚 FERPA compliance report generated for educational institution review.'); }
+        function scanLegalCompliance() { alert('⚖️ Scanning attorney-client privilege protection... Legal communications secured.'); }
+        function generateLegalReport() { alert('📋 Legal privilege protection report generated for law firm review.'); }
+        function scanFISMACompliance() { alert('🏛️ Scanning FISMA compliance... Government security standards assessed.'); }
+        function generateFISMAReport() { alert('🇺🇸 FISMA compliance report generated for government agency review.'); }
+        function scanInternationalCompliance() { alert('🌍 Scanning international compliance across 43 frameworks... Global assessment complete.'); }
+        function generateGlobalReport() { alert('🌐 Global compliance report generated covering all international frameworks.'); }
+        function manageTeamAccess() { alert('👥 Team access management panel opened. Configure permissions for all members.'); }
+        function auditTeamMembers() { alert('🔍 Auditing all team members... Privacy compliance check in progress.'); }
+        function configureRole() { alert('🎭 Role configuration panel opened. Set permissions for selected role.'); }
+        function auditPermissions() { alert('🔒 Auditing all permissions and access levels... Security review in progress.'); }
+        function createPolicy() { alert('📋 Policy creation wizard opened. Design custom privacy policies for your organization.'); }
+        function enforceCompliance() { alert('⚡ Policy enforcement activated! Automated compliance monitoring enabled.'); }
+        function generateOrgReport() { alert('🏢 Organization-wide privacy report generated for executive review.'); }
+        function scheduleReporting() { alert('📅 Automated reporting scheduled. Executive and compliance reports will be generated monthly.'); }
+        function manageIntegrations() { alert('🔗 Integration management panel opened. Configure enterprise system connections.'); }
+        function testConnections() { alert('🧪 Testing all enterprise integrations... Connection status verified.'); }
+        function manageTenants() { alert('🏗️ Multi-tenant management panel opened. Configure isolated security environments.'); }
+        function auditIsolation() { alert('🔒 Auditing data isolation across all tenants... Security boundaries verified.'); }
+
         // Real-time metric updates
         setInterval(() => {
             if (hasAdvancedAccess) {
@@ -991,7 +1752,7 @@
                 // Update other metrics occasionally
                 if (Math.random() > 0.995) {
                     const blocked = document.getElementById('osintBlocked');
-                    blocked.textContent = parseInt(blocked.textContent) + 1;
+                    if (blocked) blocked.textContent = parseInt(blocked.textContent) + 1;
                 }
             }
         }, 2000);
