@@ -1,0 +1,489 @@
+# Digital Footprint Eraser - Enterprise Stack
+# Production-ready Docker Compose with security hardening
+
+version: '3.8'
+
+networks:
+  dfe-frontend:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.1.0/24
+  dfe-backend:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.2.0/24
+  dfe-database:
+    driver: bridge
+    internal: true
+    ipam:
+      config:
+        - subnet: 172.20.3.0/24
+  dfe-monitoring:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.4.0/24
+
+volumes:
+  postgres_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/dfe/data/postgres
+  redis_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/dfe/data/redis
+  nginx_logs:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  quantum_keys:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /opt/dfe/quantum-keys
+
+secrets:
+  postgres_password:
+    file: ./secrets/postgres_password.txt
+  redis_password:
+    file: ./secrets/redis_password.txt
+  quantum_master_key:
+    file: ./secrets/quantum_master_key.txt
+  ai_api_key:
+    file: ./secrets/ai_api_key.txt
+  ssl_certificate:
+    file: ./secrets/ssl_certificate.pem
+  ssl_private_key:
+    file: ./secrets/ssl_private_key.pem
+
+services:
+  # Reverse Proxy with WAF
+  nginx-waf:
+    image: nginx:1.25-alpine
+    container_name: dfe-nginx-waf
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./configs/nginx-waf.conf:/etc/nginx/nginx.conf:ro
+      - ./configs/security-headers.conf:/etc/nginx/conf.d/security-headers.conf:ro
+      - nginx_logs:/var/log/nginx
+      - ./ssl:/etc/nginx/ssl:ro
+    networks:
+      - dfe-frontend
+    depends_on:
+      - dfe-app
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    user: "101:101"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    labels:
+      - "traefik.enable=false"
+      - "security.level=high"
+
+  # Main Application
+  dfe-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: dfe/enterprise:latest
+    container_name: dfe-application
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - SECURITY_LEVEL=military-grade
+      - QUANTUM_ENABLED=true
+      - AI_THREAT_DETECTION=enabled
+      - REDIS_HOST=redis-cache
+      - POSTGRES_HOST=postgres-db
+      - LOG_LEVEL=info
+    volumes:
+      - ./logs:/app/logs
+      - quantum_keys:/app/quantum-keys:ro
+    networks:
+      - dfe-frontend
+      - dfe-backend
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+      redis-cache:
+        condition: service_healthy
+    secrets:
+      - quantum_master_key
+      - ai_api_key
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+    healthcheck:
+      test: ["CMD", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    labels:
+      - "security.level=military-grade"
+      - "compliance=FISMA,HIPAA,SOX"
+
+  # AI Threat Detection Service
+  ai-threat-service:
+    image: dfe/ai-threat-detection:latest
+    container_name: dfe-ai-threats
+    restart: unless-stopped
+    environment:
+      - AI_MODEL_PATH=/app/models
+      - THREAT_DB_HOST=postgres-db
+      - QUANTUM_ENCRYPTION=enabled
+    volumes:
+      - ./ai-models:/app/models:ro
+      - ./logs:/app/logs
+    networks:
+      - dfe-backend
+    depends_on:
+      - postgres-db
+    secrets:
+      - ai_api_key
+      - quantum_master_key
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "10002:10002"
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=200m
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 4G
+        reservations:
+          cpus: '1.0'
+          memory: 2G
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/health"]
+      interval: 60s
+      timeout: 15s
+      retries: 3
+
+  # Quantum Security Service
+  quantum-service:
+    image: dfe/quantum-security:latest
+    container_name: dfe-quantum
+    restart: unless-stopped
+    environment:
+      - QUANTUM_KEY_PATH=/app/quantum-keys
+      - POST_QUANTUM_ALGORITHMS=CRYSTALS-Kyber,CRYSTALS-Dilithium,FALCON
+      - SECURITY_LEVEL=maximum
+    volumes:
+      - quantum_keys:/app/quantum-keys
+      - ./logs:/app/logs
+    networks:
+      - dfe-backend
+    secrets:
+      - quantum_master_key
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "10003:10003"
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=50m
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8082/quantum-health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Family Protection Service
+  family-protection:
+    image: dfe/family-protection:latest
+    container_name: dfe-family
+    restart: unless-stopped
+    environment:
+      - FAMILY_DB_HOST=postgres-db
+      - AI_BEHAVIORAL_ANALYSIS=enabled
+      - CHILD_SAFETY_LEVEL=maximum
+      - SENIOR_PROTECTION_LEVEL=maximum
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - dfe-backend
+    depends_on:
+      - postgres-db
+      - ai-threat-service
+    secrets:
+      - ai_api_key
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "10004:10004"
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8083/family-health"]
+      interval: 45s
+      timeout: 10s
+      retries: 3
+
+  # Database - PostgreSQL with encryption
+  postgres-db:
+    image: postgres:15-alpine
+    container_name: dfe-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=dfe_enterprise
+      - POSTGRES_USER=dfe_user
+      - POSTGRES_PASSWORD_FILE=/run/secrets/postgres_password
+      - POSTGRES_INITDB_ARGS=--auth-host=scram-sha-256 --auth-local=scram-sha-256
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./configs/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    networks:
+      - dfe-database
+    secrets:
+      - postgres_password
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - FOWNER
+      - SETGID
+      - SETUID
+    user: "999:999"
+    command: >
+      postgres
+      -c config_file=/etc/postgresql/postgresql.conf
+      -c ssl=on
+      -c ssl_cert_file=/var/lib/postgresql/server.crt
+      -c ssl_key_file=/var/lib/postgresql/server.key
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dfe_user -d dfe_enterprise"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 80s
+
+  # Redis Cache with encryption
+  redis-cache:
+    image: redis:7-alpine
+    container_name: dfe-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass $(cat /run/secrets/redis_password)
+      --appendonly yes
+      --auto-aof-rewrite-percentage 100
+      --auto-aof-rewrite-min-size 64mb
+      --maxmemory 512mb
+      --maxmemory-policy allkeys-lru
+    volumes:
+      - redis_data:/data
+      - ./configs/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - dfe-database
+    secrets:
+      - redis_password
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "999:999"
+    healthcheck:
+      test: ["CMD", "redis-cli", "--no-auth-warning", "-a", "$(cat /run/secrets/redis_password)", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Monitoring - Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: dfe-prometheus
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=90d'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./configs/security-rules.yml:/etc/prometheus/rules/security-rules.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - dfe-monitoring
+      - dfe-backend
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "65534:65534"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:9090/-/healthy"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Monitoring - Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: dfe-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD__FILE=/run/secrets/grafana_admin_password
+      - GF_SECURITY_SECRET_KEY__FILE=/run/secrets/grafana_secret_key
+      - GF_SECURITY_DISABLE_GRAVATAR=true
+      - GF_SECURITY_COOKIE_SECURE=true
+      - GF_SECURITY_COOKIE_SAMESITE=strict
+      - GF_SECURITY_CONTENT_TYPE_PROTECTION=true
+      - GF_SECURITY_X_CONTENT_TYPE_OPTIONS=nosniff
+      - GF_SECURITY_X_XSS_PROTECTION=true
+      - GF_SERVER_PROTOCOL=https
+      - GF_SERVER_CERT_FILE=/etc/ssl/certs/grafana.crt
+      - GF_SERVER_CERT_KEY=/etc/ssl/private/grafana.key
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./configs/grafana-dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./configs/grafana-datasources:/etc/grafana/provisioning/datasources:ro
+      - ./ssl:/etc/ssl:ro
+    networks:
+      - dfe-monitoring
+    depends_on:
+      - prometheus
+    secrets:
+      - grafana_admin_password
+      - grafana_secret_key
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "472:472"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/api/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Log Management - Fluentd
+  fluentd:
+    image: fluent/fluentd:v1.16-debian-1
+    container_name: dfe-fluentd
+    restart: unless-stopped
+    volumes:
+      - ./configs/fluentd.conf:/fluentd/etc/fluent.conf:ro
+      - ./logs:/var/log/dfe:ro
+      - nginx_logs:/var/log/nginx:ro
+    networks:
+      - dfe-monitoring
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "fluent:fluent"
+
+  # Security Scanner - Continuous monitoring
+  security-scanner:
+    image: dfe/security-scanner:latest
+    container_name: dfe-security-scanner
+    restart: unless-stopped
+    environment:
+      - SCAN_INTERVAL=3600
+      - THREAT_INTELLIGENCE_ENABLED=true
+      - QUANTUM_VALIDATION=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./logs:/app/logs
+    networks:
+      - dfe-monitoring
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - DAC_READ_SEARCH
+    user: "10005:10005"
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=100m
+
+  # Backup Service
+  backup-service:
+    image: dfe/backup-service:latest
+    container_name: dfe-backup
+    restart: unless-stopped
+    environment:
+      - BACKUP_SCHEDULE=0 2 * * *
+      - ENCRYPTION_ENABLED=true
+      - QUANTUM_BACKUP=true
+    volumes:
+      - postgres_data:/backup/postgres:ro
+      - redis_data:/backup/redis:ro
+      - quantum_keys:/backup/quantum-keys:ro
+      - ./backups:/app/backups
+    networks:
+      - dfe-database
+    depends_on:
+      - postgres-db
+      - redis-cache
+    secrets:
+      - quantum_master_key
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    user: "10006:10006"
+    read_only: true
+    tmpfs:
+      - /tmp:noexec,nosuid,size=500m
+
+# Additional secrets for Grafana
+secrets:
+  grafana_admin_password:
+    file: ./secrets/grafana_admin_password.txt
+  grafana_secret_key:
+    file: ./secrets/grafana_secret_key.txt
