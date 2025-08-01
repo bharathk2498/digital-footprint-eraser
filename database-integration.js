@@ -91,7 +91,8 @@ class DigitalFootprintDB {
                         full_name: metadata.fullName || '',
                         user_type: metadata.userType || 'INDIVIDUAL',
                         ...metadata
-                    }
+                    },
+                    emailRedirectTo: 'https://bharathk2498.github.io/digital-footprint-eraser/email-confirmation.html'
                 }
             });
             
@@ -121,8 +122,8 @@ class DigitalFootprintDB {
                 user: data.user, 
                 needsVerification: needsVerification,
                 message: needsVerification ? 
-                    'Account created! Please check your email to verify your account.' : 
-                    'Account created and verified!'
+                    'Account created successfully! Please check your email to verify your account before signing in.' : 
+                    'Account created and verified! You can now use all features.'
             };
         } catch (error) {
             console.error('Signup error:', error);
@@ -152,6 +153,18 @@ class DigitalFootprintDB {
             
             if (error) {
                 console.error('Signin error:', error);
+                
+                // Special handling for email not confirmed
+                if (error.message.includes('Email not confirmed')) {
+                    return {
+                        success: false,
+                        error: 'Email not verified',
+                        needsVerification: true,
+                        email: email,
+                        message: 'Your email address has not been verified yet. Please check your email and click the verification link, or request a new verification email.'
+                    };
+                }
+                
                 throw error;
             }
             
@@ -199,29 +212,37 @@ class DigitalFootprintDB {
     // EMAIL VERIFICATION METHODS
     // ====================
 
-    async resendVerificationEmail() {
+    async resendVerificationEmail(email = null) {
         try {
-            const user = await this.getCurrentUser();
-            if (!user) {
-                throw new Error('No user found');
+            let targetEmail = email;
+            
+            if (!targetEmail) {
+                const user = await this.getCurrentUser();
+                if (!user) {
+                    throw new Error('No user found. Please sign up first.');
+                }
+                targetEmail = user.email;
             }
 
             const { error } = await this.supabase.auth.resend({
                 type: 'signup',
-                email: user.email
+                email: targetEmail,
+                options: {
+                    emailRedirectTo: 'https://bharathk2498.github.io/digital-footprint-eraser/email-confirmation.html'
+                }
             });
 
             if (error) throw error;
 
             return { 
                 success: true, 
-                message: 'Verification email sent! Please check your inbox.' 
+                message: 'Verification email sent successfully! Please check your inbox and spam folder.' 
             };
         } catch (error) {
             console.error('Resend email error:', error);
             return { 
                 success: false, 
-                error: error.message 
+                error: this.formatAuthError(error.message)
             };
         }
     }
@@ -498,12 +519,13 @@ class DigitalFootprintDB {
     formatAuthError(errorMessage) {
         const errorMap = {
             'Invalid login credentials': 'Invalid email or password. Please check your credentials and try again.',
-            'Email not confirmed': 'Please check your email and click the verification link before signing in.',
+            'Email not confirmed': 'Please verify your email address before signing in. Check your inbox for a verification email.',
             'User already registered': 'An account with this email already exists. Try signing in instead.',
             'Signup disabled': 'New registrations are temporarily disabled. Please try again later.',
             'Password should be at least 6 characters': 'Password must be at least 6 characters long.',
             'Unable to validate email address': 'Please enter a valid email address.',
-            'Email rate limit exceeded': 'Too many emails sent. Please wait before requesting another verification email.'
+            'Email rate limit exceeded': 'Too many emails sent. Please wait before requesting another verification email.',
+            'Only an email address or phone number should be provided on signup': 'Please enter only an email address.'
         };
 
         return errorMap[errorMessage] || errorMessage;
@@ -935,6 +957,29 @@ window.DigitalFootprintUtils = {
                 }
                 
                 result = await window.dfDB.signIn(email, password);
+                
+                // Special handling for email verification required
+                if (!result.success && result.needsVerification) {
+                    messageDiv.style.background = 'rgba(245, 158, 11, 0.1)';
+                    messageDiv.style.color = '#F59E0B';
+                    messageDiv.innerHTML = `
+                        ⚠️ ${result.error}<br><br>
+                        ${result.message}<br><br>
+                        <button onclick="window.dfDB.resendVerificationEmail('${result.email}').then(res => {
+                            if(res.success) alert('✅ ' + res.message);
+                            else alert('❌ ' + res.error);
+                        })" style="
+                            background: linear-gradient(45deg, #F59E0B, #D97706);
+                            color: white;
+                            border: none;
+                            padding: 0.5rem 1rem;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-weight: 600;
+                        ">📧 Resend Verification Email</button>
+                    `;
+                    return;
+                }
             } else {
                 const fullName = document.getElementById('signupFullName').value;
                 const email = document.getElementById('signupEmail').value;
@@ -977,7 +1022,9 @@ window.DigitalFootprintUtils = {
     // Password reset functionality
     async resetPassword(email) {
         try {
-            const { error } = await window.dfDB.supabase.auth.resetPasswordForEmail(email);
+            const { error } = await window.dfDB.supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: 'https://bharathk2498.github.io/digital-footprint-eraser/email-confirmation.html'
+            });
             if (error) throw error;
             
             return {
@@ -997,5 +1044,5 @@ console.log('🚀 Digital Footprint Eraser Database Integration Loaded');
 console.log('🛡️ Complete database functionality ready');
 console.log('📊 26 tables available for all features');
 console.log('🔐 Row Level Security enabled');
-console.log('📧 Email verification system active');
+console.log('📧 Email verification system active with proper redirects');
 console.log('🌐 Connected to: https://rmnmiqpxqpjvpcavkmxn.supabase.co');
