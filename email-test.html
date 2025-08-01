@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification Test - Digital Footprint Eraser</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📧</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0A0A0F 0%, #1a1a2e 50%, #16213e 100%);
+            color: #F8FAFC;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #F8FAFC, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #CBD5E1;
+            font-size: 1.1rem;
+        }
+
+        .test-section {
+            background: rgba(76, 29, 149, 0.1);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #8B5CF6;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #F8FAFC;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            background: rgba(76, 29, 149, 0.1);
+            color: #F8FAFC;
+            font-size: 1rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #8B5CF6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4C1D95, #8B5CF6);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #8B5CF6;
+            border: 2px solid #8B5CF6;
+        }
+
+        .btn-success {
+            background: #10B981;
+            color: white;
+        }
+
+        .btn-warning {
+            background: #F59E0B;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .result-box {
+            background: rgba(76, 29, 149, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-success { background: #10B981; }
+        .status-warning { background: #F59E0B; }
+        .status-error { background: #EF4444; }
+
+        .info-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #93C5FD;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: transparent;
+            color: #8B5CF6;
+            border: 2px solid #8B5CF6;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: #8B5CF6;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .step-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .step-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .step-list li:last-child {
+            border-bottom: none;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 24px;
+            height: 24px;
+            background: #8B5CF6;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 class="title">📧 Email Verification Test</h1>
+            <p class="subtitle">Test your Supabase email configuration and database integration</p>
+        </div>
+
+        <div class="info-box">
+            <strong>📋 Before Testing:</strong> Ensure you've completed the Supabase configuration steps in <code>SUPABASE_EMAIL_SETUP.md</code>
+        </div>
+
+        <!-- Step 1: Registration Test -->
+        <div class="test-section">
+            <h3 class="section-title">🔐 Step 1: Test User Registration</h3>
+            <p style="color: #CBD5E1; margin-bottom: 1rem;">Create a test account to verify email sending and database storage.</p>
+            
+            <div class="form-group">
+                <label for="testEmail">Test Email Address:</label>
+                <input type="email" id="testEmail" placeholder="your-test-email@example.com" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="testPassword">Test Password:</label>
+                <input type="password" id="testPassword" placeholder="Minimum 6 characters" required>
+            </div>
+            
+            <button class="btn btn-primary" onclick="testRegistration()">Create Test Account</button>
+            <button class="btn btn-secondary" onclick="clearRegistrationResults()">Clear Results</button>
+            
+            <div id="registrationResults" class="result-box"></div>
+        </div>
+
+        <!-- Step 2: Email Verification -->
+        <div class="test-section">
+            <h3 class="section-title">📬 Step 2: Check Email Verification</h3>
+            <p style="color: #CBD5E1; margin-bottom: 1rem;">After registration, check your email and click the verification link.</p>
+            
+            <ol class="step-list">
+                <li><span class="step-number">1</span>Check your email inbox (and spam folder)</li>
+                <li><span class="step-number">2</span>Look for email from Supabase or your configured sender</li>
+                <li><span class="step-number">3</span>Click the verification link in the email</li>
+                <li><span class="step-number">4</span>Return here and check verification status</li>
+            </ol>
+            
+            <button class="btn btn-success" onclick="checkEmailVerification()">Check Verification Status</button>
+            <button class="btn btn-warning" onclick="resendVerificationEmail()">Resend Verification Email</button>
+            
+            <div id="verificationResults" class="result-box"></div>
+        </div>
+
+        <!-- Step 3: Database Check -->
+        <div class="test-section">
+            <h3 class="section-title">💾 Step 3: Verify Database Storage</h3>
+            <p style="color: #CBD5E1; margin-bottom: 1rem;">Check if user data is properly stored in the database.</p>
+            
+            <button class="btn btn-primary" onclick="checkDatabaseStorage()">Check Database Storage</button>
+            <button class="btn btn-secondary" onclick="viewUserProfile()">View User Profile</button>
+            
+            <div id="databaseResults" class="result-box"></div>
+        </div>
+
+        <!-- Step 4: Sign In Test -->
+        <div class="test-section">
+            <h3 class="section-title">🔑 Step 4: Test Sign In</h3>
+            <p style="color: #CBD5E1; margin-bottom: 1rem;">Try signing in with your test account after email verification.</p>
+            
+            <div class="form-group">
+                <label for="signinEmail">Email:</label>
+                <input type="email" id="signinEmail" placeholder="Same as registration email">
+            </div>
+            
+            <div class="form-group">
+                <label for="signinPassword">Password:</label>
+                <input type="password" id="signinPassword" placeholder="Same as registration password">
+            </div>
+            
+            <button class="btn btn-primary" onclick="testSignIn()">Test Sign In</button>
+            <button class="btn btn-secondary" onclick="signOut()">Sign Out</button>
+            
+            <div id="signinResults" class="result-box"></div>
+        </div>
+
+        <!-- System Status -->
+        <div class="test-section">
+            <h3 class="section-title">📊 System Status</h3>
+            <div id="systemStatus">
+                <p><span class="status-indicator status-warning"></span>Database: <span id="dbStatus">Checking...</span></p>
+                <p><span class="status-indicator status-warning"></span>Authentication: <span id="authStatus">Checking...</span></p>
+                <p><span class="status-indicator status-warning"></span>Email System: <span id="emailStatus">Not tested</span></p>
+            </div>
+            
+            <button class="btn btn-success" onclick="checkSystemStatus()">Refresh System Status</button>
+        </div>
+
+        <a href="index.html" class="back-link">← Back to Main Site</a>
+    </div>
+
+    <!-- Include Database Integration -->
+    <script src="database-integration.js"></script>
+
+    <script>
+        let currentTestUser = null;
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('📧 Email Verification Test Page Loaded');
+            await waitForDatabase();
+            checkSystemStatus();
+            
+            // Auto-fill email if there's a test user in session
+            const user = await window.dfDB.getCurrentUser();
+            if (user) {
+                document.getElementById('signinEmail').value = user.email;
+                document.getElementById('testEmail').value = user.email;
+                currentTestUser = user;
+            }
+        });
+
+        async function waitForDatabase() {
+            let attempts = 0;
+            while (!window.dfDB?.supabase && attempts < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+            }
+        }
+
+        async function testRegistration() {
+            const email = document.getElementById('testEmail').value;
+            const password = document.getElementById('testPassword').value;
+            const resultsDiv = document.getElementById('registrationResults');
+            
+            if (!email || !password) {
+                showResults(resultsDiv, '❌ Please enter both email and password', 'error');
+                return;
+            }
+
+            showResults(resultsDiv, '🔄 Creating test account...', 'info');
+            
+            try {
+                const result = await window.dfDB.signUp(email, password, {
+                    fullName: 'Test User',
+                    userType: 'TEST'
+                });
+
+                if (result.success) {
+                    currentTestUser = result.user;
+                    document.getElementById('signinEmail').value = email;
+                    document.getElementById('signinPassword').value = password;
+                    
+                    const statusText = result.needsVerification ? 
+                        '✅ Account created! Verification email sent.\n📧 Check your email and click the verification link.' :
+                        '✅ Account created and automatically verified!';
+                    
+                    showResults(resultsDiv, statusText + '\n\nUser ID: ' + result.user.id + '\nEmail: ' + result.user.email, 'success');
+                } else {
+                    showResults(resultsDiv, '❌ Registration failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showResults(resultsDiv, '❌ Registration error: ' + error.message, 'error');
+            }
+        }
+
+        async function checkEmailVerification() {
+            const resultsDiv = document.getElementById('verificationResults');
+            
+            if (!currentTestUser) {
+                const user = await window.dfDB.getCurrentUser();
+                if (!user) {
+                    showResults(resultsDiv, '❌ No user session found. Please register first.', 'error');
+                    return;
+                }
+                currentTestUser = user;
+            }
+
+            showResults(resultsDiv, '🔄 Checking email verification status...', 'info');
+
+            try {
+                const isVerified = await window.dfDB.checkEmailVerification();
+                const profile = await window.dfDB.getUserProfile();
+                
+                let statusText = isVerified ? 
+                    '✅ Email is verified!' : 
+                    '⚠️ Email is not yet verified.';
+                
+                statusText += '\n\nUser Details:';
+                statusText += '\n- User ID: ' + currentTestUser.id;
+                statusText += '\n- Email: ' + currentTestUser.email;
+                statusText += '\n- Email Confirmed: ' + (currentTestUser.email_confirmed_at ? 'Yes' : 'No');
+                statusText += '\n- Profile Email Verified: ' + (profile?.email_verified ? 'Yes' : 'No');
+                
+                if (currentTestUser.email_confirmed_at) {
+                    statusText += '\n- Verified At: ' + new Date(currentTestUser.email_confirmed_at).toLocaleString();
+                }
+
+                showResults(resultsDiv, statusText, isVerified ? 'success' : 'warning');
+            } catch (error) {
+                showResults(resultsDiv, '❌ Error checking verification: ' + error.message, 'error');
+            }
+        }
+
+        async function resendVerificationEmail() {
+            const resultsDiv = document.getElementById('verificationResults');
+            
+            showResults(resultsDiv, '🔄 Resending verification email...', 'info');
+
+            try {
+                const result = await window.dfDB.resendVerificationEmail();
+                
+                if (result.success) {
+                    showResults(resultsDiv, '✅ ' + result.message, 'success');
+                } else {
+                    showResults(resultsDiv, '❌ ' + result.error, 'error');
+                }
+            } catch (error) {
+                showResults(resultsDiv, '❌ Error resending email: ' + error.message, 'error');
+            }
+        }
+
+        async function checkDatabaseStorage() {
+            const resultsDiv = document.getElementById('databaseResults');
+            
+            if (!currentTestUser) {
+                const user = await window.dfDB.getCurrentUser();
+                if (!user) {
+                    showResults(resultsDiv, '❌ No user session found. Please register first.', 'error');
+                    return;
+                }
+                currentTestUser = user;
+            }
+
+            showResults(resultsDiv, '🔄 Checking database storage...', 'info');
+
+            try {
+                const profile = await window.dfDB.getUserProfile();
+                const subscription = await window.dfDB.getUserSubscription();
+                const threats = await window.dfDB.getUserThreats();
+                
+                let reportText = '📊 Database Storage Report:\n\n';
+                
+                // User Profile Check
+                if (profile) {
+                    reportText += '✅ User Security Profile: FOUND\n';
+                    reportText += '   - Privacy Score: ' + profile.privacy_score + '\n';
+                    reportText += '   - Email Verified: ' + profile.email_verified + '\n';
+                    reportText += '   - Created: ' + new Date(profile.created_at).toLocaleString() + '\n';
+                } else {
+                    reportText += '❌ User Security Profile: NOT FOUND\n';
+                }
+                
+                // Subscription Check
+                if (subscription) {
+                    reportText += '\n✅ User Subscription: FOUND\n';
+                    reportText += '   - Plan: ' + subscription.subscription_plans.plan_name + '\n';
+                    reportText += '   - Status: ' + subscription.subscription_status + '\n';
+                    reportText += '   - Started: ' + new Date(subscription.start_date).toLocaleString() + '\n';
+                } else {
+                    reportText += '\n❌ User Subscription: NOT FOUND\n';
+                }
+                
+                // Threats Check
+                reportText += '\n📊 Threat Detections: ' + threats.length + ' found\n';
+                
+                // Database Tables Check
+                reportText += '\n🗃️ Database Tables Accessible:\n';
+                const tables = ['user_security_profiles', 'user_subscriptions', 'threat_detections', 'family_protection'];
+                for (const table of tables) {
+                    try {
+                        const { data, error } = await window.dfDB.supabase
+                            .from(table)
+                            .select('id')
+                            .limit(1);
+                        reportText += '   ✅ ' + table + ': Accessible\n';
+                    } catch (e) {
+                        reportText += '   ❌ ' + table + ': Error - ' + e.message + '\n';
+                    }
+                }
+
+                showResults(resultsDiv, reportText, 'success');
+            } catch (error) {
+                showResults(resultsDiv, '❌ Database check error: ' + error.message, 'error');
+            }
+        }
+
+        async function viewUserProfile() {
+            const resultsDiv = document.getElementById('databaseResults');
+            
+            if (!currentTestUser) {
+                showResults(resultsDiv, '❌ No user session found.', 'error');
+                return;
+            }
+
+            try {
+                const profile = await window.dfDB.getUserProfile();
+                const subscription = await window.dfDB.getUserSubscription();
+                
+                if (profile) {
+                    const profileJson = JSON.stringify(profile, null, 2);
+                    const subscriptionJson = subscription ? JSON.stringify(subscription, null, 2) : 'No subscription found';
+                    
+                    showResults(resultsDiv, 
+                        '👤 User Profile Data:\n\n' + profileJson + 
+                        '\n\n💳 Subscription Data:\n\n' + subscriptionJson, 
+                        'success'
+                    );
+                } else {
+                    showResults(resultsDiv, '❌ No profile data found in database', 'error');
+                }
+            } catch (error) {
+                showResults(resultsDiv, '❌ Error viewing profile: ' + error.message, 'error');
+            }
+        }
+
+        async function testSignIn() {
+            const email = document.getElementById('signinEmail').value;
+            const password = document.getElementById('signinPassword').value;
+            const resultsDiv = document.getElementById('signinResults');
+            
+            if (!email || !password) {
+                showResults(resultsDiv, '❌ Please enter both email and password', 'error');
+                return;
+            }
+
+            showResults(resultsDiv, '🔄 Testing sign in...', 'info');
+
+            try {
+                const result = await window.dfDB.signIn(email, password);
+                
+                if (result.success) {
+                    currentTestUser = result.user;
+                    showResults(resultsDiv, 
+                        '✅ Sign in successful!\n\n' +
+                        'User ID: ' + result.user.id + '\n' +
+                        'Email: ' + result.user.email + '\n' +
+                        'Email Verified: ' + (result.user.email_confirmed_at ? 'Yes' : 'No'),
+                        'success'
+                    );
+                } else {
+                    showResults(resultsDiv, '❌ Sign in failed: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showResults(resultsDiv, '❌ Sign in error: ' + error.message, 'error');
+            }
+        }
+
+        async function signOut() {
+            const resultsDiv = document.getElementById('signinResults');
+            
+            try {
+                const result = await window.dfDB.signOut();
+                
+                if (result.success) {
+                    currentTestUser = null;
+                    showResults(resultsDiv, '✅ Successfully signed out', 'success');
+                } else {
+                    showResults(resultsDiv, '❌ Sign out error: ' + result.error, 'error');
+                }
+            } catch (error) {
+                showResults(resultsDiv, '❌ Sign out error: ' + error.message, 'error');
+            }
+        }
+
+        async function checkSystemStatus() {
+            const dbStatus = document.getElementById('dbStatus');
+            const authStatus = document.getElementById('authStatus');
+            const emailStatus = document.getElementById('emailStatus');
+            
+            // Check database connection
+            try {
+                if (window.dfDB && window.dfDB.supabase) {
+                    const { data, error } = await window.dfDB.supabase
+                        .from('subscription_plans')
+                        .select('id')
+                        .limit(1);
+                    
+                    if (!error) {
+                        dbStatus.textContent = 'Connected ✅';
+                        dbStatus.previousElementSibling.className = 'status-indicator status-success';
+                    } else {
+                        dbStatus.textContent = 'Error: ' + error.message;
+                        dbStatus.previousElementSibling.className = 'status-indicator status-error';
+                    }
+                } else {
+                    dbStatus.textContent = 'Not initialized';
+                    dbStatus.previousElementSibling.className = 'status-indicator status-error';
+                }
+            } catch (error) {
+                dbStatus.textContent = 'Connection failed';
+                dbStatus.previousElementSibling.className = 'status-indicator status-error';
+            }
+            
+            // Check authentication
+            try {
+                const user = await window.dfDB.getCurrentUser();
+                if (user) {
+                    authStatus.textContent = 'Signed in as ' + user.email;
+                    authStatus.previousElementSibling.className = 'status-indicator status-success';
+                } else {
+                    authStatus.textContent = 'Not signed in';
+                    authStatus.previousElementSibling.className = 'status-indicator status-warning';
+                }
+            } catch (error) {
+                authStatus.textContent = 'Auth check failed';
+                authStatus.previousElementSibling.className = 'status-indicator status-error';
+            }
+        }
+
+        function clearRegistrationResults() {
+            const resultsDiv = document.getElementById('registrationResults');
+            resultsDiv.classList.remove('show');
+            resultsDiv.innerHTML = '';
+        }
+
+        function showResults(element, message, type = 'info') {
+            const statusIcon = type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️';
+            element.innerHTML = statusIcon + ' ' + message.replace(/\n/g, '<br>');
+            element.classList.add('show');
+            element.scrollTop = element.scrollHeight;
+        }
+
+        console.log('📧 Email Verification Test Page Ready');
+    </script>
+</body>
+</html>
