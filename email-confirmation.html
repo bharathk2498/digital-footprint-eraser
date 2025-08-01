@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Verification - Digital Footprint Eraser</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✅</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0A0A0F 0%, #1a1a2e 50%, #16213e 100%);
+            color: #F8FAFC;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .confirmation-container {
+            max-width: 500px;
+            width: 100%;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.2);
+        }
+
+        .verification-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .title {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #F8FAFC, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .message {
+            color: #CBD5E1;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+
+        .status-box {
+            background: rgba(76, 29, 149, 0.2);
+            border: 1px solid rgba(139, 92, 246, 0.4);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #4C1D95, #8B5CF6);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #8B5CF6;
+            border: 2px solid #8B5CF6;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(139, 92, 246, 0.3);
+            border-radius: 50%;
+            border-top-color: #8B5CF6;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 0.5rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .success {
+            color: #10B981;
+            border-color: rgba(16, 185, 129, 0.4);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .error {
+            color: #EF4444;
+            border-color: rgba(239, 68, 68, 0.4);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .warning {
+            color: #F59E0B;
+            border-color: rgba(245, 158, 11, 0.4);
+            background: rgba(245, 158, 11, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="confirmation-container">
+        <div class="verification-icon" id="verificationIcon">🔄</div>
+        <h1 class="title" id="verificationTitle">Verifying Your Email</h1>
+        <p class="message" id="verificationMessage">
+            <span class="loading"></span>
+            Please wait while we verify your email address...
+        </p>
+        
+        <div class="status-box" id="statusBox">
+            Processing email verification...
+        </div>
+
+        <div id="actionButtons" style="display: none;">
+            <a href="index.html" class="btn btn-primary">Continue to Dashboard</a>
+            <button class="btn btn-secondary" onclick="retryVerification()">Retry Verification</button>
+        </div>
+    </div>
+
+    <!-- Include Database Integration -->
+    <script src="database-integration.js"></script>
+
+    <script>
+        let verificationAttempts = 0;
+        const maxRetries = 3;
+
+        // Initialize verification process
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('📧 Email Confirmation Page Loaded');
+            await waitForDatabase();
+            await processEmailVerification();
+        });
+
+        async function waitForDatabase() {
+            let attempts = 0;
+            while (!window.dfDB?.supabase && attempts < 50) {
+                await new Promise(resolve => setTimeout(resolve, 100));
+                attempts++;
+            }
+        }
+
+        async function processEmailVerification() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const accessToken = urlParams.get('access_token');
+            const refreshToken = urlParams.get('refresh_token');
+            const tokenType = urlParams.get('token_type');
+            const type = urlParams.get('type');
+            const error = urlParams.get('error');
+            const errorDescription = urlParams.get('error_description');
+
+            updateStatus('🔄 Processing verification...', 'Checking email verification parameters...', 'info');
+
+            // Handle errors first
+            if (error) {
+                handleVerificationError(error, errorDescription);
+                return;
+            }
+
+            // Check if this is an email confirmation
+            if (type === 'signup' || type === 'email_change' || accessToken) {
+                await handleEmailConfirmation(accessToken, refreshToken, tokenType);
+            } else {
+                // No verification parameters found
+                handleNoVerificationData();
+            }
+        }
+
+        async function handleEmailConfirmation(accessToken, refreshToken, tokenType) {
+            try {
+                updateStatus('✅ Email Verified!', 'Processing your account activation...', 'processing');
+
+                if (accessToken && refreshToken) {
+                    // Set the session with the tokens
+                    const { data, error } = await window.dfDB.supabase.auth.setSession({
+                        access_token: accessToken,
+                        refresh_token: refreshToken
+                    });
+
+                    if (error) {
+                        throw new Error('Failed to set session: ' + error.message);
+                    }
+
+                    // Get the user details
+                    const user = data.user;
+                    if (user) {
+                        updateStatus('🎉 Email Successfully Verified!', 
+                            `Welcome ${user.email}! Your account is now fully activated.`, 
+                            'success');
+
+                        // Update user profile to mark email as verified
+                        await window.dfDB.updateEmailVerificationStatus(user.id, true);
+
+                        // Log successful verification
+                        await logVerificationSuccess(user);
+
+                        // Show success state
+                        showSuccessState(user);
+                    } else {
+                        throw new Error('No user data received');
+                    }
+                } else {
+                    // Try alternative verification method
+                    await verifyWithCurrentSession();
+                }
+            } catch (error) {
+                console.error('Email confirmation error:', error);
+                handleVerificationError('confirmation_failed', error.message);
+            }
+        }
+
+        async function verifyWithCurrentSession() {
+            try {
+                const { data: { user }, error } = await window.dfDB.supabase.auth.getUser();
+                
+                if (error) throw error;
+                
+                if (user && user.email_confirmed_at) {
+                    updateStatus('✅ Email Verified!', 
+                        `Your email ${user.email} has been successfully verified!`, 
+                        'success');
+                    
+                    await window.dfDB.updateEmailVerificationStatus(user.id, true);
+                    await logVerificationSuccess(user);
+                    showSuccessState(user);
+                } else {
+                    throw new Error('Email verification not complete');
+                }
+            } catch (error) {
+                console.error('Session verification error:', error);
+                handleVerificationError('session_error', error.message);
+            }
+        }
+
+        async function logVerificationSuccess(user) {
+            try {
+                // Log the successful verification
+                await window.dfDB.supabase
+                    .from('email_verification_logs')
+                    .insert([
+                        {
+                            user_id: user.id,
+                            email_address: user.email,
+                            verification_type: 'EMAIL_CONFIRMED',
+                            verified_at: new Date().toISOString()
+                        }
+                    ]);
+
+                // Create a success alert
+                await window.dfDB.supabase
+                    .from('security_alerts')
+                    .insert([
+                        {
+                            user_id: user.id,
+                            alert_type: 'EMAIL_VERIFIED',
+                            severity: 'INFO',
+                            alert_message: `Email verification completed successfully for ${user.email}`,
+                            alert_data: {
+                                email: user.email,
+                                verified_at: new Date().toISOString(),
+                                verification_method: 'EMAIL_LINK'
+                            }
+                        }
+                    ]);
+
+                console.log('✅ Verification success logged');
+            } catch (error) {
+                console.error('Error logging verification:', error);
+                // Don't fail the verification process if logging fails
+            }
+        }
+
+        function handleVerificationError(errorType, errorDescription) {
+            let errorMessage = 'An error occurred during email verification.';
+            let suggestions = [];
+
+            switch (errorType) {
+                case 'access_denied':
+                    errorMessage = 'Email verification was denied or cancelled.';
+                    suggestions = ['Try clicking the verification link again', 'Request a new verification email'];
+                    break;
+                case 'expired_token':
+                    errorMessage = 'The verification link has expired.';
+                    suggestions = ['Request a new verification email', 'Check if you clicked an old link'];
+                    break;
+                case 'invalid_request':
+                    errorMessage = 'The verification link is invalid or malformed.';
+                    suggestions = ['Make sure you clicked the complete link from your email', 'Request a new verification email'];
+                    break;
+                default:
+                    errorMessage = errorDescription || 'Email verification failed.';
+                    suggestions = ['Try again with a fresh verification email', 'Contact support if the problem persists'];
+            }
+
+            updateStatus('❌ Verification Failed', errorMessage, 'error');
+            
+            const statusBox = document.getElementById('statusBox');
+            statusBox.innerHTML += '<br><br><strong>Suggestions:</strong><br>' + 
+                suggestions.map(s => '• ' + s).join('<br>');
+
+            showErrorState();
+        }
+
+        function handleNoVerificationData() {
+            updateStatus('⚠️ No Verification Data', 
+                'This page is used for email verification, but no verification parameters were found in the URL.', 
+                'warning');
+            
+            const statusBox = document.getElementById('statusBox');
+            statusBox.innerHTML += '<br><br>If you clicked an email verification link, please:<br>' +
+                '• Make sure you clicked the complete link<br>' +
+                '• Check if the link was broken across multiple lines<br>' +
+                '• Try requesting a new verification email';
+
+            showWarningState();
+        }
+
+        function updateStatus(title, message, type) {
+            const icon = document.getElementById('verificationIcon');
+            const titleEl = document.getElementById('verificationTitle');
+            const messageEl = document.getElementById('verificationMessage');
+            const statusBox = document.getElementById('statusBox');
+
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+
+            // Remove loading spinner
+            messageEl.innerHTML = messageEl.innerHTML.replace(/<span class="loading"><\/span>/g, '');
+
+            switch (type) {
+                case 'success':
+                    icon.textContent = '🎉';
+                    statusBox.className = 'status-box success';
+                    statusBox.innerHTML = '✅ Email verification successful!<br>Your account is now fully activated.';
+                    break;
+                case 'error':
+                    icon.textContent = '❌';
+                    statusBox.className = 'status-box error';
+                    break;
+                case 'warning':
+                    icon.textContent = '⚠️';
+                    statusBox.className = 'status-box warning';
+                    break;
+                case 'processing':
+                    icon.textContent = '⚡';
+                    statusBox.className = 'status-box';
+                    statusBox.innerHTML = '⚡ Processing email verification...';
+                    break;
+                default:
+                    icon.textContent = '🔄';
+                    statusBox.className = 'status-box';
+            }
+        }
+
+        function showSuccessState() {
+            const actionButtons = document.getElementById('actionButtons');
+            actionButtons.style.display = 'block';
+            
+            // Auto-redirect after 5 seconds
+            setTimeout(() => {
+                if (confirm('Verification successful! Redirect to dashboard now?')) {
+                    window.location.href = 'index.html';
+                }
+            }, 3000);
+        }
+
+        function showErrorState() {
+            const actionButtons = document.getElementById('actionButtons');
+            actionButtons.innerHTML = `
+                <a href="index.html" class="btn btn-secondary">Back to Home</a>
+                <button class="btn btn-primary" onclick="requestNewVerification()">Request New Verification</button>
+            `;
+            actionButtons.style.display = 'block';
+        }
+
+        function showWarningState() {
+            const actionButtons = document.getElementById('actionButtons');
+            actionButtons.innerHTML = `
+                <a href="index.html" class="btn btn-primary">Back to Home</a>
+                <a href="email-test.html" class="btn btn-secondary">Test Email System</a>
+            `;
+            actionButtons.style.display = 'block';
+        }
+
+        async function retryVerification() {
+            if (verificationAttempts < maxRetries) {
+                verificationAttempts++;
+                updateStatus('🔄 Retrying Verification', 'Attempting verification again...', 'processing');
+                await processEmailVerification();
+            } else {
+                updateStatus('⚠️ Max Retries Reached', 
+                    'Please request a new verification email or contact support.', 
+                    'warning');
+                showErrorState();
+            }
+        }
+
+        async function requestNewVerification() {
+            try {
+                const result = await window.dfDB.resendVerificationEmail();
+                if (result.success) {
+                    alert('✅ New verification email sent! Please check your inbox.');
+                } else {
+                    alert('❌ Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('❌ Error sending verification email: ' + error.message);
+            }
+        }
+
+        // Handle browser back/forward navigation
+        window.addEventListener('popstate', function(event) {
+            // If user navigates away and back, re-process verification
+            processEmailVerification();
+        });
+
+        console.log('📧 Email Confirmation Handler Ready');
+    </script>
+</body>
+</html>
