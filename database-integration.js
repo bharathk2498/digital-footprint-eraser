@@ -3,10 +3,10 @@
 // Complete database functionality for all features
 // ====================
 
-// IMPORTANT: Replace these with your actual Supabase credentials
+// Supabase Configuration
 const SUPABASE_CONFIG = {
     url: 'https://rmnmiqpxqpjvpcavkmxn.supabase.co',
-    anonKey: 'YOUR_SUPABASE_ANON_KEY_HERE' // Replace with your actual anon key from Supabase dashboard
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJtbm1pcXB4cXBqdnBjYXZrbXhuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTM5OTUzMTAsImV4cCI6MjA2OTU3MTMxMH0.deKUH0tkvzCoHcqIedPDeG2YcS_lxrhVpGjMJU-ErF0'
 };
 
 // DigitalFootprintDB - Complete Database Integration Class
@@ -891,3 +891,4 @@ console.log('🚀 Digital Footprint Eraser Database Integration Loaded');
 console.log('🛡️ Complete database functionality ready');
 console.log('📊 26 tables available for all features');
 console.log('🔐 Row Level Security enabled');
+console.log('🌐 Connected to: https://rmnmiqpxqpjvpcavkmxn.supabase.co');
