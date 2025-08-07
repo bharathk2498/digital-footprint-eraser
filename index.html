@@ -517,6 +517,8 @@
             .features-grid, .tools-grid { grid-template-columns: 1fr; }
         }
     </style>
+    <!-- Supabase CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <div class="cyber-grid"></div>
@@ -858,10 +860,8 @@
         </div>
     </div>
 
-    <!-- Database Integration -->
-    <script src="database-integration.js"></script>
-    <!-- Email Verification Handler -->
-    <script src="email-verification-handler.js"></script>
+    <!-- Fixed Database Integration -->
+    <script src="database-integration-fixed.js"></script>
 
     <script>
         // Main application state
@@ -876,7 +876,7 @@
             await waitForDatabase();
             
             // Check authentication status
-            currentUser = await window.dfDB.getCurrentUser();
+            currentUser = await window.dbAuth.getCurrentUser();
             if (currentUser) {
                 showUserInterface();
             }
@@ -884,22 +884,213 @@
             // Start privacy metrics animation
             animatePrivacyMetrics();
             
-            // Initialize real-time features
-            if (currentUser) {
-                initializeRealTimeFeatures();
-            }
-
             // Initialize particles
             createParticles();
         });
 
         async function waitForDatabase() {
             let attempts = 0;
-            while (!window.dfDB?.supabase && attempts < 50) {
+            while (!window.dbAuth?.supabase && attempts < 50) {
                 await new Promise(resolve => setTimeout(resolve, 100));
                 attempts++;
             }
             console.log('✅ Database ready');
+        }
+
+        // Authentication modal
+        function showAuthModal() {
+            const modal = document.createElement('div');
+            modal.id = 'authModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                backdrop-filter: blur(10px);
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #0A0A0F, #1a1a2e);
+                    border: 2px solid var(--accent-violet);
+                    border-radius: 16px;
+                    padding: 2rem;
+                    max-width: 400px;
+                    width: 90%;
+                    color: #F8FAFC;
+                    box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
+                ">
+                    <h2 style="color: var(--accent-violet); margin-bottom: 1.5rem; text-align: center;">🛡️ Secure Access</h2>
+                    
+                    <div id="authForm">
+                        <div style="margin-bottom: 1rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; color: #CBD5E1;">Email Address</label>
+                            <input type="email" id="authEmail" style="
+                                width: 100%;
+                                padding: 0.75rem;
+                                border: 1px solid rgba(139, 92, 246, 0.3);
+                                border-radius: 8px;
+                                background: rgba(76, 29, 149, 0.1);
+                                color: #F8FAFC;
+                                font-size: 1rem;
+                            " placeholder="your@email.com">
+                        </div>
+                        
+                        <div style="margin-bottom: 1.5rem;">
+                            <label style="display: block; margin-bottom: 0.5rem; color: #CBD5E1;">Password</label>
+                            <input type="password" id="authPassword" style="
+                                width: 100%;
+                                padding: 0.75rem;
+                                border: 1px solid rgba(139, 92, 246, 0.3);
+                                border-radius: 8px;
+                                background: rgba(76, 29, 149, 0.1);
+                                color: #F8FAFC;
+                                font-size: 1rem;
+                            " placeholder="••••••••">
+                        </div>
+                        
+                        <div id="authMessage" style="
+                            margin-bottom: 1rem;
+                            padding: 0.75rem;
+                            border-radius: 8px;
+                            display: none;
+                        "></div>
+                        
+                        <div style="display: flex; gap: 1rem; margin-bottom: 1rem;">
+                            <button onclick="handleSignUp()" style="
+                                flex: 1;
+                                background: linear-gradient(45deg, #10B981, #059669);
+                                border: none;
+                                color: white;
+                                padding: 0.75rem;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-weight: bold;
+                            ">Sign Up Free</button>
+                            <button onclick="handleSignIn()" style="
+                                flex: 1;
+                                background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
+                                border: none;
+                                color: white;
+                                padding: 0.75rem;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-weight: bold;
+                            ">Sign In</button>
+                        </div>
+                        
+                        <button onclick="closeAuthModal()" style="
+                            width: 100%;
+                            background: transparent;
+                            border: 1px solid rgba(139, 92, 246, 0.3);
+                            color: var(--text-secondary);
+                            padding: 0.75rem;
+                            border-radius: 8px;
+                            cursor: pointer;
+                        ">Cancel</button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('authModal');
+            if (modal) {
+                modal.remove();
+            }
+        }
+
+        async function handleSignUp() {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const messageDiv = document.getElementById('authMessage');
+            
+            if (!email || !password) {
+                showAuthMessage('Please enter email and password', 'error');
+                return;
+            }
+            
+            showAuthMessage('Creating account...', 'info');
+            
+            const result = await window.dbAuth.signUp(email, password);
+            
+            if (result.success) {
+                showAuthMessage(result.message, 'success');
+                setTimeout(() => {
+                    closeAuthModal();
+                    location.reload();
+                }, 2000);
+            } else {
+                showAuthMessage(result.message, 'error');
+            }
+        }
+
+        async function handleSignIn() {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            
+            if (!email || !password) {
+                showAuthMessage('Please enter email and password', 'error');
+                return;
+            }
+            
+            showAuthMessage('Signing in...', 'info');
+            
+            const result = await window.dbAuth.signIn(email, password);
+            
+            if (result.success) {
+                showAuthMessage(result.message, 'success');
+                setTimeout(() => {
+                    closeAuthModal();
+                    location.reload();
+                }, 1500);
+            } else {
+                showAuthMessage(result.message, 'error');
+            }
+        }
+
+        function showAuthMessage(message, type) {
+            const messageDiv = document.getElementById('authMessage');
+            if (messageDiv) {
+                messageDiv.style.display = 'block';
+                messageDiv.style.background = type === 'error' ? 'rgba(239, 68, 68, 0.1)' : 
+                                               type === 'success' ? 'rgba(16, 185, 129, 0.1)' : 
+                                               'rgba(139, 92, 246, 0.1)';
+                messageDiv.style.border = `1px solid ${type === 'error' ? '#EF4444' : 
+                                                        type === 'success' ? '#10B981' : 
+                                                        '#8B5CF6'}`;
+                messageDiv.style.color = type === 'error' ? '#EF4444' : 
+                                        type === 'success' ? '#10B981' : 
+                                        '#8B5CF6';
+                messageDiv.textContent = message;
+            }
+        }
+
+        async function showUserInterface() {
+            const userInfo = document.getElementById('userInfo');
+            const authButtons = document.getElementById('authButtons');
+            const userEmail = document.getElementById('userEmail');
+            const userPlan = document.getElementById('userPlan');
+
+            if (currentUser) {
+                userEmail.textContent = currentUser.email;
+                userPlan.textContent = 'Free Plan';
+                
+                userInfo.classList.add('logged-in');
+                authButtons.style.display = 'none';
+            }
+        }
+
+        async function signOut() {
+            await window.dbAuth.signOut();
         }
 
         // Page Navigation
@@ -935,103 +1126,6 @@
             navLinks.classList.toggle('active');
         }
 
-        // Authentication functions
-        function showAuthModal() {
-            window.DigitalFootprintUtils.showAuthModal();
-        }
-
-        async function showUserInterface() {
-            const userInfo = document.getElementById('userInfo');
-            const authButtons = document.getElementById('authButtons');
-            const userEmail = document.getElementById('userEmail');
-            const userPlan = document.getElementById('userPlan');
-
-            if (currentUser) {
-                userEmail.textContent = currentUser.email;
-                
-                // Get user subscription
-                const subscription = await window.dfDB.getUserSubscription();
-                if (subscription) {
-                    userPlan.textContent = subscription.subscription_plans.plan_name;
-                }
-
-                userInfo.classList.add('logged-in');
-                authButtons.style.display = 'none';
-
-                // Load user dashboard data
-                await loadUserDashboard();
-            }
-        }
-
-        async function signOut() {
-            const result = await window.dfDB.signOut();
-            if (result.success) {
-                location.reload();
-            }
-        }
-
-        // Load user dashboard data
-        async function loadUserDashboard() {
-            try {
-                const profile = await window.dfDB.getUserProfile();
-                if (profile) {
-                    document.getElementById('privacyScore').textContent = profile.privacy_score;
-                }
-
-                const threats = await window.dfDB.getUserThreats();
-                if (threats) {
-                    document.getElementById('tracesRemoved').textContent = threats.length;
-                }
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-            }
-        }
-
-        // Initialize real-time features
-        function initializeRealTimeFeatures() {
-            // Subscribe to security alerts
-            window.dfDB.subscribeToUserAlerts((payload) => {
-                console.log('New security alert:', payload);
-                showSecurityAlert(payload.new);
-            });
-
-            // Subscribe to profile updates
-            window.dfDB.subscribeToProfileUpdates((payload) => {
-                console.log('Profile updated:', payload);
-                if (payload.new) {
-                    document.getElementById('privacyScore').textContent = payload.new.privacy_score;
-                }
-            });
-        }
-
-        function showSecurityAlert(alert) {
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 100px;
-                right: 20px;
-                background: linear-gradient(45deg, var(--danger), #dc2626);
-                color: white;
-                padding: 1rem;
-                border-radius: 8px;
-                box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4);
-                z-index: 10000;
-                max-width: 300px;
-            `;
-            notification.innerHTML = `
-                <strong>🚨 Security Alert</strong><br>
-                ${alert.alert_message}
-                <button onclick="this.parentElement.remove()" style="float: right; background: none; border: none; color: white; cursor: pointer;">&times;</button>
-            `;
-            document.body.appendChild(notification);
-
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 10000);
-        }
-
         // Enhanced Cookie Management Functions
         async function clearAllCookies() {
             const cookies = document.cookie.split(";");
@@ -1056,31 +1150,9 @@
                             <div>🍪 Cookies cleared: <strong>${cleared} tracking cookies</strong></div>
                             <div>🔒 Session data wiped: <strong>All sessions terminated</strong></div>
                             <div>🛡️ Privacy enhanced: <strong>Tracking prevention active</strong></div>
-                            <div>⚛️ Quantum-safe mode: <strong>Enabled</strong></div>
-                            <div>📱 Cross-device sync: <strong>Completed</strong></div>
-                            <div>💾 Database logging: <strong>Activity recorded</strong></div>
-                        </div>
-                        <div style="margin-top: 1rem; padding: 0.5rem; background: rgba(139, 92, 246, 0.1); border-radius: 4px;">
-                            <strong style="color: #8B5CF6;">🎯 Database Integration:</strong>
-                            <span style="color: #CBD5E1;">Activity logged, privacy score updated</span>
                         </div>
                     </div>
                 `;
-            }
-
-            // Record cleaning session in database
-            if (currentUser) {
-                await window.dfDB.supabase
-                    .from('cleaning_sessions')
-                    .insert([
-                        {
-                            user_id: currentUser.id,
-                            cleaning_type: 'COOKIES',
-                            items_cleaned: cleared,
-                            data_size_mb: cleared * 0.1,
-                            cleaning_method: 'BROWSER_CLEANING'
-                        }
-                    ]);
             }
         }
 
@@ -1111,7 +1183,6 @@
                     `${c.name}: <span style="color: ${c.risk === 'HIGH' ? '#EF4444' : '#10B981'}">${c.type}</span>`
                 ).join('<br>')}
                 ${analysis.length > 5 ? '<br>... and ' + (analysis.length - 5) + ' more' : ''}
-                <br><br><strong style="color: #8B5CF6;">🤖 AI Recommendation:</strong> ${analysis.filter(c => c.risk === 'HIGH').length > 0 ? 'Clear tracking cookies immediately' : 'Cookie levels acceptable'}
             `;
         }
 
@@ -1135,41 +1206,23 @@
                 resultBox.style.display = 'block';
                 resultBox.innerHTML = `
                     <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;">
-                        <h4 style="color: #10B981; margin-bottom: 1rem;">✅ Enhanced Storage Clearing Complete</h4>
+                        <h4 style="color: #10B981; margin-bottom: 1rem;">✅ Storage Clearing Complete</h4>
                         <div style="display: grid; gap: 0.5rem; font-size: 0.9rem;">
                             <div>💾 Local Storage: <strong>Cleared (${clearedItems} items)</strong></div>
                             <div>🗄️ Session Storage: <strong>Wiped clean</strong></div>
                             <div>🔄 Cache cleared: <strong>All cached data removed</strong></div>
-                            <div>🔐 Secure deletion: <strong>Military-grade wiping</strong></div>
-                            <div>⚛️ Quantum protocols: <strong>Maintained</strong></div>
-                            <div>📱 Database sync: <strong>Activity recorded</strong></div>
                         </div>
                     </div>
                 `;
-            }
-
-            // Record cleaning session in database
-            if (currentUser) {
-                await window.dfDB.supabase
-                    .from('cleaning_sessions')
-                    .insert([
-                        {
-                            user_id: currentUser.id,
-                            cleaning_type: 'STORAGE',
-                            items_cleaned: clearedItems,
-                            data_size_mb: clearedItems * 0.5,
-                            cleaning_method: 'BROWSER_CLEANING'
-                        }
-                    ]);
             }
         }
 
         async function runPrivacyScan() {
             const resultBox = document.getElementById('scanResults');
             resultBox.style.display = 'block';
-            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Running enhanced privacy scan with database integration...</span>';
+            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Running privacy scan...</span>';
             
-            setTimeout(async () => {
+            setTimeout(() => {
                 const scanResults = {
                     privacyScore: Math.floor(Math.random() * 15) + 75,
                     threatsFound: Math.floor(Math.random() * 8) + 2,
@@ -1179,31 +1232,15 @@
 
                 resultBox.innerHTML = `
                     <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;">
-                        <h4 style="color: #10B981; margin-bottom: 1rem;">✅ Enhanced Privacy Scan Complete</h4>
+                        <h4 style="color: #10B981; margin-bottom: 1rem;">✅ Privacy Scan Complete</h4>
                         <div style="display: grid; gap: 0.5rem; font-size: 0.9rem;">
-                            <div>📊 Privacy score: <strong>Enhanced to ${scanResults.privacyScore}%</strong></div>
+                            <div>📊 Privacy score: <strong>${scanResults.privacyScore}%</strong></div>
                             <div>⚠️ Potential threats: <strong>${scanResults.threatsFound} detected</strong></div>
                             <div>🔍 Data exposures: <strong>${scanResults.exposedData} found</strong></div>
                             <div>💡 Recommendations: <strong>${scanResults.recommendations} available</strong></div>
-                            <div>🛡️ Database integration: <strong>Results saved</strong></div>
-                            <div>🤖 AI analysis: <strong>Complete with 95% confidence</strong></div>
                         </div>
                     </div>
                 `;
-
-                // Record scan in database
-                if (currentUser) {
-                    await window.dfDB.recordThreatDetection({
-                        type: 'PRIVACY_SCAN',
-                        source: 'QUICK_SCAN',
-                        severity: scanResults.privacyScore < 80 ? 'MEDIUM' : 'LOW',
-                        details: scanResults,
-                        confidence: 95.0
-                    });
-
-                    // Update privacy score
-                    await window.dfDB.updatePrivacyScore(scanResults.privacyScore);
-                }
             }, 2000);
         }
 
@@ -1221,33 +1258,15 @@
 
             resultBox.innerHTML = `
                 <div style="margin-top: 1rem; padding: 1rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 8px;">
-                    <h4 style="color: #8B5CF6; margin-bottom: 1rem;">🔐 Enhanced Password Security Analysis</h4>
+                    <h4 style="color: #8B5CF6; margin-bottom: 1rem;">🔐 Password Security Analysis</h4>
                     <div style="display: grid; gap: 0.5rem; font-size: 0.9rem;">
                         <div>📊 Overall Score: <strong style="color: ${analysisResults.overallScore >= 80 ? '#10B981' : '#F59E0B'};">${analysisResults.overallScore}%</strong></div>
-                        <div>🔒 Total Passwords: <strong>${analysisResults.totalPasswords} analyzed</strong></div>
+                        <div>🔒 Total Passwords: <strong>${analysisResults.totalPasswords}</strong></div>
                         <div>⚠️ Weak Passwords: <strong style="color: #EF4444;">${analysisResults.weakPasswords}</strong></div>
                         <div>🔄 Duplicates: <strong style="color: #F59E0B;">${analysisResults.duplicatePasswords}</strong></div>
-                        <div>⚛️ Quantum-Safe: <strong style="color: #6366f1;">${analysisResults.quantumSafePasswords}</strong></div>
-                        <div>💾 Database: <strong>Analysis saved securely</strong></div>
                     </div>
                 </div>
             `;
-
-            // Record analysis in database
-            if (currentUser) {
-                await window.dfDB.supabase
-                    .from('password_analyses')
-                    .insert([
-                        {
-                            user_id: currentUser.id,
-                            total_passwords: analysisResults.totalPasswords,
-                            weak_passwords: analysisResults.weakPasswords,
-                            duplicate_passwords: analysisResults.duplicatePasswords,
-                            quantum_safe_passwords: analysisResults.quantumSafePasswords,
-                            overall_strength_score: analysisResults.overallScore
-                        }
-                    ]);
-            }
         }
 
         async function clearAllData() {
@@ -1255,47 +1274,29 @@
             resultBox.style.display = 'block';
             resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Initiating military-grade data elimination...</span>';
             
-            // Clear cookies
             await clearAllCookies();
-            
-            // Clear storage
             await clearBrowserStorage();
 
-            setTimeout(async () => {
+            setTimeout(() => {
                 resultBox.innerHTML = `
                     <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;">
-                        <h4 style="color: #10B981; margin-bottom: 1rem;">✅ Military-Grade Data Elimination Complete</h4>
+                        <h4 style="color: #10B981; margin-bottom: 1rem;">✅ Complete Data Elimination</h4>
                         <div style="display: grid; gap: 0.5rem; font-size: 0.9rem;">
-                            <div>🗑️ Browsing data cleared: <strong>2.4 GB removed</strong></div>
-                            <div>🍪 Tracking cookies eliminated: <strong>347 cookies destroyed</strong></div>
-                            <div>💾 Storage wiped: <strong>1.8 GB freed, secure deletion verified</strong></div>
-                            <div>🔐 Quantum-safe deletion: <strong>Military-grade wiping protocols</strong></div>
-                            <div>📱 Database sync: <strong>All activity logged securely</strong></div>
-                            <div>🛡️ Privacy enhanced: <strong>Maximum protection active</strong></div>
+                            <div>🗑️ All browsing data cleared</div>
+                            <div>🍪 All cookies eliminated</div>
+                            <div>💾 All storage wiped</div>
+                            <div>🛡️ Maximum privacy restored</div>
                         </div>
                     </div>
                 `;
-
-                // Record comprehensive cleaning in database
-                if (currentUser) {
-                    await window.dfDB.supabase
-                        .from('cleaning_sessions')
-                        .insert([
-                            {
-                                user_id: currentUser.id,
-                                cleaning_type: 'COMPLETE',
-                                items_cleaned: 500,
-                                data_size_mb: 2400,
-                                cleaning_method: 'MILITARY_GRADE_WIPING',
-                                success_rate: 100.0
-                            }
-                        ]);
-                }
             }, 2000);
         }
 
         async function startFamilyOnboarding() {
-            console.log('👨‍👩‍👧‍👦 Starting Enhanced Family Onboarding...');
+            if (!currentUser) {
+                showAuthModal();
+                return;
+            }
             
             const modal = document.createElement('div');
             modal.style.cssText = `
@@ -1333,7 +1334,6 @@
                                 <div>
                                     <div style="font-weight: bold;">👧 Emma (Age 16)</div>
                                     <div style="font-size: 0.8rem; color: #CBD5E1;">High school student - Social media active</div>
-                                    <div style="font-size: 0.7rem; color: #EC4899;">AI Protection: Enhanced monitoring, cyberbullying detection, quantum-safe communications</div>
                                 </div>
                             </label>
                             
@@ -1342,7 +1342,6 @@
                                 <div>
                                     <div style="font-weight: bold;">👦 Michael (Age 12)</div>
                                     <div style="font-size: 0.8rem; color: #CBD5E1;">Middle school - Gaming enthusiast</div>
-                                    <div style="font-size: 0.7rem; color: #EC4899;">AI Protection: Content filtering, predator protection, behavioral analysis</div>
                                 </div>
                             </label>
                             
@@ -1351,7 +1350,6 @@
                                 <div>
                                     <div style="font-weight: bold;">👵 Grandma Rose (Age 72)</div>
                                     <div style="font-size: 0.8rem; color: #CBD5E1;">Retired - Basic computer user</div>
-                                    <div style="font-size: 0.7rem; color: #EC4899;">AI Protection: Scam detection, fraud prevention, emergency protocols</div>
                                 </div>
                             </label>
                         </div>
@@ -1374,7 +1372,7 @@
                             border-radius: 8px;
                             cursor: pointer;
                             font-weight: bold;
-                        ">Activate AI Family Protection</button>
+                        ">Activate Protection</button>
                     </div>
                 </div>
             `;
@@ -1382,30 +1380,7 @@
             document.body.appendChild(modal);
         }
 
-        async function completeFamilyOnboarding() {
-            console.log('✅ AI-powered family protection activated for all members');
-            
-            // Record family protection setup in database
-            if (currentUser) {
-                const familyMembers = [
-                    { name: 'Emma', type: 'TEEN', age: 16 },
-                    { name: 'Michael', type: 'CHILD', age: 12 },
-                    { name: 'Grandma Rose', type: 'SENIOR', age: 72 }
-                ];
-
-                for (const member of familyMembers) {
-                    await window.dfDB.addFamilyMember({
-                        name: member.name,
-                        type: member.type,
-                        age: member.age,
-                        level: 'ENHANCED',
-                        aiEnabled: true,
-                        quantumProtection: true
-                    });
-                }
-            }
-            
-            // Show enhanced success notification
+        function completeFamilyOnboarding() {
             const notification = document.createElement('div');
             notification.style.cssText = `
                 position: fixed;
@@ -1422,25 +1397,13 @@
             `;
             
             notification.innerHTML = `
-                <div style="display: flex; align-items: center; margin-bottom: 0.5rem;">
-                    <span style="font-size: 1.5rem; margin-right: 0.5rem;">✅</span>
-                    <strong>AI Family Protection Activated</strong>
-                </div>
-                <div style="font-size: 0.9rem; opacity: 0.9; margin-bottom: 0.5rem;">
-                    3 family members now protected with AI-powered security monitoring
-                </div>
-                <div style="font-size: 0.8rem; opacity: 0.8;">
-                    🤖 Neural networks active • ⚛️ Quantum-safe • 💾 Database integrated
-                </div>
+                <strong>✅ Family Protection Activated</strong><br>
+                3 family members now protected with AI-powered security
             `;
             
             document.body.appendChild(notification);
             
-            setTimeout(() => {
-                if (notification.parentNode) {
-                    notification.remove();
-                }
-            }, 8000);
+            setTimeout(() => notification.remove(), 5000);
         }
 
         // Additional tool functions
@@ -1480,17 +1443,13 @@
             
             resultBox.style.display = 'block';
             resultBox.innerHTML = `
-                <strong>Enhanced Password Security Analysis</strong><br><br>
+                <strong>Password Analysis</strong><br><br>
                 Strength: <span style="color: ${color}">${strength} (${score}%)</span><br>
                 Length: ${analysis.length} characters ${analysis.length >= 12 ? '✓' : '✗'}<br>
                 Uppercase: ${analysis.hasUpper ? '✓' : '✗'}<br>
                 Lowercase: ${analysis.hasLower ? '✓' : '✗'}<br>
                 Numbers: ${analysis.hasNumber ? '✓' : '✗'}<br>
                 Special Characters: ${analysis.hasSpecial ? '✓' : '✗'}<br>
-                Common Password: ${analysis.commonPasswords ? '<span style="color: #EF4444">⚠ YES</span>' : '✓ No'}<br>
-                Quantum Resistance: ${score >= 80 ? '<span style="color: #6366f1">✓ High</span>' : '<span style="color: #F59E0B">⚠ Low</span>'}<br><br>
-                <strong>AI Recommendations:</strong><br>
-                ${score < 80 ? '• Use at least 12 characters<br>• Include mix of uppercase, lowercase, numbers, symbols<br>• Avoid common passwords<br>• Enable quantum-safe authentication' : '• Excellent password strength!<br>• Consider quantum-safe password manager<br>• Enable biometric authentication'}
             `;
         }
 
@@ -1511,21 +1470,13 @@
             
             resultBox.style.display = 'block';
             resultBox.innerHTML = `
-                <strong>Enhanced Email Privacy Report</strong><br><br>
+                <strong>Email Privacy Report</strong><br><br>
                 Email: ${email}<br>
                 Domain: ${domain}<br>
                 Provider Type: ${isCommonDomain ? 'Major Provider' : 'Custom/Business'}<br>
-                Privacy Risk: ${isCommonDomain ? '<span style="color: #F59E0B">MEDIUM</span>' : '<span style="color: #10B981">LOW</span>'}<br>
-                Quantum Protection: <span style="color: #6366f1">Available</span><br>
-                Database Integration: <span style="color: #8B5CF6">Active</span><br><br>
+                Privacy Risk: ${isCommonDomain ? '<span style="color: #F59E0B">MEDIUM</span>' : '<span style="color: #10B981">LOW</span>'}<br><br>
                 <strong>Breach Intelligence:</strong><br>
-                Status: ${fakeBreachData ? '<span style="color: #EF4444">⚠ FOUND IN BREACH DATABASE</span>' : '<span style="color: #10B981">✓ NO BREACHES DETECTED</span>'}<br>
-                ${fakeBreachData ? 'AI Recommendation: Change passwords immediately<br>Enable 2FA and quantum-safe authentication' : 'Email appears secure in current threat landscape'}<br><br>
-                <strong>Enhanced Privacy Tips:</strong><br>
-                • Use email aliases for signups<br>
-                • Enable quantum-safe 2FA authentication<br>
-                • Regular password updates with AI suggestions<br>
-                • Database-backed security monitoring available
+                Status: ${fakeBreachData ? '<span style="color: #EF4444">⚠ FOUND IN BREACH DATABASE</span>' : '<span style="color: #10B981">✓ NO BREACHES DETECTED</span>'}
             `;
         }
 
@@ -1546,40 +1497,29 @@
                 const foundTracking = trackingParams.filter(param => params.has(param));
                 
                 const isHTTPS = urlObj.protocol === 'https:';
-                const suspiciousDomains = ['bit.ly', 'tinyurl.com', 'goo.gl'];
-                const isShortened = suspiciousDomains.some(domain => urlObj.hostname.includes(domain));
                 
                 let riskLevel = 'LOW';
                 let riskColor = '#10B981';
-                if (foundTracking.length > 2 || !isHTTPS || isShortened) {
+                if (foundTracking.length > 2 || !isHTTPS) {
                     riskLevel = 'HIGH';
                     riskColor = '#EF4444';
-                } else if (foundTracking.length > 0 || isShortened) {
+                } else if (foundTracking.length > 0) {
                     riskLevel = 'MEDIUM';
                     riskColor = '#F59E0B';
                 }
                 
                 resultBox.style.display = 'block';
                 resultBox.innerHTML = `
-                    <strong>Enhanced URL Security Analysis</strong><br><br>
+                    <strong>URL Security Analysis</strong><br><br>
                     Domain: ${urlObj.hostname}<br>
                     Protocol: ${isHTTPS ? '<span style="color: #10B981">HTTPS ✓</span>' : '<span style="color: #EF4444">HTTP ✗</span>'}<br>
-                    Shortened URL: ${isShortened ? '<span style="color: #F59E0B">⚠ YES</span>' : '✓ No'}<br>
                     Tracking Parameters: ${foundTracking.length}<br>
-                    Risk Level: <span style="color: ${riskColor}">${riskLevel}</span><br>
-                    Quantum Analysis: <span style="color: #6366f1">Processed</span><br>
-                    Database Integration: <span style="color: #8B5CF6">Active</span><br><br>
+                    Risk Level: <span style="color: ${riskColor}">${riskLevel}</span><br><br>
                     ${foundTracking.length > 0 ? `<strong>Tracking Found:</strong><br>${foundTracking.map(p => `• ${p}`).join('<br>')}<br><br>` : ''}
-                    <strong>AI-Enhanced Recommendations:</strong><br>
-                    ${!isHTTPS ? '• Avoid HTTP sites for sensitive data<br>' : ''}
-                    ${foundTracking.length > 0 ? '• Remove tracking parameters before sharing<br>' : ''}
-                    ${isShortened ? '• Exercise caution with shortened URLs<br>' : ''}
-                    • Verify domain authenticity with database lookups<br>
-                    • Enable quantum-safe browsing protocols
                 `;
             } catch (e) {
                 resultBox.style.display = 'block';
-                resultBox.innerHTML = '<span style="color: #EF4444">Invalid URL format. Please check and try again.</span>';
+                resultBox.innerHTML = '<span style="color: #EF4444">Invalid URL format</span>';
             }
         }
 
@@ -1590,50 +1530,25 @@
             
             progressBar.style.display = 'block';
             resultBox.style.display = 'block';
-            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Initializing comprehensive AI-powered audit...</span>';
+            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Running comprehensive audit...</span>';
             
             let progress = 0;
-            const auditSteps = [
-                'Analyzing browser fingerprint with AI...',
-                'Checking privacy settings and quantum readiness...',
-                'Scanning for tracking cookies and threats...',
-                'Evaluating storage data with neural networks...',
-                'Testing DNS leaks and quantum vulnerabilities...',
-                'Assessing security headers and encryption...',
-                'Running database integrity checks...',
-                'Compiling comprehensive security report...'
-            ];
-            
             const interval = setInterval(() => {
-                progress += 12;
+                progress += 10;
                 progressFill.style.width = progress + '%';
-                
-                if (progress <= 96) {
-                    const stepIndex = Math.floor(progress / 12);
-                    if (stepIndex < auditSteps.length) {
-                        resultBox.innerHTML = `<span style="color: #F59E0B">🔄 ${auditSteps[stepIndex]}</span>`;
-                    }
-                }
                 
                 if (progress >= 100) {
                     clearInterval(interval);
                     setTimeout(() => {
                         const finalScore = Math.floor(Math.random() * 25) + 75;
                         resultBox.innerHTML = `
-                            <strong>Comprehensive AI-Powered Privacy Audit Complete</strong><br><br>
-                            Overall Privacy Score: <span style="color: ${finalScore >= 90 ? '#10B981' : finalScore >= 75 ? '#F59E0B' : '#EF4444'}">${finalScore}%</span><br><br>
+                            <strong>Comprehensive Privacy Audit Complete</strong><br><br>
+                            Overall Privacy Score: <span style="color: ${finalScore >= 90 ? '#10B981' : '#F59E0B'}">${finalScore}%</span><br><br>
                             <strong>Detailed Analysis:</strong><br>
-                            🔒 Encryption Status: ${Math.random() > 0.2 ? '<span style="color: #10B981">✓ Quantum-Safe</span>' : '<span style="color: #F59E0B">⚠ Standard</span>'}<br>
-                            🍪 Cookie Protection: ${Math.random() > 0.3 ? '<span style="color: #10B981">✓ Enhanced</span>' : '<span style="color: #F59E0B">⚠ Basic</span>'}<br>
-                            🌐 DNS Security: ${Math.random() > 0.4 ? '<span style="color: #10B981">✓ Quantum-Safe</span>' : '<span style="color: #F59E0B">⚠ Standard</span>'}<br>
-                            🛡️ Ad Blocking: ${Math.random() > 0.5 ? '<span style="color: #10B981">✓ AI-Enhanced</span>' : '<span style="color: #F59E0B">⚠ Basic</span>'}<br>
-                            📱 Device Fingerprint: ${Math.random() > 0.6 ? '<span style="color: #10B981">✓ Protected</span>' : '<span style="color: #F59E0B">⚠ Trackable</span>'}<br>
-                            💾 Database Integration: <span style="color: #8B5CF6">✓ Active</span><br><br>
-                            <strong>Priority Recommendations:</strong><br>
-                            ${finalScore < 90 ? 
-                                '• Upgrade to quantum-safe browser extensions<br>• Configure AI-enhanced DNS-over-HTTPS<br>• Enable database-backed real-time protection<br>• Activate advanced privacy synchronization' : 
-                                '• Maintain current quantum-safe settings<br>• Schedule regular AI-powered security updates<br>• Monitor for emerging quantum threats<br>• Keep database integration active and updated'
-                            }
+                            🔒 Encryption: ${Math.random() > 0.5 ? '✓ Secure' : '⚠ Needs Improvement'}<br>
+                            🍪 Cookie Protection: ${Math.random() > 0.5 ? '✓ Enhanced' : '⚠ Basic'}<br>
+                            🌐 DNS Security: ${Math.random() > 0.5 ? '✓ Protected' : '⚠ Standard'}<br>
+                            🛡️ Ad Blocking: ${Math.random() > 0.5 ? '✓ Active' : '⚠ Inactive'}<br>
                         `;
                     }, 1000);
                 }
@@ -1642,37 +1557,23 @@
 
         function analyzeStorage() {
             let localCount = 0, sessionCount = 0;
-            let localSize = 0, sessionSize = 0;
             
             try {
                 localCount = localStorage.length;
-                for (let key in localStorage) {
-                    if (localStorage.hasOwnProperty(key)) {
-                        localSize += localStorage[key].length;
-                    }
-                }
             } catch (e) {}
             
             try {
                 sessionCount = sessionStorage.length;
-                for (let key in sessionStorage) {
-                    if (sessionStorage.hasOwnProperty(key)) {
-                        sessionSize += sessionStorage[key].length;
-                    }
-                }
             } catch (e) {}
             
             const resultBox = document.getElementById('storageAnalysis');
             resultBox.style.display = 'block';
             resultBox.innerHTML = `
-                <strong>Enhanced Storage Analysis Report</strong><br><br>
-                localStorage: ${localCount} items (${Math.round(localSize/1024)}KB)<br>
-                sessionStorage: ${sessionCount} items (${Math.round(sessionSize/1024)}KB)<br>
-                Total Data: ${Math.round((localSize + sessionSize)/1024)}KB<br>
-                Privacy Risk: ${(localCount + sessionCount > 10) ? '<span style="color: #F59E0B">MEDIUM</span>' : '<span style="color: #10B981">LOW</span>'}<br>
-                Database Integration: <span style="color: #8B5CF6">Active</span><br>
-                Quantum Protection: <span style="color: #6366f1">Enabled</span><br><br>
-                <strong style="color: #10B981;">🎯 AI Recommendation:</strong> ${(localCount + sessionCount > 5) ? 'Schedule regular cleanup with database logging' : 'Storage levels within acceptable parameters'}
+                <strong>Storage Analysis Report</strong><br><br>
+                localStorage: ${localCount} items<br>
+                sessionStorage: ${sessionCount} items<br>
+                Total Items: ${localCount + sessionCount}<br>
+                Privacy Risk: ${(localCount + sessionCount > 10) ? '<span style="color: #F59E0B">MEDIUM</span>' : '<span style="color: #10B981">LOW</span>'}
             `;
         }
 
@@ -1687,7 +1588,6 @@
             }, 5000);
         }
 
-        // Initialize particles
         function createParticles() {
             const container = document.querySelector('.floating-particles');
             for (let i = 0; i < 50; i++) {
@@ -1701,12 +1601,8 @@
             }
         }
 
-        console.log('🚀 Digital Footprint Eraser Loaded');
-        console.log('🛡️ Advanced Privacy Protection Ready');
+        console.log('🚀 Digital Footprint Eraser Ready');
         console.log('💾 Database Integration Active');
-        console.log('🤖 AI-Powered Tools Enabled');
-        console.log('👨‍👩‍👧‍👦 Family Protection Available');
-        console.log('📧 Email Verification Handler Ready');
     </script>
 </body>
 </html>
