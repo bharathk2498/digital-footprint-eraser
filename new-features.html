@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Features - Digital Footprint Eraser</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #0A0A0F 0%, #1a1a2e 50%, #16213e 100%);
+            color: #F8FAFC;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            padding-top: 2rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            background: linear-gradient(45deg, #F59E0B, #D97706);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #F8FAFC, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            color: #CBD5E1;
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .feature-card {
+            background: rgba(139, 92, 246, 0.05);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
+            border-color: #8B5CF6;
+        }
+        
+        .feature-card.danger { border-color: rgba(239, 68, 68, 0.4); }
+        .feature-card.info { border-color: rgba(59, 130, 246, 0.4); }
+        .feature-card.success { border-color: rgba(0, 255, 209, 0.4); }
+        
+        .feature-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #F8FAFC;
+        }
+        
+        .feature-description {
+            color: #CBD5E1;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-highlights {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feature-highlights li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+            color: #94A3B8;
+        }
+        
+        .feature-highlights li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            font-weight: bold;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(45deg, #4C1D95, #8B5CF6);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 8px;
+            color: #F8FAFC;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(-5px);
+        }
+        
+        @media (max-width: 768px) {
+            .features-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Home</a>
+        
+        <div class="header">
+            <div class="badge">🚀 JUST LAUNCHED</div>
+            <h1>New Advanced Features</h1>
+            <p class="subtitle">
+                Three cutting-edge tools to take your privacy protection to the next level
+            </p>
+        </div>
+        
+        <div class="features-grid">
+            <a href="dark-web-monitoring.html" class="feature-card danger">
+                <div class="feature-icon">🕵️</div>
+                <h3 class="feature-title">Dark Web Monitoring</h3>
+                <p class="feature-description">
+                    Real-time monitoring and threat intelligence from 47 dark web data sources
+                </p>
+                <ul class="feature-highlights">
+                    <li>Email breach scanner</li>
+                    <li>Credential monitoring</li>
+                    <li>Data marketplace tracker</li>
+                    <li>Live threat intelligence feed</li>
+                </ul>
+                <button class="btn btn-primary">Launch Dark Web Scanner →</button>
+            </a>
+            
+            <a href="social-media-auditor.html" class="feature-card info">
+                <div class="feature-icon">🔍</div>
+                <h3 class="feature-title">Social Media Auditor</h3>
+                <p class="feature-description">
+                    Comprehensive privacy analysis across LinkedIn, Twitter, Facebook, and Instagram
+                </p>
+                <ul class="feature-highlights">
+                    <li>Privacy score analysis</li>
+                    <li>Critical issue detection</li>
+                    <li>Auto-fix privacy settings</li>
+                    <li>4 major platforms covered</li>
+                </ul>
+                <button class="btn btn-primary">Start Privacy Audit →</button>
+            </a>
+            
+            <a href="deepfake-detection.html" class="feature-card success">
+                <div class="feature-icon">🤖</div>
+                <h3 class="feature-title">AI Deepfake Detection</h3>
+                <p class="feature-description">
+                    Advanced AI-powered authentication for images, voice, and video content
+                </p>
+                <ul class="feature-highlights">
+                    <li>Image authentication</li>
+                    <li>Voice clone detection</li>
+                    <li>Video deepfake analysis</li>
+                    <li>Reputation monitoring</li>
+                </ul>
+                <button class="btn btn-primary">Analyze Media Now →</button>
+            </a>
+        </div>
+        
+        <div style="text-align: center; padding: 3rem 0; background: rgba(139, 92, 246, 0.05); border-radius: 20px; border: 1px solid rgba(139, 92, 246, 0.3);">
+            <h2 style="margin-bottom: 1.5rem; font-size: 2rem;">Ready to Get Started?</h2>
+            <p style="color: #CBD5E1; margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                All three features are production-ready and available now. Click any card above to start protecting your digital identity.
+            </p>
+            <a href="index.html" class="btn btn-primary">← Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>
