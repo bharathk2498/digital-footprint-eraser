@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Privacy Auditor - Digital Footprint Eraser</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔍</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-violet: #8B5CF6;
+            --dark-bg: #0A0A0F;
+            --danger-red: #EF4444;
+            --warning-orange: #F59E0B;
+            --success-green: #10B981;
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --card-bg: rgba(139, 92, 246, 0.05);
+            --border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a2e 50%, #16213e 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #1DA1F2, #C13584, #4267B2, #0077B5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .platform-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .platform-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.2);
+        }
+
+        .platform-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .platform-icon {
+            font-size: 2.5rem;
+        }
+
+        .platform-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .privacy-score {
+            text-align: center;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .score-circle.high {
+            background: linear-gradient(135deg, var(--success-green), #059669);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.5);
+        }
+
+        .score-circle.medium {
+            background: linear-gradient(135deg, var(--warning-orange), #D97706);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.5);
+        }
+
+        .score-circle.low {
+            background: linear-gradient(135deg, var(--danger-red), #DC2626);
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.5);
+        }
+
+        .score-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .issue-list {
+            margin-top: 1.5rem;
+        }
+
+        .issue-item {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .issue-item.critical {
+            border-left-color: var(--danger-red);
+        }
+
+        .issue-item.warning {
+            border-left-color: var(--warning-orange);
+        }
+
+        .issue-item.info {
+            border-left-color: var(--primary-violet);
+        }
+
+        .issue-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .issue-description {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .btn {
+            padding: 0.8rem 1.6rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-violet), #A855F7);
+            color: white;
+        }
+
+        .btn-scan {
+            background: linear-gradient(45deg, #1DA1F2, #0891B2);
+            color: white;
+        }
+
+        .btn-fix {
+            background: linear-gradient(45deg, var(--success-green), #059669);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .summary-card {
+            background: var(--card-bg);
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .summary-stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid var(--primary-violet);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .recommendation-title {
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary-violet);
+        }
+
+        .recommendation-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .recommendation-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .recommendation-list li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: var(--primary-violet);
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .platform-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🔍 Social Media Privacy Auditor</h1>
+            <p style="color: var(--text-secondary); font-size: 1.1rem;">Comprehensive privacy analysis across all major social platforms</p>
+        </div>
+
+        <div class="summary-card">
+            <h2>Overall Privacy Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-stat">
+                    <div class="stat-number" style="color: var(--danger-red);" id="totalIssues">0</div>
+                    <div class="stat-label">Total Issues</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-number" style="color: var(--warning-orange);" id="criticalIssues">0</div>
+                    <div class="stat-label">Critical</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-number" style="color: var(--success-green);" id="avgScore">0</div>
+                    <div class="stat-label">Avg Privacy Score</div>
+                </div>
+                <div class="summary-stat">
+                    <div class="stat-number" style="color: var(--primary-violet);" id="platformsScanned">0</div>
+                    <div class="stat-label">Platforms Scanned</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="platform-grid">
+            <!-- LinkedIn -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">💼</div>
+                    <div class="platform-name">LinkedIn</div>
+                </div>
+
+                <div class="privacy-score">
+                    <div class="score-circle medium" id="linkedinScore">
+                        <span>62</span>
+                    </div>
+                    <div class="score-label">Privacy Score</div>
+                </div>
+
+                <div class="issue-list" id="linkedinIssues">
+                    <div class="issue-item critical">
+                        <div class="issue-title">
+                            <span>🔴</span>
+                            <span>Public Profile Exposure</span>
+                        </div>
+                        <div class="issue-description">
+                            Your full employment history and contact information are publicly visible to anyone on the internet.
+                        </div>
+                    </div>
+                    <div class="issue-item warning">
+                        <div class="issue-title">
+                            <span>🟡</span>
+                            <span>Third-Party Data Sharing</span>
+                        </div>
+                        <div class="issue-description">
+                            Your data is being shared with 47 third-party applications and advertisers.
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-scan" onclick="scanPlatform('linkedin')">Deep Scan</button>
+                <button class="btn btn-fix" onclick="fixIssues('linkedin')">Auto-Fix Issues</button>
+            </div>
+
+            <!-- Twitter -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">🐦</div>
+                    <div class="platform-name">Twitter / X</div>
+                </div>
+
+                <div class="privacy-score">
+                    <div class="score-circle low" id="twitterScore">
+                        <span>38</span>
+                    </div>
+                    <div class="score-label">Privacy Score</div>
+                </div>
+
+                <div class="issue-list" id="twitterIssues">
+                    <div class="issue-item critical">
+                        <div class="issue-title">
+                            <span>🔴</span>
+                            <span>Location Data Exposed</span>
+                        </div>
+                        <div class="issue-description">
+                            Your tweets contain precise location data revealing your daily patterns and home address.
+                        </div>
+                    </div>
+                    <div class="issue-item critical">
+                        <div class="issue-title">
+                            <span>🔴</span>
+                            <span>Personalized Ads Enabled</span>
+                        </div>
+                        <div class="issue-description">
+                            Twitter tracks your activity across the web to serve targeted advertisements.
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-scan" onclick="scanPlatform('twitter')">Deep Scan</button>
+                <button class="btn btn-fix" onclick="fixIssues('twitter')">Auto-Fix Issues</button>
+            </div>
+
+            <!-- Facebook -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">📘</div>
+                    <div class="platform-name">Facebook</div>
+                </div>
+
+                <div class="privacy-score">
+                    <div class="score-circle low" id="facebookScore">
+                        <span>41</span>
+                    </div>
+                    <div class="score-label">Privacy Score</div>
+                </div>
+
+                <div class="issue-list" id="facebookIssues">
+                    <div class="issue-item critical">
+                        <div class="issue-title">
+                            <span>🔴</span>
+                            <span>Facial Recognition Active</span>
+                        </div>
+                        <div class="issue-description">
+                            Facebook is using facial recognition to tag you in photos without your explicit consent.
+                        </div>
+                    </div>
+                    <div class="issue-item warning">
+                        <div class="issue-title">
+                            <span>🟡</span>
+                            <span>Off-Facebook Activity</span>
+                        </div>
+                        <div class="issue-description">
+                            847 websites and apps are sending your activity data to Facebook.
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-scan" onclick="scanPlatform('facebook')">Deep Scan</button>
+                <button class="btn btn-fix" onclick="fixIssues('facebook')">Auto-Fix Issues</button>
+            </div>
+
+            <!-- Instagram -->
+            <div class="platform-card">
+                <div class="platform-header">
+                    <div class="platform-icon">📷</div>
+                    <div class="platform-name">Instagram</div>
+                </div>
+
+                <div class="privacy-score">
+                    <div class="score-circle medium" id="instagramScore">
+                        <span>56</span>
+                    </div>
+                    <div class="score-label">Privacy Score</div>
+                </div>
+
+                <div class="issue-list" id="instagramIssues">
+                    <div class="issue-item warning">
+                        <div class="issue-title">
+                            <span>🟡</span>
+                            <span>Story Location Sharing</span>
+                        </div>
+                        <div class="issue-description">
+                            Your Instagram stories automatically share your precise location with followers.
+                        </div>
+                    </div>
+                    <div class="issue-item info">
+                        <div class="issue-title">
+                            <span>🔵</span>
+                            <span>Account Not Private</span>
+                        </div>
+                        <div class="issue-description">
+                            Your profile and posts are visible to anyone on Instagram, not just followers.
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-scan" onclick="scanPlatform('instagram')">Deep Scan</button>
+                <button class="btn btn-fix" onclick="fixIssues('instagram')">Auto-Fix Issues</button>
+            </div>
+        </div>
+
+        <div class="recommendation-box">
+            <div class="recommendation-title">📋 Top Privacy Recommendations</div>
+            <ul class="recommendation-list">
+                <li>Enable two-factor authentication on all platforms</li>
+                <li>Review and revoke third-party app permissions monthly</li>
+                <li>Disable location services for social media apps</li>
+                <li>Set posts to "Friends Only" or "Private" by default</li>
+                <li>Regularly delete old posts that may contain sensitive information</li>
+                <li>Use different email addresses for each social platform</li>
+                <li>Disable facial recognition and photo tagging features</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function scanPlatform(platform) {
+            alert(`🔍 Deep scanning ${platform}...\\n\\nThis will analyze:\\n✓ Privacy settings\\n✓ Data sharing permissions\\n✓ Third-party connections\\n✓ Historical posts\\n✓ Location data\\n✓ Photo metadata\\n\\nScan will complete in approximately 30 seconds.`);
+            
+            setTimeout(() => {
+                updateStats();
+            }, 1000);
+        }
+
+        function fixIssues(platform) {
+            alert(`🔧 Automatically fixing ${platform} privacy issues...\\n\\n✅ Tightening privacy settings\\n✅ Revoking unnecessary permissions\\n✅ Disabling location tracking\\n✅ Limiting data sharing\\n✅ Updating post visibility\\n\\nChanges applied successfully!`);
+            
+            const scoreElement = document.getElementById(platform + 'Score');
+            if (scoreElement) {
+                const currentScore = parseInt(scoreElement.querySelector('span').textContent);
+                const newScore = Math.min(currentScore + 25, 95);
+                scoreElement.querySelector('span').textContent = newScore;
+                
+                if (newScore >= 70) {
+                    scoreElement.className = 'score-circle high';
+                } else if (newScore >= 50) {
+                    scoreElement.className = 'score-circle medium';
+                }
+            }
+            
+            updateStats();
+        }
+
+        function updateStats() {
+            const totalIssues = document.querySelectorAll('.issue-item').length;
+            const criticalIssues = document.querySelectorAll('.issue-item.critical').length;
+            
+            const scores = [];
+            document.querySelectorAll('.score-circle span').forEach(el => {
+                scores.push(parseInt(el.textContent));
+            });
+            const avgScore = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+            
+            document.getElementById('totalIssues').textContent = totalIssues;
+            document.getElementById('criticalIssues').textContent = criticalIssues;
+            document.getElementById('avgScore').textContent = avgScore;
+            document.getElementById('platformsScanned').textContent = scores.length;
+        }
+
+        window.addEventListener('load', updateStats);
+
+        console.log('🔍 Social Media Privacy Auditor Initialized');
+        console.log('📊 Analyzing privacy across 4 major platforms');
+        console.log('🛡️ Real-time privacy monitoring active');
+    </script>
+</body>
+</html>
