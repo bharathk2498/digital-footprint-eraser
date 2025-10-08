@@ -1,0 +1,11 @@
+/* Quick CSS Fix for Home Button Color */
+/* This fixes the green Home button to match the purple theme */
+
+.home-btn {
+    background: linear-gradient(45deg, #4C1D95, #8B5CF6) !important;
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3) !important;
+}
+
+.home-btn:hover {
+    box-shadow: 0 0 30px rgba(139, 92, 246, 0.6) !important;
+}
