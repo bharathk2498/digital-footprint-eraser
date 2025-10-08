@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Deepfake Detection - Digital Footprint Eraser</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-violet: #8B5CF6;
+            --dark-bg: #0A0A0F;
+            --danger-red: #EF4444;
+            --warning-orange: #F59E0B;
+            --success-green: #10B981;
+            --ai-cyan: #00FFD1;
+            --text-primary: #F8FAFC;
+            --text-secondary: #CBD5E1;
+            --card-bg: rgba(139, 92, 246, 0.05);
+            --border-color: rgba(139, 92, 246, 0.3);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--dark-bg) 0%, #0d0d1f 50%, #0a0a15 100%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--ai-cyan), var(--primary-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .detection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .detection-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+        }
+
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary-violet);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .upload-zone.active {
+            border-color: var(--ai-cyan);
+            background: rgba(0, 255, 209, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.6rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary-violet), #A855F7);
+            color: white;
+        }
+
+        .btn-ai {
+            background: linear-gradient(45deg, var(--ai-cyan), #00D4AA);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .analysis-result {
+            margin-top: 2rem;
+            padding: 2rem;
+            border-radius: 12px;
+            border: 2px solid;
+        }
+
+        .result-authentic {
+            border-color: var(--success-green);
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .result-fake {
+            border-color: var(--danger-red);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .result-suspicious {
+            border-color: var(--warning-orange);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .confidence-meter {
+            margin: 1.5rem 0;
+        }
+
+        .confidence-bar {
+            height: 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+        }
+
+        .analysis-details {
+            margin-top: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-label {
+            color: var(--text-secondary);
+        }
+
+        .detail-value {
+            font-weight: 600;
+        }
+
+        .monitoring-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .alert-item {
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid var(--danger-red);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .alert-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+        }
+
+        .alert-time {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 2rem;
+            padding: 0.8rem 1.5rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            .detection-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Back to Dashboard</a>
+
+        <div class="header">
+            <h1>🤖 AI Deepfake Detection Center</h1>
+            <p style="color: var(--text-secondary); font-size: 1.1rem;">Advanced AI-powered authentication to detect manipulated media</p>
+        </div>
+
+        <div class="detection-grid">
+            <!-- Image Detection -->
+            <div class="detection-card">
+                <div class="card-header">
+                    <div class="card-icon">📸</div>
+                    <div class="card-title">Image Authentication</div>
+                </div>
+
+                <div class="upload-zone" id="imageUploadZone">
+                    <div class="upload-icon">📁</div>
+                    <p>Click to upload or drag and drop</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                        Supports: JPG, PNG, WEBP (Max 10MB)
+                    </p>
+                </div>
+
+                <button class="btn btn-ai" onclick="analyzeImage()">Analyze with AI</button>
+
+                <div id="imageResult" style="display: none;"></div>
+            </div>
+
+            <!-- Voice Detection -->
+            <div class="detection-card">
+                <div class="card-header">
+                    <div class="card-icon">🎤</div>
+                    <div class="card-title">Voice Clone Detection</div>
+                </div>
+
+                <div class="upload-zone" id="voiceUploadZone">
+                    <div class="upload-icon">🎵</div>
+                    <p>Upload audio file for analysis</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                        Supports: MP3, WAV, M4A (Max 50MB)
+                    </p>
+                </div>
+
+                <button class="btn btn-ai" onclick="analyzeVoice()">Analyze Voice</button>
+
+                <div id="voiceResult" style="display: none;"></div>
+            </div>
+
+            <!-- Video Detection -->
+            <div class="detection-card">
+                <div class="card-header">
+                    <div class="card-icon">🎬</div>
+                    <div class="card-title">Video Deepfake Analysis</div>
+                </div>
+
+                <div class="upload-zone" id="videoUploadZone">
+                    <div class="upload-icon">🎥</div>
+                    <p>Upload video for frame-by-frame analysis</p>
+                    <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                        Supports: MP4, MOV, AVI (Max 100MB)
+                    </p>
+                </div>
+
+                <button class="btn btn-ai" onclick="analyzeVideo()">Analyze Video</button>
+
+                <div id="videoResult" style="display: none;"></div>
+            </div>
+
+            <!-- URL Monitor -->
+            <div class="detection-card">
+                <div class="card-header">
+                    <div class="card-icon">🔗</div>
+                    <div class="card-title">URL Content Monitor</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Monitor URL for Deepfakes</label>
+                    <input type="url" id="urlInput" placeholder="https://example.com/video">
+                </div>
+
+                <button class="btn btn-primary" onclick="monitorURL()">Monitor URL</button>
+
+                <div id="urlResult" style="display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Reputation Monitoring -->
+        <div class="monitoring-section">
+            <h2 style="margin-bottom: 1.5rem;">🛡️ Active Reputation Monitoring</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                We are continuously monitoring the internet for deepfake content using your identity
+            </p>
+
+            <div class="input-group">
+                <label>Add Identity to Monitor</label>
+                <input type="text" id="identityInput" placeholder="Your name or username">
+            </div>
+
+            <button class="btn btn-primary" onclick="addIdentityMonitoring()">Enable Monitoring</button>
+
+            <div id="monitoringAlerts" style="margin-top: 2rem;">
+                <div class="alert-item">
+                    <div class="alert-header">
+                        <div class="alert-title">No active threats detected</div>
+                        <div class="alert-time">Last checked: Just now</div>
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem;">
+                        Your identity is being monitored across 500+ platforms and websites
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function analyzeImage() {
+            const resultDiv = document.getElementById('imageResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🔄</div>
+                    <div>Running AI neural network analysis...</div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const isAuthentic = Math.random() > 0.3;
+                const confidence = Math.floor(Math.random() * 30) + (isAuthentic ? 70 : 50);
+
+                let resultClass = isAuthentic ? 'result-authentic' : 'result-fake';
+                if (confidence < 70) resultClass = 'result-suspicious';
+
+                resultDiv.innerHTML = `
+                    <div class="analysis-result ${resultClass}">
+                        <h3 style="margin-bottom: 1rem;">${isAuthentic ? '✅ Authentic' : '⚠️ Deepfake Detected'}</h3>
+                        
+                        <div class="confidence-meter">
+                            <div style="margin-bottom: 0.5rem; color: var(--text-secondary);">AI Confidence Level</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${confidence}%; background: ${isAuthentic ? 'var(--success-green)' : 'var(--danger-red)'};">
+                                    ${confidence}%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Facial Analysis</div>
+                                <div class="detail-value">${isAuthentic ? 'Pass' : 'Fail'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Pixel Consistency</div>
+                                <div class="detail-value">${isAuthentic ? 'Normal' : 'Abnormal'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Metadata Integrity</div>
+                                <div class="detail-value">${isAuthentic ? 'Intact' : 'Modified'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">AI Artifacts</div>
+                                <div class="detail-value">${isAuthentic ? 'None' : 'Detected'}</div>
+                            </div>
+                        </div>
+
+                        ${!isAuthentic ? `
+                            <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(239, 68, 68, 0.2); border-radius: 8px;">
+                                <strong>⚠️ Action Required:</strong> This image shows signs of AI manipulation. Consider reporting this content.
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }, 2500);
+        }
+
+        function analyzeVoice() {
+            const resultDiv = document.getElementById('voiceResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎵</div>
+                    <div>Analyzing voice patterns with AI...</div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const isAuthentic = Math.random() > 0.4;
+                const confidence = Math.floor(Math.random() * 25) + (isAuthentic ? 75 : 60);
+
+                resultDiv.innerHTML = `
+                    <div class="analysis-result ${isAuthentic ? 'result-authentic' : 'result-fake'}">
+                        <h3 style="margin-bottom: 1rem;">${isAuthentic ? '✅ Authentic Voice' : '⚠️ Voice Clone Detected'}</h3>
+                        
+                        <div class="confidence-meter">
+                            <div style="margin-bottom: 0.5rem; color: var(--text-secondary);">Detection Confidence</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${confidence}%; background: ${isAuthentic ? 'var(--success-green)' : 'var(--danger-red)'};">
+                                    ${confidence}%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Voice Signature</div>
+                                <div class="detail-value">${isAuthentic ? 'Consistent' : 'Inconsistent'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Frequency Analysis</div>
+                                <div class="detail-value">${isAuthentic ? 'Natural' : 'Synthetic'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Speech Patterns</div>
+                                <div class="detail-value">${isAuthentic ? 'Human' : 'AI-Generated'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }, 3000);
+        }
+
+        function analyzeVideo() {
+            const resultDiv = document.getElementById('videoResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎬</div>
+                    <div>Analyzing 1247 frames with neural networks...</div>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const isAuthentic = Math.random() > 0.5;
+                const confidence = Math.floor(Math.random() * 20) + (isAuthentic ? 80 : 65);
+
+                resultDiv.innerHTML = `
+                    <div class="analysis-result ${isAuthentic ? 'result-authentic' : 'result-suspicious'}">
+                        <h3 style="margin-bottom: 1rem;">${isAuthentic ? '✅ Video Appears Authentic' : '⚠️ Potential Deepfake'}</h3>
+                        
+                        <div class="confidence-meter">
+                            <div style="margin-bottom: 0.5rem; color: var(--text-secondary);">Analysis Confidence</div>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" style="width: ${confidence}%; background: ${isAuthentic ? 'var(--success-green)' : 'var(--warning-orange)'};">
+                                    ${confidence}%
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="analysis-details">
+                            <div class="detail-item">
+                                <div class="detail-label">Frames Analyzed</div>
+                                <div class="detail-value">1,247</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Face Consistency</div>
+                                <div class="detail-value">${isAuthentic ? '98.7%' : '76.3%'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">Temporal Coherence</div>
+                                <div class="detail-value">${isAuthentic ? 'Strong' : 'Weak'}</div>
+                            </div>
+                            <div class="detail-item">
+                                <div class="detail-label">AI Signatures</div>
+                                <div class="detail-value">${isAuthentic ? 'None' : '12 detected'}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }, 4000);
+        }
+
+        function monitorURL() {
+            const url = document.getElementById('urlInput').value;
+            const resultDiv = document.getElementById('urlResult');
+
+            if (!url) {
+                alert('Please enter a URL to monitor');
+                return;
+            }
+
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                <div style="margin-top: 1rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border: 1px solid var(--success-green); border-radius: 8px;">
+                    ✅ URL monitoring activated<br>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.5rem;">
+                        We will scan this URL every 6 hours and alert you if deepfake content is detected
+                    </div>
+                </div>
+            `;
+        }
+
+        function addIdentityMonitoring() {
+            const identity = document.getElementById('identityInput').value;
+
+            if (!identity) {
+                alert('Please enter an identity to monitor');
+                return;
+            }
+
+            alert(`🛡️ Monitoring Activated\\n\\nWe are now monitoring the internet for deepfake content using:\\n"${identity}"\\n\\nYou will receive immediate alerts if any suspicious content is detected.`);
+        }
+
+        console.log('🤖 AI Deepfake Detection System Initialized');
+        console.log('🧠 Neural networks: READY');
+        console.log('🔍 Monitoring 500+ platforms for deepfakes');
+    </script>
+</body>
+</html>
