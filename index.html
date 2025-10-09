@@ -262,6 +262,76 @@
             font-size: 0.9rem;
         }
 
+        .advanced-features-section {
+            padding: 4rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(76, 29, 149, 0.05), rgba(139, 92, 246, 0.05));
+            border-radius: 20px;
+        }
+
+        .new-badge {
+            display: inline-block;
+            background: linear-gradient(45deg, #F59E0B, #D97706);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 1rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .advanced-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(76, 29, 149, 0.1));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .advanced-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .advanced-card:hover::before {
+            left: 100%;
+        }
+
+        .advanced-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--glow-intense);
+            border-color: var(--electric-violet);
+        }
+
+        .advanced-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            box-shadow: var(--glow);
+        }
+
         .features-section, .tools-section {
             padding: 4rem 2rem;
             max-width: 1400px;
@@ -590,6 +660,47 @@
             </div>
         </section>
 
+        <section class="advanced-features-section">
+            <h2 class="section-title">
+                New Advanced Features
+                <span class="new-badge">NEW</span>
+            </h2>
+            <div class="features-grid">
+                <div class="advanced-card" onclick="window.location.href='dark-web-monitoring.html'">
+                    <div class="advanced-icon">🕵️</div>
+                    <h3 class="feature-title">Dark Web Monitoring Dashboard</h3>
+                    <p class="feature-description">
+                        Real-time monitoring of dark web marketplaces and forums. Get instant alerts when your data appears on underground networks. Track breach databases and stolen credentials across 500 threat sources.
+                    </p>
+                    <button class="btn btn-primary btn-small" onclick="window.location.href='dark-web-monitoring.html'; event.stopPropagation();">
+                        Launch Monitor →
+                    </button>
+                </div>
+
+                <div class="advanced-card" onclick="window.location.href='social-media-auditor.html'">
+                    <div class="advanced-icon">📱</div>
+                    <h3 class="feature-title">Social Media Privacy Auditor</h3>
+                    <p class="feature-description">
+                        Comprehensive audit of your social media footprint across all major platforms. AI-powered risk analysis identifies privacy leaks and suggests actionable fixes. Scan Facebook, Twitter, LinkedIn, Instagram and more.
+                    </p>
+                    <button class="btn btn-primary btn-small" onclick="window.location.href='social-media-auditor.html'; event.stopPropagation();">
+                        Start Audit →
+                    </button>
+                </div>
+
+                <div class="advanced-card" onclick="window.location.href='deepfake-detection.html'">
+                    <div class="advanced-icon">🎭</div>
+                    <h3 class="feature-title">AI Deepfake Detection</h3>
+                    <p class="feature-description">
+                        Advanced neural network analysis to detect manipulated media. Protect your identity from deepfake attacks with 99 percent accuracy detection. Upload images or videos for instant verification and forensic analysis.
+                    </p>
+                    <button class="btn btn-primary btn-small" onclick="window.location.href='deepfake-detection.html'; event.stopPropagation();">
+                        Scan Media →
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <section class="tools-section">
             <h2 class="section-title">Free Privacy Tools</h2>
             <div class="tools-grid">
@@ -663,7 +774,7 @@
                     <h3 class="feature-title">Deep Web Scanning</h3>
                     <p class="feature-description">
                         Advanced OSINT algorithms scan the dark web, social networks, and data broker sites 
-                        to identify your exposed personal information across 500+ platforms.
+                        to identify your exposed personal information across 500 platforms.
                     </p>
                 </div>
                 
@@ -724,7 +835,7 @@
                 </p>
                 <p style="color: var(--text-secondary); margin-bottom: 2rem;">
                     Trusted by Fortune 500 executives, government officials, and privacy-conscious professionals 
-                    worldwide. Over 1 million digital traces successfully removed with 99.9% success rate.
+                    worldwide. Over 1 million digital traces successfully removed with 99.9 percent success rate.
                 </p>
                 <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
                     <div style="text-align: center;">
@@ -785,7 +896,7 @@
         async function waitForDatabase() {
             let attempts = 0;
             while (!window.dfDB?.supabase && attempts < 50) {
-                await new Promise(resolve => setTimeout(resolve), 100);
+                await new Promise(resolve => setTimeout(resolve, 100));
                 attempts++;
             }
             console.log('✅ Database ready');
