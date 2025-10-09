@@ -68,7 +68,7 @@
             top: 0;
             left: 0;
             right: 0;
-            background: rgba(10, 10, 15, 0.9);
+            background: rgba(10, 10, 15, 0.95);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(139, 92, 246, 0.2);
             padding: 1rem 2rem;
@@ -95,23 +95,42 @@
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 0.5rem;
             list-style: none;
+            align-items: center;
         }
 
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
-            padding: 0.5rem 1rem;
+            padding: 0.6rem 1.2rem;
             border-radius: 8px;
             transition: all 0.3s ease;
             position: relative;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .nav-links a:hover {
-            color: var(--accent-violet);
-            background: var(--glass-bg);
-            box-shadow: var(--glow);
+            color: var(--text-primary);
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .nav-links .nav-advanced-btn {
+            background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-left: 1rem;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .nav-links .nav-advanced-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+            background: linear-gradient(45deg, var(--secondary-violet), var(--electric-violet));
         }
 
         .nav-actions {
@@ -121,11 +140,11 @@
         }
 
         .auth-button {
-            padding: 0.6rem 1.2rem;
-            border: 2px solid var(--accent-violet);
+            padding: 0.6rem 1.3rem;
+            border: 1.5px solid rgba(139, 92, 246, 0.4);
             border-radius: 8px;
             background: transparent;
-            color: var(--accent-violet);
+            color: var(--text-secondary);
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.9rem;
@@ -134,16 +153,22 @@
         }
 
         .auth-button:hover {
-            background: var(--accent-violet);
-            color: white;
+            background: rgba(139, 92, 246, 0.1);
+            color: var(--accent-violet);
+            border-color: var(--accent-violet);
             transform: translateY(-2px);
-            box-shadow: var(--glow);
         }
 
         .auth-button.primary {
             background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
             color: white;
             border: none;
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .auth-button.primary:hover {
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+            transform: translateY(-2px);
         }
 
         .user-info {
@@ -577,9 +602,22 @@
                 top: 100%;
                 left: 0;
                 right: 0;
-                background: rgba(10, 10, 15, 0.95);
+                background: rgba(10, 10, 15, 0.98);
                 flex-direction: column;
                 padding: 1rem;
+                gap: 0;
+            }
+            .nav-links li {
+                width: 100%;
+            }
+            .nav-links a {
+                display: block;
+                width: 100%;
+                text-align: center;
+            }
+            .nav-links .nav-advanced-btn {
+                margin-left: 0;
+                margin-top: 0.5rem;
             }
             .nav-links.active { display: flex; }
             .mobile-menu { display: flex; }
@@ -601,12 +639,12 @@
                 <li><a href="#" onclick="showPage('tools')">Free Tools</a></li>
                 <li><a href="#" onclick="goToAbout()">About Us</a></li>
                 <li><a href="#" onclick="showPage('main', '#features')">Features</a></li>
-                <li><a href="advanced-security-enhanced.html" class="btn btn-primary">🚀 Advanced Security</a></li>
+                <li><a href="advanced-security-enhanced.html" class="nav-advanced-btn">Advanced Security</a></li>
             </ul>
             <div class="nav-actions">
                 <div class="user-info" id="userInfo">
                     <span id="userEmail"></span>
-                    <button class="auth-button" onclick="showUpgradeModal()">⚡ Upgrade</button>
+                    <button class="auth-button" onclick="showUpgradeModal()">Upgrade</button>
                     <button class="auth-button" onclick="signOut()">Sign Out</button>
                 </div>
                 <div id="authButtons">
@@ -654,8 +692,8 @@
 
                 <div class="cta-section">
                     <a href="#" onclick="showPage('tools')" class="btn btn-primary">Try Free Tools</a>
-                    <a href="advanced-security-enhanced.html" class="btn btn-secondary">🤖 AI Advanced Scanner</a>
-                    <button onclick="startFamilyOnboarding()" class="btn btn-secondary">👨‍👩‍👧‍👦 Protect Family</button>
+                    <a href="advanced-security-enhanced.html" class="btn btn-secondary">AI Advanced Scanner</a>
+                    <button onclick="startFamilyOnboarding()" class="btn btn-secondary">Protect Family</button>
                 </div>
             </div>
         </section>
@@ -868,7 +906,7 @@
 
             <div style="text-align: center; margin-top: 3rem;">
                 <button onclick="showPage('main')" class="btn btn-secondary">← Back to Home</button>
-                <a href="advanced-security-enhanced.html" class="btn btn-primary">🚀 Try AI Advanced Tools</a>
+                <a href="advanced-security-enhanced.html" class="btn btn-primary">Try AI Advanced Tools</a>
             </div>
         </div>
     </div>
@@ -880,7 +918,7 @@
         let isScanning = false;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            console.log('🚀 Digital Footprint Eraser Initializing...');
+            console.log('Digital Footprint Eraser Initializing...');
             
             await waitForDatabase();
             
@@ -899,7 +937,7 @@
                 await new Promise(resolve => setTimeout(resolve, 100));
                 attempts++;
             }
-            console.log('✅ Database ready');
+            console.log('Database ready');
         }
 
         function showAuthModal() {
@@ -962,7 +1000,7 @@
                     box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
                     margin: 2rem;
                 ">
-                    <h2 style="color: var(--accent-violet); margin-bottom: 2rem; text-align: center; font-size: 2rem;">⚡ Upgrade Your Protection</h2>
+                    <h2 style="color: var(--accent-violet); margin-bottom: 2rem; text-align: center; font-size: 2rem;">Upgrade Your Protection</h2>
                     
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
                         <div style="background: rgba(76, 29, 149, 0.1); border: 2px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1.5rem;">
@@ -1120,7 +1158,7 @@
         async function runPrivacyScan() {
             const resultBox = document.getElementById('scanResults');
             resultBox.style.display = 'block';
-            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Running privacy scan...</span>';
+            resultBox.innerHTML = '<span style="color: #F59E0B">Running privacy scan...</span>';
             
             setTimeout(() => {
                 const scanResults = {
@@ -1172,7 +1210,7 @@
         async function clearAllData() {
             const resultBox = document.getElementById('clearResults');
             resultBox.style.display = 'block';
-            resultBox.innerHTML = '<span style="color: #F59E0B">🔄 Initiating military-grade data elimination...</span>';
+            resultBox.innerHTML = '<span style="color: #F59E0B">Initiating military-grade data elimination...</span>';
             
             await clearAllCookies();
             await clearBrowserStorage();
@@ -1225,8 +1263,8 @@
             }
         }
 
-        console.log('🚀 Digital Footprint Eraser Ready');
-        console.log('💾 Database Integration Active');
+        console.log('Digital Footprint Eraser Ready');
+        console.log('Database Integration Active');
     </script>
 </body>
 </html>
