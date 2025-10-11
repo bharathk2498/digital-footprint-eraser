@@ -114,25 +114,24 @@
         }
 
         .home-btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
-            color: white;
-            border: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            font-weight: 600;
-            text-decoration: none;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 0.5rem;
-            box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+            gap: 8px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 6px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
         }
 
         .home-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
 
         .nav-tabs {
@@ -617,7 +616,7 @@
         <div class="nav-container">
             <div class="nav-header">
                 <a href="index.html" class="home-btn">
-                    <span>🏠</span>
+                    <span>⌂</span>
                     <span>Home</span>
                 </a>
                 <h2 style="color: var(--accent-violet); margin: 0; text-shadow: 0 0 20px var(--accent-violet);">🛡️ Advanced Security Center</h2>
@@ -1489,14 +1488,14 @@
         }
 
         function simulateUpgrade() {
-            alert('🎉 Welcome to Advanced Security Premium!\n\n✅ All AI features unlocked\n✅ Quantum Defense enabled\n✅ Family Protection AI activated\n✅ Enterprise Zero-Trust access\n✅ Global Compliance monitoring\n✅ Behavioral Analytics enabled\n✅ Neural threat detection active\n\nYou now have access to military-grade privacy protection with quantum-level security!');
+            alert('🎉 Welcome to Advanced Security Premium!\\n\\n✅ All AI features unlocked\\n✅ Quantum Defense enabled\\n✅ Family Protection AI activated\\n✅ Enterprise Zero-Trust access\\n✅ Global Compliance monitoring\\n✅ Behavioral Analytics enabled\\n✅ Neural threat detection active\\n\\nYou now have access to military-grade privacy protection with quantum-level security!');
             localStorage.setItem('advancedAccess', 'true');
             document.getElementById('paywallOverlay').style.display = 'none';
             hasAdvancedAccess = true;
         }
 
         function startTrial() {
-            alert('🎯 14-day Advanced Security Trial Activated!\n\n✅ Full access to all premium features\n✅ AI models and quantum security\n✅ Enterprise controls unlocked\n✅ 24/7 AI monitoring enabled\n✅ Behavioral analysis active\n✅ Quantum defense systems ready\n\nExperience the future of privacy protection with quantum-enhanced AI security!');
+            alert('🎯 14-day Advanced Security Trial Activated!\\n\\n✅ Full access to all premium features\\n✅ AI models and quantum security\\n✅ Enterprise controls unlocked\\n✅ 24/7 AI monitoring enabled\\n✅ Behavioral analysis active\\n✅ Quantum defense systems ready\\n\\nExperience the future of privacy protection with quantum-enhanced AI security!');
             localStorage.setItem('advancedAccess', 'true');
             document.getElementById('paywallOverlay').style.display = 'none';
             hasAdvancedAccess = true;
@@ -1556,7 +1555,7 @@
         }
 
         function enableComplianceAI() {
-            alert('🤖 AI Compliance Monitoring Activated!\n\n✅ Real-time regulation tracking\n✅ Automated violation detection\n✅ Predictive compliance scoring\n✅ Intelligent audit preparation\n✅ Executive compliance dashboard\n\nYour compliance posture is now enhanced with AI-powered monitoring and analysis!');
+            alert('🤖 AI Compliance Monitoring Activated!\\n\\n✅ Real-time regulation tracking\\n✅ Automated violation detection\\n✅ Predictive compliance scoring\\n✅ Intelligent audit preparation\\n✅ Executive compliance dashboard\\n\\nYour compliance posture is now enhanced with AI-powered monitoring and analysis!');
         }
 
         function generateComplianceReport() {
@@ -1599,11 +1598,11 @@
         }
 
         function enableZeroTrustAI() {
-            alert('🔐 Zero-Trust AI Architecture Activated!\n\n✅ Never trust, always verify protocols\n✅ AI-powered identity verification\n✅ Behavioral analysis for all users\n✅ Real-time risk assessment\n✅ Automated access controls\n✅ Continuous security monitoring\n\nYour organization now operates under AI-enhanced zero-trust security!');
+            alert('🔐 Zero-Trust AI Architecture Activated!\\n\\n✅ Never trust, always verify protocols\\n✅ AI-powered identity verification\\n✅ Behavioral analysis for all users\\n✅ Real-time risk assessment\\n✅ Automated access controls\\n✅ Continuous security monitoring\\n\\nYour organization now operates under AI-enhanced zero-trust security!');
         }
 
         function deployEnterpriseAI() {
-            alert('🚀 Enterprise AI Security Deployed!\n\n✅ AI models active across all systems\n✅ Threat intelligence feeds integrated\n✅ Automated incident response enabled\n✅ Executive dashboards configured\n✅ Employee training modules deployed\n✅ 24/7 AI monitoring operational\n\nEnterprise AI security is now fully operational!');
+            alert('🚀 Enterprise AI Security Deployed!\\n\\n✅ AI models active across all systems\\n✅ Threat intelligence feeds integrated\\n✅ Automated incident response enabled\\n✅ Executive dashboards configured\\n✅ Employee training modules deployed\\n✅ 24/7 AI monitoring operational\\n\\nEnterprise AI security is now fully operational!');
         }
 
         // AI Security Functions
@@ -1627,15 +1626,15 @@
         }
 
         function enableNeuralDefense() {
-            alert('🧠 Neural Network Defense Activated!\n\n✅ 47-layer deep learning network deployed\n✅ Real-time threat pattern analysis\n✅ Adaptive defense mechanisms active\n✅ Self-evolving security protocols\n✅ Quantum-enhanced neural processing\n✅ Autonomous threat neutralization\n\nNeural defense system is learning and protecting your environment!');
+            alert('🧠 Neural Network Defense Activated!\\n\\n✅ 47-layer deep learning network deployed\\n✅ Real-time threat pattern analysis\\n✅ Adaptive defense mechanisms active\\n✅ Self-evolving security protocols\\n✅ Quantum-enhanced neural processing\\n✅ Autonomous threat neutralization\\n\\nNeural defense system is learning and protecting your environment!');
         }
 
         function runMLAnalysis() {
-            alert('📊 Machine Learning Threat Analysis Running!\n\n🔬 Analyzing behavioral patterns\n📈 Predicting future threats (30-90 days)\n🎯 Identifying attack vectors\n⚡ Processing 1M+ data points\n🧮 Generating risk probabilities\n📋 Creating actionable intelligence\n\nML analysis complete - 23 future threats predicted with 99.7% confidence!');
+            alert('📊 Machine Learning Threat Analysis Running!\\n\\n🔬 Analyzing behavioral patterns\\n📈 Predicting future threats (30-90 days)\\n🎯 Identifying attack vectors\\n⚡ Processing 1M+ data points\\n🧮 Generating risk probabilities\\n📋 Creating actionable intelligence\\n\\nML analysis complete - 23 future threats predicted with 99.7% confidence!');
         }
 
         function requestQuantumConsultation() {
-            alert('⚛️ Quantum Security Consultation Requested!\n\n🔬 Connecting to quantum cryptography specialist\n📊 Scheduling quantum risk assessment\n🌌 Preparing quantum entanglement demonstration\n🔐 Post-quantum readiness evaluation scheduled\n\nA quantum security expert will contact you within 24 hours to discuss your quantum defense requirements.');
+            alert('⚛️ Quantum Security Consultation Requested!\\n\\n🔬 Connecting to quantum cryptography specialist\\n📊 Scheduling quantum risk assessment\\n🌌 Preparing quantum entanglement demonstration\\n🔐 Post-quantum readiness evaluation scheduled\\n\\nA quantum security expert will contact you within 24 hours to discuss your quantum defense requirements.');
         }
 
         // Initialize modal close functionality
