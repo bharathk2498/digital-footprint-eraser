@@ -196,6 +196,301 @@
             transition: 0.3s;
         }
 
+        .feature-strip {
+            position: fixed;
+            top: 75px;
+            left: 0;
+            right: 0;
+            background: rgba(10, 10, 15, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(139, 92, 246, 0.15);
+            padding: 0.75rem 2rem;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-strip-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .feature-strip-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.05);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .feature-strip-item:hover {
+            background: rgba(139, 92, 246, 0.15);
+            border-color: var(--accent-violet);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+            color: var(--text-primary);
+        }
+
+        .feature-strip-icon {
+            font-size: 1.2rem;
+        }
+
+        .quick-access-bar {
+            background: linear-gradient(135deg, rgba(76, 29, 149, 0.15), rgba(139, 92, 246, 0.1));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            margin: 3rem auto;
+            max-width: 1200px;
+            box-shadow: 0 10px 40px rgba(139, 92, 246, 0.2);
+        }
+
+        .quick-access-title {
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--text-primary), var(--accent-violet));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .quick-access-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .quick-access-card {
+            background: rgba(10, 10, 15, 0.8);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quick-access-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .quick-access-card:hover::before {
+            left: 100%;
+        }
+
+        .quick-access-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--electric-violet);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+        }
+
+        .quick-access-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .quick-access-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .quick-access-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .feature-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        .badge-enterprise {
+            background: linear-gradient(45deg, #EC4899, #BE185D);
+            color: white;
+        }
+
+        .badge-ai {
+            background: linear-gradient(45deg, #6366F1, #8B5CF6);
+            color: white;
+        }
+
+        .floating-nav-widget {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            z-index: 998;
+            width: 60px;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .floating-nav-widget:hover {
+            width: 250px;
+            box-shadow: 0 10px 50px rgba(139, 92, 246, 0.4);
+        }
+
+        .floating-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 0.5rem;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .floating-nav-item:hover {
+            background: rgba(139, 92, 246, 0.2);
+        }
+
+        .floating-nav-icon {
+            font-size: 1.5rem;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .floating-nav-text {
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-nav-widget:hover .floating-nav-text {
+            opacity: 1;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-left: auto;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .floating-nav-widget:hover .status-dot {
+            opacity: 1;
+        }
+
+        .status-active {
+            background: var(--success);
+            box-shadow: 0 0 10px var(--success);
+        }
+
+        .status-warning {
+            background: var(--warning);
+            box-shadow: 0 0 10px var(--warning);
+        }
+
+        .executive-dashboard-widget {
+            background: linear-gradient(135deg, rgba(76, 29, 149, 0.1), rgba(139, 92, 246, 0.05));
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 1200px;
+        }
+
+        .dashboard-widget-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--accent-violet);
+        }
+
+        .dashboard-pills-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .dashboard-pill {
+            background: rgba(10, 10, 15, 0.8);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 30px;
+            padding: 0.75rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-pill:hover {
+            border-color: var(--electric-violet);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .pill-icon {
+            font-size: 1.3rem;
+        }
+
+        .pill-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .pill-label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .pill-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .pill-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 0.5rem;
+        }
+
         .main-page {
             display: block;
         }
@@ -211,7 +506,7 @@
             justify-content: center;
             text-align: center;
             padding: 2rem;
-            margin-top: 80px;
+            margin-top: 150px;
         }
 
         .hero-content {
@@ -596,6 +891,13 @@
 
         @media (max-width: 768px) {
             .hero-title { font-size: 2.5rem; }
+            .hero { margin-top: 160px; }
+            .feature-strip { top: 70px; padding: 0.5rem 1rem; }
+            .feature-strip-container { gap: 0.5rem; }
+            .feature-strip-item { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+            .quick-access-grid { grid-template-columns: 1fr; }
+            .floating-nav-widget { display: none; }
+            .dashboard-pills-container { flex-direction: column; }
             .nav-links { 
                 display: none; 
                 position: absolute;
@@ -660,6 +962,31 @@
         </div>
     </nav>
 
+    <div class="feature-strip">
+        <div class="feature-strip-container">
+            <a href="#" onclick="scrollToTools(); return false;" class="feature-strip-item">
+                <span class="feature-strip-icon">🛡️</span>
+                <span>Privacy Tools</span>
+            </a>
+            <a href="dark-web-monitoring.html" class="feature-strip-item">
+                <span class="feature-strip-icon">🕵️</span>
+                <span>Dark Web Monitor</span>
+            </a>
+            <a href="social-media-auditor.html" class="feature-strip-item">
+                <span class="feature-strip-icon">📱</span>
+                <span>Social Audit</span>
+            </a>
+            <a href="deepfake-detection.html" class="feature-strip-item">
+                <span class="feature-strip-icon">🎭</span>
+                <span>Deepfake Scan</span>
+            </a>
+            <a href="advanced-security-enhanced.html" class="feature-strip-item">
+                <span class="feature-strip-icon">⚡</span>
+                <span>AI Scanner</span>
+            </a>
+        </div>
+    </div>
+
     <div id="mainPage" class="main-page">
         <section class="hero">
             <div class="hero-content">
@@ -697,6 +1024,80 @@
                 </div>
             </div>
         </section>
+
+        <div class="quick-access-bar">
+            <h2 class="quick-access-title">🚀 Advanced Security Features</h2>
+            <div class="quick-access-grid">
+                <div class="quick-access-card" onclick="window.location.href='dark-web-monitoring.html'">
+                    <span class="quick-access-icon">🕵️</span>
+                    <div class="quick-access-label">Dark Web Monitor</div>
+                    <div class="quick-access-desc">Real-time scanning of 500 dark web sources for your exposed data</div>
+                    <span class="feature-badge badge-ai">AI POWERED</span>
+                </div>
+
+                <div class="quick-access-card" onclick="window.location.href='social-media-auditor.html'">
+                    <span class="quick-access-icon">📱</span>
+                    <div class="quick-access-label">Social Media Auditor</div>
+                    <div class="quick-access-desc">Comprehensive privacy audit across all major social platforms</div>
+                    <span class="feature-badge badge-enterprise">ENTERPRISE</span>
+                </div>
+
+                <div class="quick-access-card" onclick="window.location.href='deepfake-detection.html'">
+                    <span class="quick-access-icon">🎭</span>
+                    <div class="quick-access-label">Deepfake Detection</div>
+                    <div class="quick-access-desc">99% accuracy AI detection of manipulated media and identity theft</div>
+                    <span class="feature-badge badge-ai">AI POWERED</span>
+                </div>
+
+                <div class="quick-access-card" onclick="window.location.href='advanced-security-enhanced.html'">
+                    <span class="quick-access-icon">⚡</span>
+                    <div class="quick-access-label">AI Attack Surface Scanner</div>
+                    <div class="quick-access-desc">Enterprise threat intelligence and vulnerability assessment</div>
+                    <span class="feature-badge badge-enterprise">ENTERPRISE</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="executive-dashboard-widget">
+            <h3 class="dashboard-widget-title">⚡ Security Status Dashboard</h3>
+            <div class="dashboard-pills-container">
+                <div class="dashboard-pill">
+                    <span class="pill-icon">🛡️</span>
+                    <div class="pill-content">
+                        <div class="pill-label">Protection Status</div>
+                        <div class="pill-value">Active</div>
+                    </div>
+                    <div class="pill-status status-active"></div>
+                </div>
+
+                <div class="dashboard-pill">
+                    <span class="pill-icon">🔍</span>
+                    <div class="pill-content">
+                        <div class="pill-label">Monitored Sources</div>
+                        <div class="pill-value">500+</div>
+                    </div>
+                    <div class="pill-status status-active"></div>
+                </div>
+
+                <div class="dashboard-pill">
+                    <span class="pill-icon">⚠️</span>
+                    <div class="pill-content">
+                        <div class="pill-label">Threats Blocked</div>
+                        <div class="pill-value">247</div>
+                    </div>
+                    <div class="pill-status status-warning"></div>
+                </div>
+
+                <div class="dashboard-pill">
+                    <span class="pill-icon">📊</span>
+                    <div class="pill-content">
+                        <div class="pill-label">Privacy Score</div>
+                        <div class="pill-value">85%</div>
+                    </div>
+                    <div class="pill-status status-active"></div>
+                </div>
+            </div>
+        </div>
 
         <section class="advanced-features-section">
             <h2 class="section-title">
@@ -891,6 +1292,34 @@
                 </div>
             </div>
         </section>
+    </div>
+
+    <div class="floating-nav-widget">
+        <div class="floating-nav-item" onclick="scrollToTools()">
+            <span class="floating-nav-icon">🛡️</span>
+            <span class="floating-nav-text">Privacy Tools</span>
+            <div class="status-dot status-active"></div>
+        </div>
+        <div class="floating-nav-item" onclick="window.location.href='dark-web-monitoring.html'">
+            <span class="floating-nav-icon">🕵️</span>
+            <span class="floating-nav-text">Dark Web Monitor</span>
+            <div class="status-dot status-active"></div>
+        </div>
+        <div class="floating-nav-item" onclick="window.location.href='social-media-auditor.html'">
+            <span class="floating-nav-icon">📱</span>
+            <span class="floating-nav-text">Social Auditor</span>
+            <div class="status-dot status-warning"></div>
+        </div>
+        <div class="floating-nav-item" onclick="window.location.href='deepfake-detection.html'">
+            <span class="floating-nav-icon">🎭</span>
+            <span class="floating-nav-text">Deepfake Scan</span>
+            <div class="status-dot status-active"></div>
+        </div>
+        <div class="floating-nav-item" onclick="window.location.href='advanced-security-enhanced.html'">
+            <span class="floating-nav-icon">⚡</span>
+            <span class="floating-nav-text">AI Scanner</span>
+            <div class="status-dot status-active"></div>
+        </div>
     </div>
 
     <script src="database-integration.js"></script>
