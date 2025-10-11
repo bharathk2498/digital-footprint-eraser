@@ -201,8 +201,63 @@
             z-index: 997;
             min-width: 300px;
             max-height: 200px;
-            overflow-y: auto;
+            overflow: hidden;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .activity-feed.minimized {
+            max-height: 50px;
+            min-width: 200px;
+        }
+
+        .activity-feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        .activity-feed-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent-violet);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .activity-feed-toggle {
+            background: transparent;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .activity-feed-toggle:hover {
+            background: rgba(139, 92, 246, 0.2);
+            border-color: var(--accent-violet);
+            color: var(--accent-violet);
+        }
+
+        .activity-feed-content {
+            max-height: 150px;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+        }
+
+        .activity-feed.minimized .activity-feed-content {
+            display: none;
         }
 
         .activity-item {
@@ -1129,9 +1184,20 @@
     </div>
 
     <div class="activity-feed" id="activityFeed">
-        <div class="activity-item">🛡️ User from New York protected 2 min ago</div>
-        <div class="activity-item">🔒 User from London cleared 5 cookies 5 min ago</div>
-        <div class="activity-item">✅ User from Tokyo completed scan 8 min ago</div>
+        <div class="activity-feed-header">
+            <div class="activity-feed-title">
+                <span>📡</span>
+                <span>Live Activity</span>
+            </div>
+            <button class="activity-feed-toggle" onclick="toggleActivityFeed()" title="Minimize/Maximize">
+                <span id="activityToggleIcon">−</span>
+            </button>
+        </div>
+        <div class="activity-feed-content" id="activityFeedContent">
+            <div class="activity-item">🛡️ User from New York protected 2 min ago</div>
+            <div class="activity-item">🔒 User from London cleared 5 cookies 5 min ago</div>
+            <div class="activity-item">✅ User from Tokyo completed scan 8 min ago</div>
+        </div>
     </div>
 
     <nav class="navbar">
@@ -1529,6 +1595,7 @@
         let currentUser = null;
         let isScanning = false;
         let userCount = 2847;
+        let activityFeedMinimized = false;
 
         function toggleTheme() {
             const html = document.documentElement;
@@ -1548,6 +1615,32 @@
             themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
         }
 
+        function toggleActivityFeed() {
+            const activityFeed = document.getElementById('activityFeed');
+            const toggleIcon = document.getElementById('activityToggleIcon');
+            
+            activityFeedMinimized = !activityFeedMinimized;
+            
+            if (activityFeedMinimized) {
+                activityFeed.classList.add('minimized');
+                toggleIcon.textContent = '+';
+                localStorage.setItem('activityFeedMinimized', 'true');
+            } else {
+                activityFeed.classList.remove('minimized');
+                toggleIcon.textContent = '−';
+                localStorage.setItem('activityFeedMinimized', 'false');
+            }
+        }
+
+        function initActivityFeed() {
+            const savedState = localStorage.getItem('activityFeedMinimized');
+            if (savedState === 'true') {
+                activityFeedMinimized = true;
+                document.getElementById('activityFeed').classList.add('minimized');
+                document.getElementById('activityToggleIcon').textContent = '+';
+            }
+        }
+
         function updateLiveCounter() {
             userCount += Math.floor(Math.random() * 5) + 1;
             const counterElement = document.getElementById('userCounter');
@@ -1565,16 +1658,16 @@
                 '🔐 User from Paris ran security audit'
             ];
             
-            const activityFeed = document.getElementById('activityFeed');
-            if (activityFeed) {
+            const activityFeedContent = document.getElementById('activityFeedContent');
+            if (activityFeedContent) {
                 const newActivity = document.createElement('div');
                 newActivity.className = 'activity-item';
                 newActivity.textContent = activities[Math.floor(Math.random() * activities.length)] + ' ' + Math.floor(Math.random() * 10) + ' min ago';
                 
-                activityFeed.insertBefore(newActivity, activityFeed.firstChild);
+                activityFeedContent.insertBefore(newActivity, activityFeedContent.firstChild);
                 
-                if (activityFeed.children.length > 3) {
-                    activityFeed.removeChild(activityFeed.lastChild);
+                if (activityFeedContent.children.length > 3) {
+                    activityFeedContent.removeChild(activityFeedContent.lastChild);
                 }
             }
         }
@@ -1614,6 +1707,7 @@
             console.log('Digital Footprint Eraser Initializing...');
             
             initTheme();
+            initActivityFeed();
             initTooltips();
             
             await waitForDatabase();
@@ -1960,8 +2054,7 @@
             }
         }
 
-        console.log('Digital Footprint Eraser Ready - Phase 1 Enhanced');
-        console.log('Features: Dark Mode, Social Proof, Tooltips, Performance Optimized');
+        console.log('Digital Footprint Eraser Ready - Enhanced with Minimizable Activity Feed');
     </script>
 </body>
 </html>
