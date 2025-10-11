@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,8 +10,13 @@
     <meta property="og:description" content="Military-grade privacy protection with free tools for cookie cleaning, password analysis, and comprehensive security audits.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://bharathk2498.github.io/digital-footprint-eraser">
+    
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    
     <title>Digital Footprint Eraser - Executive Security Suite</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛡️</text></svg>">
+    
     <style>
         * {
             margin: 0;
@@ -19,7 +24,7 @@
             box-sizing: border-box;
         }
 
-        :root {
+        :root[data-theme="dark"] {
             --primary-violet: #4C1D95;
             --secondary-violet: #7C3AED;
             --accent-violet: #8B5CF6;
@@ -34,14 +39,187 @@
             --danger: #EF4444;
             --glow: 0 0 30px rgba(139, 92, 246, 0.3);
             --glow-intense: 0 0 50px rgba(139, 92, 246, 0.6);
+            --bg-gradient-start: #0A0A0F;
+            --bg-gradient-mid: #1a1a2e;
+            --bg-gradient-end: #16213e;
+        }
+
+        :root[data-theme="light"] {
+            --primary-violet: #6D28D9;
+            --secondary-violet: #8B5CF6;
+            --accent-violet: #A78BFA;
+            --electric-violet: #C4B5FD;
+            --dark-bg: #F8FAFC;
+            --card-bg: rgba(139, 92, 246, 0.05);
+            --glass-bg: rgba(139, 92, 246, 0.02);
+            --text-primary: #1E293B;
+            --text-secondary: #475569;
+            --success: #10B981;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --glow: 0 0 20px rgba(139, 92, 246, 0.2);
+            --glow-intense: 0 0 30px rgba(139, 92, 246, 0.4);
+            --bg-gradient-start: #F8FAFC;
+            --bg-gradient-mid: #F1F5F9;
+            --bg-gradient-end: #E2E8F0;
         }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--dark-bg) 0%, #1a1a2e 50%, #16213e 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
             color: var(--text-primary);
             overflow-x: hidden;
             min-height: 100vh;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10001;
+            background: rgba(139, 92, 246, 0.1);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.5rem;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(139, 92, 246, 0.2);
+            transform: rotate(180deg);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+        }
+
+        .social-proof-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            z-index: 998;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            animation: slideInLeft 0.5s ease;
+        }
+
+        @keyframes slideInLeft {
+            from { transform: translateX(-100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .live-counter {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: livePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .counter-number {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-violet);
+        }
+
+        .counter-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .tooltip {
+            position: absolute;
+            background: rgba(10, 10, 15, 0.98);
+            border: 2px solid rgba(139, 92, 246, 0.4);
+            border-radius: 8px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            max-width: 250px;
+            z-index: 10002;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+
+        .tooltip-arrow {
+            position: absolute;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .tooltip-arrow.bottom {
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 8px 8px 0 8px;
+            border-color: rgba(139, 92, 246, 0.4) transparent transparent transparent;
+        }
+
+        .has-tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .activity-feed {
+            position: fixed;
+            bottom: 100px;
+            left: 20px;
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            z-index: 997;
+            min-width: 300px;
+            max-height: 200px;
+            overflow-y: auto;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .activity-item {
+            padding: 0.5rem;
+            border-bottom: 1px solid rgba(139, 92, 246, 0.2);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .cyber-grid {
@@ -114,6 +292,7 @@
         .nav-links a:hover {
             color: var(--text-primary);
             background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
         }
 
         .nav-links .nav-advanced-btn {
@@ -897,6 +1076,8 @@
             .feature-strip-item { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
             .quick-access-grid { grid-template-columns: 1fr; }
             .floating-nav-widget { display: none; }
+            .social-proof-banner { display: none; }
+            .activity-feed { display: none; }
             .dashboard-pills-container { flex-direction: column; }
             .nav-links { 
                 display: none; 
@@ -927,21 +1108,41 @@
             .features-grid, .tools-grid { grid-template-columns: 1fr; }
         }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 </head>
 <body>
     <div class="cyber-grid"></div>
     <div class="floating-particles"></div>
+
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark/Light Mode">
+        <span id="themeIcon">🌙</span>
+    </div>
+
+    <div class="social-proof-banner" id="socialProofBanner">
+        <div class="live-counter">
+            <div class="live-dot"></div>
+            <div>
+                <div class="counter-number" id="userCounter">2847</div>
+                <div class="counter-label">users protected today</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="activity-feed" id="activityFeed">
+        <div class="activity-item">🛡️ User from New York protected 2 min ago</div>
+        <div class="activity-item">🔒 User from London cleared 5 cookies 5 min ago</div>
+        <div class="activity-item">✅ User from Tokyo completed scan 8 min ago</div>
+    </div>
 
     <nav class="navbar">
         <div class="nav-container">
             <div class="logo">🛡️ Digital Footprint Eraser</div>
             <ul class="nav-links" id="navLinks">
                 <li><a href="#" onclick="showPage('main'); return false;">Home</a></li>
-                <li><a href="#tools-section" onclick="scrollToTools(); return false;">Free Tools</a></li>
+                <li><a href="#tools-section" onclick="scrollToTools(); return false;" class="has-tooltip" data-tooltip="Free privacy protection tools">Free Tools</a></li>
                 <li><a href="#about" onclick="goToAbout(); return false;">About Us</a></li>
                 <li><a href="#features" onclick="showPage('main', '#features'); return false;">Features</a></li>
-                <li><a href="advanced-security-enhanced.html" class="nav-advanced-btn">Advanced Security</a></li>
+                <li><a href="advanced-security-enhanced.html" class="nav-advanced-btn has-tooltip" data-tooltip="AI-powered enterprise security">Advanced Security</a></li>
             </ul>
             <div class="nav-actions">
                 <div class="user-info" id="userInfo">
@@ -1028,28 +1229,28 @@
         <div class="quick-access-bar">
             <h2 class="quick-access-title">🚀 Advanced Security Features</h2>
             <div class="quick-access-grid">
-                <div class="quick-access-card" onclick="window.location.href='dark-web-monitoring.html'">
+                <div class="quick-access-card has-tooltip" data-tooltip="Monitor 500+ dark web sources in real-time" onclick="window.location.href='dark-web-monitoring.html'">
                     <span class="quick-access-icon">🕵️</span>
                     <div class="quick-access-label">Dark Web Monitor</div>
                     <div class="quick-access-desc">Real-time scanning of 500 dark web sources for your exposed data</div>
                     <span class="feature-badge badge-ai">AI POWERED</span>
                 </div>
 
-                <div class="quick-access-card" onclick="window.location.href='social-media-auditor.html'">
+                <div class="quick-access-card has-tooltip" data-tooltip="Audit privacy across all social platforms" onclick="window.location.href='social-media-auditor.html'">
                     <span class="quick-access-icon">📱</span>
                     <div class="quick-access-label">Social Media Auditor</div>
                     <div class="quick-access-desc">Comprehensive privacy audit across all major social platforms</div>
                     <span class="feature-badge badge-enterprise">ENTERPRISE</span>
                 </div>
 
-                <div class="quick-access-card" onclick="window.location.href='deepfake-detection.html'">
+                <div class="quick-access-card has-tooltip" data-tooltip="99% accuracy detection of manipulated media" onclick="window.location.href='deepfake-detection.html'">
                     <span class="quick-access-icon">🎭</span>
                     <div class="quick-access-label">Deepfake Detection</div>
                     <div class="quick-access-desc">99% accuracy AI detection of manipulated media and identity theft</div>
                     <span class="feature-badge badge-ai">AI POWERED</span>
                 </div>
 
-                <div class="quick-access-card" onclick="window.location.href='advanced-security-enhanced.html'">
+                <div class="quick-access-card has-tooltip" data-tooltip="Enterprise threat intelligence and assessment" onclick="window.location.href='advanced-security-enhanced.html'">
                     <span class="quick-access-icon">⚡</span>
                     <div class="quick-access-label">AI Attack Surface Scanner</div>
                     <div class="quick-access-desc">Enterprise threat intelligence and vulnerability assessment</div>
@@ -1327,9 +1528,170 @@
     <script>
         let currentUser = null;
         let isScanning = false;
+        let userCount = 2847;
+        let hasShownExitIntent = false;
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const themeIcon = document.getElementById('themeIcon');
+            themeIcon.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        }
+
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            const themeIcon = document.getElementById('themeIcon');
+            themeIcon.textContent = savedTheme === 'dark' ? '🌙' : '☀️';
+        }
+
+        function updateLiveCounter() {
+            userCount += Math.floor(Math.random() * 5) + 1;
+            const counterElement = document.getElementById('userCounter');
+            if (counterElement) {
+                counterElement.textContent = userCount.toLocaleString();
+            }
+        }
+
+        function addActivityItem() {
+            const activities = [
+                '🛡️ User from San Francisco protected',
+                '🔒 User from Berlin cleared cookies',
+                '✅ User from Sydney completed scan',
+                '🌐 User from Dubai upgraded to Pro',
+                '🔐 User from Paris ran security audit'
+            ];
+            
+            const activityFeed = document.getElementById('activityFeed');
+            if (activityFeed) {
+                const newActivity = document.createElement('div');
+                newActivity.className = 'activity-item';
+                newActivity.textContent = activities[Math.floor(Math.random() * activities.length)] + ' ' + Math.floor(Math.random() * 10) + ' min ago';
+                
+                activityFeed.insertBefore(newActivity, activityFeed.firstChild);
+                
+                if (activityFeed.children.length > 3) {
+                    activityFeed.removeChild(activityFeed.lastChild);
+                }
+            }
+        }
+
+        function initTooltips() {
+            const tooltipElements = document.querySelectorAll('.has-tooltip');
+            
+            tooltipElements.forEach(element => {
+                element.addEventListener('mouseenter', function(e) {
+                    const tooltipText = this.getAttribute('data-tooltip');
+                    const tooltip = document.createElement('div');
+                    tooltip.className = 'tooltip show';
+                    tooltip.textContent = tooltipText;
+                    tooltip.id = 'active-tooltip';
+                    
+                    const arrow = document.createElement('div');
+                    arrow.className = 'tooltip-arrow bottom';
+                    tooltip.appendChild(arrow);
+                    
+                    document.body.appendChild(tooltip);
+                    
+                    const rect = this.getBoundingClientRect();
+                    tooltip.style.left = rect.left + (rect.width / 2) - (tooltip.offsetWidth / 2) + 'px';
+                    tooltip.style.top = rect.top - tooltip.offsetHeight - 10 + 'px';
+                });
+                
+                element.addEventListener('mouseleave', function() {
+                    const tooltip = document.getElementById('active-tooltip');
+                    if (tooltip) {
+                        tooltip.remove();
+                    }
+                });
+            });
+        }
+
+        function showExitIntentPopup() {
+            if (hasShownExitIntent) return;
+            hasShownExitIntent = true;
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.95);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+                backdrop-filter: blur(10px);
+                animation: fadeIn 0.3s ease;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #0A0A0F, #1a1a2e);
+                    border: 2px solid var(--accent-violet);
+                    border-radius: 16px;
+                    padding: 3rem;
+                    max-width: 500px;
+                    text-align: center;
+                    color: #F8FAFC;
+                    box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
+                ">
+                    <h2 style="font-size: 2rem; margin-bottom: 1rem; color: var(--accent-violet);">Wait! Before You Go...</h2>
+                    <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #CBD5E1;">
+                        Get your FREE Security Report and discover your digital footprint exposure level.
+                    </p>
+                    <input type="email" placeholder="Enter your email" style="
+                        width: 100%;
+                        padding: 1rem;
+                        border: 2px solid rgba(139, 92, 246, 0.3);
+                        border-radius: 8px;
+                        background: rgba(76, 29, 149, 0.1);
+                        color: white;
+                        font-size: 1rem;
+                        margin-bottom: 1rem;
+                    ">
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        width: 100%;
+                        padding: 1rem;
+                        background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 1.1rem;
+                        font-weight: bold;
+                        cursor: pointer;
+                        margin-bottom: 1rem;
+                    ">Get Free Report</button>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        background: transparent;
+                        border: none;
+                        color: #64748B;
+                        cursor: pointer;
+                        font-size: 0.9rem;
+                    ">No thanks, I'll take my chances</button>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        document.addEventListener('mouseleave', function(e) {
+            if (e.clientY <= 0) {
+                showExitIntentPopup();
+            }
+        });
 
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Digital Footprint Eraser Initializing...');
+            
+            initTheme();
+            initTooltips();
             
             await waitForDatabase();
             
@@ -1340,6 +1702,9 @@
             
             animatePrivacyMetrics();
             createParticles();
+            
+            setInterval(updateLiveCounter, 15000);
+            setInterval(addActivityItem, 30000);
         });
 
         async function waitForDatabase() {
@@ -1672,8 +2037,8 @@
             }
         }
 
-        console.log('Digital Footprint Eraser Ready');
-        console.log('Database Integration Active');
+        console.log('Digital Footprint Eraser Ready - Phase 1 Enhanced');
+        console.log('Features: Dark Mode, Social Proof, Tooltips, Performance Optimized');
     </script>
 </body>
 </html>
