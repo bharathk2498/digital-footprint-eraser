@@ -1529,7 +1529,6 @@
         let currentUser = null;
         let isScanning = false;
         let userCount = 2847;
-        let hasShownExitIntent = false;
 
         function toggleTheme() {
             const html = document.documentElement;
@@ -1610,82 +1609,6 @@
                 });
             });
         }
-
-        function showExitIntentPopup() {
-            if (hasShownExitIntent) return;
-            hasShownExitIntent = true;
-            
-            const modal = document.createElement('div');
-            modal.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.95);
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                z-index: 10000;
-                backdrop-filter: blur(10px);
-                animation: fadeIn 0.3s ease;
-            `;
-            
-            modal.innerHTML = `
-                <div style="
-                    background: linear-gradient(135deg, #0A0A0F, #1a1a2e);
-                    border: 2px solid var(--accent-violet);
-                    border-radius: 16px;
-                    padding: 3rem;
-                    max-width: 500px;
-                    text-align: center;
-                    color: #F8FAFC;
-                    box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
-                ">
-                    <h2 style="font-size: 2rem; margin-bottom: 1rem; color: var(--accent-violet);">Wait! Before You Go...</h2>
-                    <p style="font-size: 1.1rem; margin-bottom: 2rem; color: #CBD5E1;">
-                        Get your FREE Security Report and discover your digital footprint exposure level.
-                    </p>
-                    <input type="email" placeholder="Enter your email" style="
-                        width: 100%;
-                        padding: 1rem;
-                        border: 2px solid rgba(139, 92, 246, 0.3);
-                        border-radius: 8px;
-                        background: rgba(76, 29, 149, 0.1);
-                        color: white;
-                        font-size: 1rem;
-                        margin-bottom: 1rem;
-                    ">
-                    <button onclick="this.parentElement.parentElement.remove()" style="
-                        width: 100%;
-                        padding: 1rem;
-                        background: linear-gradient(45deg, var(--primary-violet), var(--accent-violet));
-                        color: white;
-                        border: none;
-                        border-radius: 8px;
-                        font-size: 1.1rem;
-                        font-weight: bold;
-                        cursor: pointer;
-                        margin-bottom: 1rem;
-                    ">Get Free Report</button>
-                    <button onclick="this.parentElement.parentElement.remove()" style="
-                        background: transparent;
-                        border: none;
-                        color: #64748B;
-                        cursor: pointer;
-                        font-size: 0.9rem;
-                    ">No thanks, I'll take my chances</button>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
-
-        document.addEventListener('mouseleave', function(e) {
-            if (e.clientY <= 0) {
-                showExitIntentPopup();
-            }
-        });
 
         document.addEventListener('DOMContentLoaded', async () => {
             console.log('Digital Footprint Eraser Initializing...');
