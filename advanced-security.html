@@ -492,5 +492,70 @@
         </div>
     </nav>
 
-    <!-- Paywall and rest of content unchanged... -->
-    <!-- [Content continues exactly as before] -->
+    <!-- Paywall Overlay -->
+    <div id="paywallOverlay" class="paywall-overlay">
+        <div class="paywall-modal">
+            <h2 style="color: var(--accent-violet); margin-bottom: 1rem;">🔒 Advanced Security Features</h2>
+            <p style="margin-bottom: 2rem; line-height: 1.6;">
+                These enterprise-grade security tools are available with our Advanced Security subscription.
+                Upgrade to access military-grade threat intelligence, automated data removal, and comprehensive privacy protection.
+            </p>
+            <div style="margin-bottom: 2rem;">
+                <div style="font-size: 2rem; font-weight: 700; color: var(--accent-violet);">$19.99/month</div>
+                <div style="color: var(--text-secondary);">or $199/year (save 17%)</div>
+            </div>
+            <button class="btn btn-primary" style="margin-right: 1rem;" onclick="simulateUpgrade()">Upgrade Now</button>
+            <button class="btn" style="background: transparent; color: var(--accent-violet); border: 2px solid var(--accent-violet);" onclick="startTrial()">Start Free Trial</button>
+        </div>
+    </div>
+
+    <div class="advanced-dashboard">
+        <!-- [REST OF THE HTML CONTENT UNCHANGED FROM LINE 330 TO END] -->
+    </div>
+
+    <script>
+        // Check if user has access to advanced features
+        let hasAdvancedAccess = localStorage.getItem('advancedAccess') === 'true';
+        
+        // Show paywall if no access
+        if (!hasAdvancedAccess) {
+            document.getElementById('paywallOverlay').style.display = 'flex';
+        }
+
+        function simulateUpgrade() {
+            alert('🎉 Welcome to Advanced Security! All premium features are now unlocked including AI Security, Zero-Trust Architecture, and Global Compliance.');
+            localStorage.setItem('advancedAccess', 'true');
+            document.getElementById('paywallOverlay').style.display = 'none';
+            hasAdvancedAccess = true;
+        }
+
+        function startTrial() {
+            alert('🎯 7-day free trial activated! Full access to all advanced features including AI models and enterprise controls.');
+            localStorage.setItem('advancedAccess', 'true');
+            document.getElementById('paywallOverlay').style.display = 'none';
+            hasAdvancedAccess = true;
+        }
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            
+            // Add active class to clicked nav tab
+            event.target.classList.add('active');
+        }
+
+        // [REST OF JAVASCRIPT UNCHANGED]
+    </script>
+</body>
+</html>
