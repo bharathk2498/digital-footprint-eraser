@@ -1,0 +1,86 @@
+/* Phase 2 Additional Styles */
+
+/* Command Palette Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Comparison Table Responsive */
+@media (max-width: 768px) {
+    table {
+        font-size: 0.85rem;
+    }
+    
+    table th, table td {
+        padding: 0.5rem !important;
+    }
+}
+
+/* Video Demo Hover Effects */
+.video-demo-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-demo-card:hover {
+    transform: translateY(-8px) scale(1.02);
+}
+
+/* ROI Calculator Inputs */
+input[type="number"]:focus {
+    outline: none;
+    border-color: #8B5CF6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+/* Strategic CTA Animations */
+@keyframes slideUp {
+    from {
+        transform: translateX(-50%) translateY(100px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Scroll Progress Bar */
+.scroll-progress {
+    background: linear-gradient(90deg, #7C3AED 0%, #8B5CF6 50%, #A855F7 100%);
+}
+
+/* Command Palette Result Hover */
+.command-result-item:hover {
+    background: rgba(139, 92, 246, 0.2) !important;
+    border-left: 3px solid #8B5CF6;
+}
+
+.command-result-item.active {
+    background: rgba(139, 92, 246, 0.2);
+    border-left: 3px solid #8B5CF6;
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .floating-cta {
+        display: none;
+    }
+    
+    .roi-calculator-btn {
+        bottom: 80px !important;
+        right: 10px !important;
+        padding: 0.75rem 1rem !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .command-palette,
+    .floating-cta,
+    .roi-calculator-btn,
+    .scroll-progress {
+        display: none !important;
+    }
+}
