@@ -635,10 +635,10 @@
         <div class="nav-container">
             <div class="logo">🛡️ Digital Footprint Eraser</div>
             <ul class="nav-links" id="navLinks">
-                <li><a href="#" onclick="showPage('main')">Home</a></li>
-                <li><a href="#" onclick="showPage('tools')">Free Tools</a></li>
-                <li><a href="#" onclick="goToAbout()">About Us</a></li>
-                <li><a href="#" onclick="showPage('main', '#features')">Features</a></li>
+                <li><a href="#" onclick="showPage('main'); return false;">Home</a></li>
+                <li><a href="#tools-section" onclick="scrollToTools(); return false;">Free Tools</a></li>
+                <li><a href="#about" onclick="goToAbout(); return false;">About Us</a></li>
+                <li><a href="#features" onclick="showPage('main', '#features'); return false;">Features</a></li>
                 <li><a href="advanced-security-enhanced.html" class="nav-advanced-btn">Advanced Security</a></li>
             </ul>
             <div class="nav-actions">
@@ -691,7 +691,7 @@
                 </div>
 
                 <div class="cta-section">
-                    <a href="#" onclick="showPage('tools')" class="btn btn-primary">Try Free Tools</a>
+                    <a href="#tools-section" onclick="scrollToTools(); return false;" class="btn btn-primary">Try Free Tools</a>
                     <a href="advanced-security-enhanced.html" class="btn btn-secondary">AI Advanced Scanner</a>
                     <button onclick="startFamilyOnboarding()" class="btn btn-secondary">Protect Family</button>
                 </div>
@@ -739,7 +739,7 @@
             </div>
         </section>
 
-        <section class="tools-section">
+        <section id="tools-section" class="tools-section">
             <h2 class="section-title">Free Privacy Tools</h2>
             <div class="tools-grid">
                 <div class="tool-card">
@@ -891,24 +891,6 @@
                 </div>
             </div>
         </section>
-    </div>
-
-    <div id="toolsPage" class="tools-page">
-        <div style="margin-top: 100px; padding: 2rem; max-width: 1400px; margin-left: auto; margin-right: auto;">
-            <div style="text-align: center; margin-bottom: 3rem;">
-                <h1 style="font-size: 3rem; font-weight: 800; background: linear-gradient(45deg, var(--text-primary), var(--accent-violet)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                    Free Privacy Protection Tools
-                </h1>
-                <p style="color: var(--text-secondary); font-size: 1.1rem; margin-top: 1rem;">
-                    Professional-grade tools to protect your digital privacy - completely free
-                </p>
-            </div>
-
-            <div style="text-align: center; margin-top: 3rem;">
-                <button onclick="showPage('main')" class="btn btn-secondary">← Back to Home</button>
-                <a href="advanced-security-enhanced.html" class="btn btn-primary">Try AI Advanced Tools</a>
-            </div>
-        </div>
     </div>
 
     <script src="database-integration.js"></script>
@@ -1065,16 +1047,7 @@
 
         function showPage(page, scrollToSection = null) {
             const mainPage = document.getElementById('mainPage');
-            const toolsPage = document.getElementById('toolsPage');
-            
-            mainPage.style.display = 'none';
-            toolsPage.style.display = 'none';
-            
-            if (page === 'main') {
-                mainPage.style.display = 'block';
-            } else if (page === 'tools') {
-                toolsPage.style.display = 'block';
-            }
+            mainPage.style.display = 'block';
             
             if (scrollToSection) {
                 setTimeout(() => {
@@ -1083,6 +1056,13 @@
                         target.scrollIntoView({ behavior: 'smooth' });
                     }
                 }, 100);
+            }
+        }
+
+        function scrollToTools() {
+            const toolsSection = document.getElementById('tools-section');
+            if (toolsSection) {
+                toolsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
 
