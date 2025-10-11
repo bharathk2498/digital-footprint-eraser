@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictive Exposure Intelligence - Digital Footprint Eraser</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f1f5f9;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #06b6d4, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #94a3b8;
+        }
+
+        .scan-control {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .scan-control h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        .scan-control p {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #06b6d4, #3b82f6);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #334155;
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow: hidden;
+            display: none;
+        }
+
+        .progress-bar.active {
+            display: block;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #06b6d4, #3b82f6);
+            transition: width 0.2s;
+            width: 0;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #334155;
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #06b6d4;
+            border-bottom-color: #06b6d4;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .card h3 {
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-container {
+            height: 250px;
+            position: relative;
+        }
+
+        .risk-card {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .risk-card.critical {
+            border-color: rgba(239, 68, 68, 0.3);
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .risk-card.high {
+            border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .risk-score {
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+
+        .risk-score.critical { color: #ef4444; }
+        .risk-score.high { color: #f59e0b; }
+        .risk-score.medium { color: #eab308; }
+        .risk-score.low { color: #10b981; }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .metric-box {
+            background: rgba(76, 29, 149, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #06b6d4;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-top: 0.5rem;
+        }
+
+        .action-btn {
+            width: 100%;
+            margin-top: 1rem;
+            background: white;
+            color: #0f172a;
+        }
+
+        .action-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge.critical {
+            background: #ef4444;
+            color: white;
+        }
+
+        .badge.high {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .badge.medium {
+            background: #eab308;
+            color: black;
+        }
+
+        .back-btn {
+            background: transparent;
+            border: 2px solid #06b6d4;
+            color: #06b6d4;
+        }
+
+        .back-btn:hover {
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚡ Predictive Exposure Intelligence</h1>
+            <p>AI-powered forecasting to prevent data leaks before they happen</p>
+        </div>
+
+        <div class="scan-control">
+            <h3>ML Model Analysis</h3>
+            <p>Analyzing 847 data sources, 23 corporate events, 156 API vulnerabilities</p>
+            <button class="btn" id="scanBtn" onclick="runForecast()">Run Forecast</button>
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            <p id="scanStatus" style="margin-top: 0.5rem; font-size: 0.85rem;"></p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('forecast')">Breach Forecast</button>
+            <button class="tab" onclick="switchTab('corporate')">Corporate Risks</button>
+            <button class="tab" onclick="switchTab('decay')">Data Decay</button>
+            <button class="tab" onclick="switchTab('api')">API Exposure</button>
+        </div>
+
+        <!-- Breach Forecast Tab -->
+        <div id="forecast" class="tab-content active">
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3>6-Month Breach Probability</h3>
+                    <div class="chart-container">
+                        <canvas id="breachChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Threat Vector Analysis</h3>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>High-Confidence Predictions</h3>
+                <div id="predictionsList"></div>
+            </div>
+        </div>
+
+        <!-- Corporate Risks Tab -->
+        <div id="corporate" class="tab-content">
+            <div class="card" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); margin-bottom: 2rem;">
+                <p style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.5rem;">🎯</span>
+                    <strong style="color: #ef4444;">4 Critical M&A Events Detected</strong>
+                    <span style="color: #94a3b8; margin-left: auto;">Immediate action required</span>
+                </p>
+            </div>
+            <div id="corporateRisksList"></div>
+        </div>
+
+        <!-- Data Decay Tab -->
+        <div id="decay" class="tab-content">
+            <div class="card">
+                <h3>Data Half-Life Analysis</h3>
+                <div class="chart-container">
+                    <canvas id="decayChart"></canvas>
+                </div>
+            </div>
+
+            <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));" id="decayCards"></div>
+        </div>
+
+        <!-- API Exposure Tab -->
+        <div id="api" class="tab-content">
+            <div class="card">
+                <h3>API Vulnerability Trends</h3>
+                <div class="chart-container">
+                    <canvas id="apiChart"></canvas>
+                </div>
+            </div>
+
+            <div class="grid grid-2" id="apiCards"></div>
+        </div>
+
+        <div style="text-align: center; margin-top: 3rem;">
+            <button class="btn back-btn" onclick="window.location.href='advanced-security.html'">← Back to Advanced Security</button>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const breachData = [
+            { month: 'Nov 2024', risk: 23, breaches: 2, confidence: 87 },
+            { month: 'Dec 2024', risk: 31, breaches: 3, confidence: 82 },
+            { month: 'Jan 2025', risk: 45, breaches: 4, confidence: 78 },
+            { month: 'Feb 2025', risk: 58, breaches: 6, confidence: 75 },
+            { month: 'Mar 2025', risk: 72, breaches: 8, confidence: 71 },
+            { month: 'Apr 2025', risk: 64, breaches: 7, confidence: 68 }
+        ];
+
+        const corporateRisks = [
+            { company: 'DataBroker Corp', risk: 94, reason: 'Pending acquisition by Chinese firm', action: 'Remove data now', timeline: '14 days', impact: 'Critical' },
+            { company: 'SocialSync Inc', risk: 87, reason: 'API vulnerability CVE-2024-9847', action: 'Revoke OAuth access', timeline: '3 days', impact: 'High' },
+            { company: 'CloudStore Pro', risk: 73, reason: 'Financial distress indicators', action: 'Export & delete data', timeline: '30 days', impact: 'High' },
+            { company: 'AdTech Global', risk: 61, reason: 'New data sharing partnership', action: 'Opt-out requests', timeline: '7 days', impact: 'Medium' }
+        ];
+
+        const decayData = [
+            { platform: 'Google Cache', halfLife: 12, current: 89, predicted: 23, roi: 8.2 },
+            { platform: 'Data Brokers', halfLife: 36, current: 94, predicted: 71, roi: 3.1 },
+            { platform: 'Social Media', halfLife: 48, current: 76, predicted: 58, roi: 2.4 },
+            { platform: 'Archive Sites', halfLife: 240, current: 82, predicted: 79, roi: 0.8 },
+            { platform: 'Public Records', halfLife: 480, current: 91, predicted: 88, roi: 0.3 }
+        ];
+
+        const apiData = [
+            { api: 'OAuth Apps', exposed: 23, critical: 8, trend: 'up' },
+            { api: 'Third-party SDKs', exposed: 47, critical: 12, trend: 'up' },
+            { api: 'Browser Extensions', exposed: 15, critical: 3, trend: 'stable' },
+            { api: 'Mobile Apps', exposed: 31, critical: 6, trend: 'down' },
+            { api: 'IoT Devices', exposed: 9, critical: 4, trend: 'up' }
+        ];
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        // Forecast scan
+        function runForecast() {
+            const btn = document.getElementById('scanBtn');
+            const progressBar = document.getElementById('progressBar');
+            const progressFill = document.getElementById('progressFill');
+            const status = document.getElementById('scanStatus');
+            
+            btn.disabled = true;
+            progressBar.classList.add('active');
+            let progress = 0;
+            
+            const interval = setInterval(() => {
+                progress += 2;
+                progressFill.style.width = progress + '%';
+                status.textContent = `Processing: ${progress}%`;
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    btn.disabled = false;
+                    status.textContent = 'Forecast complete!';
+                    setTimeout(() => {
+                        progressBar.classList.remove('active');
+                        status.textContent = '';
+                    }, 2000);
+                }
+            }, 50);
+        }
+
+        // Breach Chart
+        const breachCtx = document.getElementById('breachChart').getContext('2d');
+        new Chart(breachCtx, {
+            type: 'line',
+            data: {
+                labels: breachData.map(d => d.month),
+                datasets: [{
+                    label: 'Breach Risk %',
+                    data: breachData.map(d => d.risk),
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: { 
+                        beginAtZero: true,
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+
+        // Radar Chart
+        const radarCtx = document.getElementById('radarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: ['Breach Risk', 'API Exposure', 'M&A Activity', 'Data Broker', 'Regulatory'],
+                datasets: [{
+                    label: 'Risk Score',
+                    data: [78, 65, 82, 91, 54],
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'rgba(6, 182, 212, 0.2)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    r: {
+                        grid: { color: '#334155' },
+                        angleLines: { color: '#334155' },
+                        ticks: { color: '#94a3b8' },
+                        pointLabels: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+
+        // Decay Chart
+        const decayCtx = document.getElementById('decayChart').getContext('2d');
+        new Chart(decayCtx, {
+            type: 'bar',
+            data: {
+                labels: decayData.map(d => d.platform),
+                datasets: [
+                    {
+                        label: 'Current Exposure %',
+                        data: decayData.map(d => d.current),
+                        backgroundColor: '#06b6d4'
+                    },
+                    {
+                        label: '6-Month Prediction %',
+                        data: decayData.map(d => d.predicted),
+                        backgroundColor: '#3b82f6'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#94a3b8' } }
+                },
+                scales: {
+                    y: { 
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+
+        // API Chart
+        const apiCtx = document.getElementById('apiChart').getContext('2d');
+        new Chart(apiCtx, {
+            type: 'bar',
+            data: {
+                labels: apiData.map(d => d.api),
+                datasets: [
+                    {
+                        label: 'Total Exposed',
+                        data: apiData.map(d => d.exposed),
+                        backgroundColor: '#06b6d4'
+                    },
+                    {
+                        label: 'Critical',
+                        data: apiData.map(d => d.critical),
+                        backgroundColor: '#ef4444'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: '#94a3b8' } }
+                },
+                scales: {
+                    y: { 
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { color: '#334155' },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+
+        // Render predictions
+        document.getElementById('predictionsList').innerHTML = breachData.slice(2, 5).map(pred => `
+            <div class="risk-card">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <span style="font-size: 1.2rem;">⚠️</span>
+                        <strong>${pred.month} - ${pred.breaches} Predicted Breaches</strong>
+                    </div>
+                    <p style="font-size: 0.9rem; color: #94a3b8;">ML Confidence: ${pred.confidence}%</p>
+                </div>
+                <div style="text-align: right;">
+                    <div class="risk-score ${pred.risk >= 60 ? 'high' : 'medium'}">${pred.risk}%</div>
+                    <p style="font-size: 0.75rem; color: #94a3b8;">Risk Level</p>
+                </div>
+            </div>
+        `).join('');
+
+        // Render corporate risks
+        document.getElementById('corporateRisksList').innerHTML = corporateRisks.map(risk => `
+            <div class="risk-card ${risk.risk >= 80 ? 'critical' : 'high'}">
+                <div style="flex: 1;">
+                    <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem;">
+                        <h3>${risk.company}</h3>
+                        <span class="badge ${risk.impact.toLowerCase()}">${risk.impact} Impact</span>
+                    </div>
+                    <p style="color: #94a3b8; margin-bottom: 1rem;">${risk.reason}</p>
+                    <div style="display: flex; gap: 2rem; font-size: 0.9rem;">
+                        <span>⏱️ Window: ${risk.timeline}</span>
+                        <span>🛡️ ${risk.action}</span>
+                    </div>
+                    <button class="btn action-btn">Execute Removal Protocol</button>
+                </div>
+                <div style="text-align: right;">
+                    <div class="risk-score ${risk.risk >= 80 ? 'critical' : 'high'}">${risk.risk}</div>
+                    <p style="font-size: 0.75rem; color: #94a3b8;">Risk Score</p>
+                </div>
+            </div>
+        `).join('');
+
+        // Render decay cards
+        document.getElementById('decayCards').innerHTML = decayData.map(item => `
+            <div class="card">
+                <h4 style="margin-bottom: 1rem;">${item.platform}</h4>
+                <div style="margin-bottom: 1rem; font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: #94a3b8;">Half-Life:</span>
+                        <strong>${item.halfLife} days</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: #94a3b8;">Current:</span>
+                        <strong>${item.current}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                        <span style="color: #94a3b8;">6-Mo Decay:</span>
+                        <strong>${item.predicted}%</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 0.5rem; border-top: 1px solid #334155;">
+                        <span style="color: #94a3b8;">ROI Score:</span>
+                        <strong class="${item.roi >= 5 ? 'risk-score low' : item.roi >= 2 ? 'risk-score medium' : 'risk-score high'}">${item.roi}x</strong>
+                    </div>
+                </div>
+                <button class="btn action-btn" style="background: ${item.roi >= 5 ? '#10b981' : item.roi >= 2 ? '#eab308' : '#64748b'}; color: ${item.roi >= 2 ? '#000' : '#fff'};">
+                    ${item.roi >= 5 ? 'High Priority' : item.roi >= 2 ? 'Schedule' : 'Monitor Only'}
+                </button>
+            </div>
+        `).join('');
+
+        // Render API cards
+        document.getElementById('apiCards').innerHTML = apiData.map(api => `
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                    <div>
+                        <h4 style="margin-bottom: 0.5rem;">${api.api}</h4>
+                        <p style="font-size: 0.9rem; color: #94a3b8;">${api.exposed} total exposures detected</p>
+                    </div>
+                    <span class="badge ${api.trend === 'up' ? 'critical' : api.trend === 'down' ? 'low' : 'medium'}">
+                        ${api.trend === 'up' ? '↑ Rising' : api.trend === 'down' ? '↓ Falling' : '→ Stable'}
+                    </span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+                    <span style="font-size: 1.2rem;">⚠️</span>
+                    <span style="color: #ef4444; font-weight: 600;">${api.critical} Critical Vulnerabilities</span>
+                </div>
+                <button class="btn action-btn" style="background: linear-gradient(45deg, #ef4444, #f59e0b);">
+                    Revoke Access & Patch
+                </button>
+            </div>
+        `).join('');
+    </script>
+</body>
+</html>
