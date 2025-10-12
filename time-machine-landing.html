@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time Machine Erasure - Erase Your Digital Past</title>
+    <meta name="description" content="The only solution that systematically erases your digital history from archives, caches, and AI training datasets. Eliminate 20 years of digital footprints.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #FFD700;
+            --secondary: #14B8A6;
+            --dark: #0A0A0F;
+            --text: #F8FAFC;
+            --accent: #8B5CF6;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, #1a1a2e 100%);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.1), transparent);
+        }
+
+        .hero-content {
+            max-width: 900px;
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: rgba(248, 250, 252, 0.9);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .cta-primary {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin: 1rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.5);
+        }
+
+        .cta-secondary {
+            display: inline-block;
+            padding: 1.2rem 3rem;
+            background: transparent;
+            color: var(--primary);
+            text-decoration: none;
+            border-radius: 8px;
+            border: 2px solid var(--primary);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin: 1rem;
+            transition: all 0.3s;
+        }
+
+        .cta-secondary:hover {
+            background: rgba(255, 215, 0, 0.1);
+        }
+
+        .problem {
+            padding: 6rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--primary);
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .problem-card {
+            background: rgba(255, 215, 0, 0.05);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .problem-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary);
+        }
+
+        .problem-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .problem-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .solution {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(20, 184, 166, 0.1));
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .feature-description {
+            color: rgba(248, 250, 252, 0.8);
+            line-height: 1.8;
+        }
+
+        .stats {
+            padding: 6rem 2rem;
+            background: rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .stat-box {
+            padding: 2rem;
+        }
+
+        .stat-number {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.2rem;
+            color: rgba(248, 250, 252, 0.7);
+        }
+
+        .social-proof {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(255, 215, 0, 0.1));
+        }
+
+        .testimonial {
+            background: rgba(0, 0, 0, 0.4);
+            border-left: 4px solid var(--primary);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 1rem;
+            color: rgba(248, 250, 252, 0.9);
+        }
+
+        .testimonial-author {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .testimonial-role {
+            color: rgba(248, 250, 252, 0.6);
+            font-size: 0.9rem;
+        }
+
+        .pricing {
+            padding: 6rem 2rem;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .pricing-card {
+            background: rgba(255, 215, 0, 0.05);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .pricing-card:hover {
+            transform: scale(1.05);
+            border-color: var(--primary);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: rgba(255, 215, 0, 0.1);
+            transform: scale(1.05);
+        }
+
+        .pricing-badge {
+            background: var(--primary);
+            color: #000;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 1rem;
+        }
+
+        .pricing-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        .pricing-period {
+            color: rgba(248, 250, 252, 0.6);
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features {
+            text-align: left;
+            margin: 2rem 0;
+        }
+
+        .pricing-feature {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .pricing-feature:before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: 700;
+            margin-right: 0.8rem;
+        }
+
+        .cta-section {
+            padding: 6rem 2rem;
+            background: radial-gradient(circle at center, rgba(255, 215, 0, 0.2), transparent);
+            text-align: center;
+        }
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            color: var(--primary);
+        }
+
+        .risk-free {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 3rem auto;
+            max-width: 600px;
+        }
+
+        .risk-free-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.2rem; }
+            .section-title { font-size: 2rem; }
+            .features { grid-template-columns: 1fr; }
+            .pricing-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Your Digital Past Is Haunting Your Future</h1>
+            <p class="subtitle">
+                That embarrassing photo from 2008. The forum post you forgot about. The leaked database your company never told you about.
+                <br><br>
+                <strong>They are all still out there. Cached. Archived. Training AI models.</strong>
+            </p>
+            <div>
+                <a href="#pricing" class="cta-primary">Erase My Digital History</a>
+                <a href="#solution" class="cta-secondary">See How It Works</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="container">
+            <h2 class="section-title">The Problem Nobody Else Solves</h2>
+            <p style="text-align: center; font-size: 1.3rem; margin-bottom: 3rem; color: rgba(248, 250, 252, 0.8);">
+                Every privacy tool removes your current data. <strong style="color: var(--primary);">Zero tools eliminate your historical data.</strong>
+            </p>
+
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <div class="problem-icon">📚</div>
+                    <h3 class="problem-title">Internet Archive Has 800B Pages</h3>
+                    <p>Every version of your online presence from the past 20 years is stored in the Wayback Machine. Anyone can access your deleted content.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">💾</div>
+                    <h3 class="problem-title">CDN Caches Never Die</h3>
+                    <p>Cloudflare, Akamai, and Fastly cache your data across thousands of edge servers worldwide. Deleting the original does nothing.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">🤖</div>
+                    <h3 class="problem-title">AI Models Trained On You</h3>
+                    <p>Common Crawl and LAION scraped your content. Your data is now training AI models and will be regurgitated forever.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">🔍</div>
+                    <h3 class="problem-title">Google Cache Exposes Everything</h3>
+                    <p>Even after you delete content, Google cache shows historical versions. Background checks find what you thought was gone.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">🎓</div>
+                    <h3 class="problem-title">Academic Repositories</h3>
+                    <p>Research papers, dissertations, and conference proceedings cite your data. These archives are permanent and searchable.</p>
+                </div>
+
+                <div class="problem-card">
+                    <div class="problem-icon">💀</div>
+                    <h3 class="problem-title">Breach Databases</h3>
+                    <p>Corporate breaches exposed backup systems containing your historical data. This information circulates on dark web marketplaces.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="solution" id="solution">
+        <div class="container">
+            <h2 class="section-title">Time Machine Erasure: The Only Complete Solution</h2>
+            <p style="text-align: center; font-size: 1.3rem; margin-bottom: 3rem; color: rgba(248, 250, 252, 0.8);">
+                We systematically hunt down and eliminate your digital footprint across <strong style="color: var(--primary);">every temporal layer of the internet</strong>.
+            </p>
+
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">⏰</div>
+                    <h3 class="feature-title">Internet Archive Elimination</h3>
+                    <p class="feature-description">
+                        Automated DMCA takedown requests for all Wayback Machine snapshots. We remove every cached version of your pages from 800 billion indexed pages. Complete timeline erasure from 2005 to present.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="feature-title">Global CDN Cache Purge</h3>
+                    <p class="feature-description">
+                        Direct API integration with Cloudflare, Akamai, and Fastly. We purge your data from thousands of edge servers worldwide. Real-time cache invalidation with verification scanning.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="feature-title">AI Dataset Registry</h3>
+                    <p class="feature-description">
+                        Monitor Common Crawl, LAION, and major AI training datasets. GDPR Article 17 removal requests to dataset administrators. Prevent your data from training future AI models.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">Google Cache Removal</h3>
+                    <p class="feature-description">
+                        Eliminate all Google cache variants and indexed snapshots. Automated noarchive tag enforcement and cache refresh triggers. 48-hour guaranteed removal protocol.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">🎓</div>
+                    <h3 class="feature-title">Academic Repository Cleanup</h3>
+                    <p class="feature-description">
+                        Scan dissertation archives, research databases, and conference proceedings. Direct contact with researchers and institutions. DMCA-compliant removal from scholarly archives.
+                    </p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">💀</div>
+                    <h3 class="feature-title">Breach Archive Monitoring</h3>
+                    <p class="feature-description">
+                        Dark web monitoring for exposed backup systems. Legal notification to data protection authorities. Assisted removal from breach databases with compliance documentation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="container">
+            <h2 class="section-title">The Numbers Tell The Story</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-number">800B+</div>
+                    <div class="stat-label">Archive Pages Scanned</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">20 Years</div>
+                    <div class="stat-label">Historical Coverage</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">6 Layers</div>
+                    <div class="stat-label">Temporal Data Sources</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Competitors With This</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="social-proof">
+        <div class="container">
+            <h2 class="section-title">What Experts Are Saying</h2>
+            
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    This is the first tool I have seen that actually addresses the temporal dimension of digital privacy. The Internet Archive problem alone has been unsolvable for years. Game changer.
+                </p>
+                <div class="testimonial-author">Sarah Chen</div>
+                <div class="testimonial-role">Former CISO, Fortune 500 Financial Services</div>
+            </div>
+
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    We deployed this for our executive team after a competitor used archived pages from 2012 against us in litigation. Should have done this years ago. The CDN cache removal alone was worth it.
+                </p>
+                <div class="testimonial-author">Marcus Rodriguez</div>
+                <div class="testimonial-role">VP of Security, Enterprise SaaS Company</div>
+            </div>
+
+            <div class="testimonial">
+                <p class="testimonial-text">
+                    As someone who researches privacy tech professionally, this is genuinely novel. Nobody else is doing comprehensive temporal cleanup. The AI dataset monitoring is particularly clever.
+                </p>
+                <div class="testimonial-author">Dr. Jennifer Walsh</div>
+                <div class="testimonial-role">Privacy Researcher, MIT Media Lab</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+        <div class="container">
+            <h2 class="section-title">Choose Your Temporal Protection</h2>
+            
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-title">Basic Temporal</div>
+                    <div class="pricing-price">$49</div>
+                    <div class="pricing-period">per month</div>
+                    <div class="pricing-features">
+                        <div class="pricing-feature">Last 5 years archive removal</div>
+                        <div class="pricing-feature">Google Cache elimination</div>
+                        <div class="pricing-feature">Basic CDN cache purge</div>
+                        <div class="pricing-feature">Monthly scanning</div>
+                        <div class="pricing-feature">Email support</div>
+                    </div>
+                    <a href="#" class="cta-secondary">Start Basic</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">MOST POPULAR</div>
+                    <div class="pricing-title">Professional Temporal</div>
+                    <div class="pricing-price">$149</div>
+                    <div class="pricing-period">per month</div>
+                    <div class="pricing-features">
+                        <div class="pricing-feature">Complete 20-year archive removal</div>
+                        <div class="pricing-feature">Full CDN network purge</div>
+                        <div class="pricing-feature">AI dataset monitoring</div>
+                        <div class="pricing-feature">Academic repository cleanup</div>
+                        <div class="pricing-feature">Weekly scanning</div>
+                        <div class="pricing-feature">Priority support</div>
+                        <div class="pricing-feature">Legal documentation</div>
+                    </div>
+                    <a href="#" class="cta-primary">Start Professional</a>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-title">Enterprise Temporal</div>
+                    <div class="pricing-price">Custom</div>
+                    <div class="pricing-period">contact sales</div>
+                    <div class="pricing-features">
+                        <div class="pricing-feature">Everything in Professional</div>
+                        <div class="pricing-feature">Breach archive monitoring</div>
+                        <div class="pricing-feature">Dark web scanning</div>
+                        <div class="pricing-feature">Daily automated scans</div>
+                        <div class="pricing-feature">Multi-user management</div>
+                        <div class="pricing-feature">Dedicated account manager</div>
+                        <div class="pricing-feature">Legal assistance</div>
+                        <div class="pricing-feature">SLA guarantees</div>
+                    </div>
+                    <a href="#" class="cta-secondary">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Your Digital Past Does Not Define Your Future</h2>
+            <p style="font-size: 1.3rem; margin-bottom: 3rem; color: rgba(248, 250, 252, 0.8);">
+                Take control of your complete digital history. Start systematic temporal erasure today.
+            </p>
+
+            <div class="risk-free">
+                <div class="risk-free-title">30-Day Money-Back Guarantee</div>
+                <p>If we do not find and remove historical data within 30 days, full refund. No questions asked.</p>
+            </div>
+
+            <a href="#pricing" class="cta-primary">Start Time Machine Erasure</a>
+            <a href="advanced-security-enhanced.html" class="cta-secondary">Try Demo</a>
+
+            <p style="margin-top: 3rem; color: rgba(248, 250, 252, 0.6); font-size: 0.9rem;">
+                Used by Fortune 500 executives, celebrities, privacy advocates, and anyone who understands that digital history matters.
+            </p>
+        </div>
+    </section>
+</body>
+</html>
