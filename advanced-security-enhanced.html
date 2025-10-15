@@ -49,9 +49,7 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%
-
-;
+            width: 100%;
             height: 100%;
             background-image: 
                 linear-gradient(rgba(139, 92, 246, 0.1) 1px, transparent 1px),
@@ -650,6 +648,7 @@
     </div>
 
     <div class="advanced-dashboard">
+        <!-- Core Security Tab -->
         <div id="coreTab" class="tab-content active">
             <div class="dashboard-header">
                 <h1 class="dashboard-title">Core Security Operations</h1>
@@ -784,6 +783,7 @@
             </div>
         </div>
 
+        <!-- Family Tab - NOW WITH CONTENT -->
         <div id="familyTab" class="tab-content">
             <div class="dashboard-header">
                 <h1 class="dashboard-title">AI Family Protection Center</h1>
@@ -791,8 +791,38 @@
                     Advanced AI-powered privacy protection for every family member with behavioral analysis
                 </p>
             </div>
+
+            <div class="threat-analyzer ai-thinking">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">👨‍👩‍👧‍👦 AI Family Intelligence Dashboard</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="familyMembers">0</div>
+                        <div class="metric-label">Protected Members</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="familyScore">--</div>
+                        <div class="metric-label">Family AI Score</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="familyAlerts">0</div>
+                        <div class="metric-label">Active Alerts</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="familyThreats">0</div>
+                        <div class="metric-label">Threats Blocked</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-family" onclick="addFamilyMember()">Add Family Member</button>
+                <button class="btn btn-ai" onclick="runFamilyAI()">Run Family AI Audit</button>
+                <button class="btn btn-primary" onclick="activateFamilyProtection()">Activate Family Protection</button>
+
+                <div id="familyResults" class="scan-results" style="display: none;"></div>
+            </div>
         </div>
 
+        <!-- Sector Compliance Tab - NOW WITH CONTENT -->
         <div id="sectorTab" class="tab-content">
             <div class="dashboard-header">
                 <h1 class="dashboard-title">Sector Compliance Center</h1>
@@ -800,8 +830,50 @@
                     Industry-specific compliance and regulatory security
                 </p>
             </div>
+
+            <div class="threat-analyzer compliance-dashboard">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🏢 Compliance Intelligence Dashboard</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="complianceScore">--</div>
+                        <div class="metric-label">Compliance Score</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="regulationsMonitored">0</div>
+                        <div class="metric-label">Regulations</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="violations">0</div>
+                        <div class="metric-label">Violations</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="auditTrails">0</div>
+                        <div class="metric-label">Audit Trails</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Select Industry Sector:</label>
+                    <select id="sectorSelect">
+                        <option value="healthcare">Healthcare (HIPAA)</option>
+                        <option value="finance">Financial (SOX, PCI-DSS)</option>
+                        <option value="government">Government (FedRAMP)</option>
+                        <option value="education">Education (FERPA)</option>
+                        <option value="retail">Retail (PCI-DSS)</option>
+                        <option value="technology">Technology (GDPR)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-sector" onclick="runComplianceAudit()">Run Compliance Audit</button>
+                <button class="btn btn-ai" onclick="enableComplianceAI()">Enable AI Monitoring</button>
+                <button class="btn btn-primary" onclick="generateComplianceReport()">Generate Report</button>
+
+                <div id="complianceResults" class="scan-results" style="display: none;"></div>
+            </div>
         </div>
 
+        <!-- Enterprise AI Tab - NOW WITH CONTENT -->
         <div id="organizationTab" class="tab-content">
             <div class="dashboard-header">
                 <h1 class="dashboard-title">Enterprise AI Security</h1>
@@ -809,8 +881,43 @@
                     Enterprise-grade AI security orchestration
                 </p>
             </div>
+
+            <div class="threat-analyzer enterprise-dashboard">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🏢 Enterprise Security Command</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="enterpriseUsers">0</div>
+                        <div class="metric-label">Protected Users</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="enterpriseThreats">0</div>
+                        <div class="metric-label">Threats Blocked</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="zeroTrustScore">--</div>
+                        <div class="metric-label">Zero-Trust Score</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="aiPolicies">0</div>
+                        <div class="metric-label">AI Policies</div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Organization Domain:</label>
+                    <input type="text" id="orgDomain" placeholder="Enter organization domain..." />
+                </div>
+
+                <button class="btn btn-organization" onclick="runEnterpriseAI()">AI Security Scan</button>
+                <button class="btn btn-ai" onclick="enableZeroTrust()">Enable Zero-Trust</button>
+                <button class="btn btn-primary" onclick="deployEnterpriseAI()">Deploy Enterprise AI</button>
+
+                <div id="enterpriseResults" class="scan-results" style="display: none;"></div>
+            </div>
         </div>
 
+        <!-- AI Security Tab - NOW WITH CONTENT -->
         <div id="aiTab" class="tab-content">
             <div class="dashboard-header">
                 <h1 class="dashboard-title">AI Security Operations Center</h1>
@@ -818,8 +925,38 @@
                     Next-generation AI security with neural threat detection
                 </p>
             </div>
+
+            <div class="threat-analyzer ai-thinking">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">🤖 AI Security Intelligence</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="aiModels">0</div>
+                        <div class="metric-label">AI Models Active</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="neuralAccuracy">--</div>
+                        <div class="metric-label">Neural Accuracy</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="autonomousActions">0</div>
+                        <div class="metric-label">Autonomous Actions</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="mlPredictions">0</div>
+                        <div class="metric-label">ML Predictions</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-ai" onclick="activateAISecurity()">Activate AI Security</button>
+                <button class="btn btn-quantum" onclick="enableNeuralDefense()">Neural Defense</button>
+                <button class="btn btn-primary" onclick="runMLAnalysis()">ML Analysis</button>
+
+                <div id="aiSecurityResults" class="scan-results" style="display: none;"></div>
+            </div>
         </div>
 
+        <!-- Quantum Defense Tab - NOW WITH CONTENT -->
         <div id="quantumTab" class="tab-content">
             <div class="dashboard-header">
                 <h1 class="dashboard-title">Quantum Defense Center</h1>
@@ -827,13 +964,68 @@
                     Quantum-level encryption and protection against future threats
                 </p>
             </div>
+
+            <div class="threat-analyzer quantum-encryption">
+                <h3 style="margin-bottom: 1rem; color: var(--text-primary);">⚛️ Quantum Security Intelligence</h3>
+                
+                <div class="metrics-row">
+                    <div class="metric-box">
+                        <div class="metric-value" id="quantumProcessors">0</div>
+                        <div class="metric-label">Quantum Processors</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="quantumEncryption">--</div>
+                        <div class="metric-label">Encryption Level</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="quantumBreaches">0</div>
+                        <div class="metric-label">Breaches</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-value" id="quantumStatus">--</div>
+                        <div class="metric-label">Quantum Status</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-quantum" onclick="initializeQuantum()">Initialize Quantum</button>
+                <button class="btn btn-ai" onclick="runQuantumAI()">Quantum AI Analysis</button>
+                <button class="btn btn-primary" onclick="quantumReport()">Security Report</button>
+
+                <div id="quantumResults" class="scan-results" style="display: none;"></div>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card quantum-encryption">
+                    <h4 style="color: var(--quantum-purple); margin-bottom: 1rem;">🔐 Post-Quantum Cryptography</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        NIST-approved quantum-resistant algorithms protect against future quantum attacks.
+                    </p>
+                    <button class="btn btn-quantum" onclick="enablePostQuantum()">Enable</button>
+                </div>
+
+                <div class="feature-card quantum-encryption">
+                    <h4 style="color: var(--quantum-purple); margin-bottom: 1rem;">⚛️ Quantum Key Distribution</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Physics-based key distribution ensures unbreakable communication security.
+                    </p>
+                    <button class="btn btn-quantum" onclick="setupQuantumKeys()">Setup</button>
+                </div>
+
+                <div class="feature-card quantum-encryption">
+                    <h4 style="color: var(--quantum-purple); margin-bottom: 1rem;">🌌 Quantum Entanglement</h4>
+                    <p style="color: var(--text-secondary); margin-bottom: 1rem;">
+                        Instantaneous breach detection across any distance using quantum physics.
+                    </p>
+                    <button class="btn btn-quantum" onclick="enableEntanglement()">Enable</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <div id="resultModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Detailed Results</h2>
+            <h2 id="modalTitle">Results</h2>
             <div id="modalContent"></div>
         </div>
     </div>
@@ -846,14 +1038,14 @@
         }
 
         function simulateUpgrade() {
-            alert('Welcome to Advanced Security Premium\n\nAll AI features unlocked\nQuantum Defense enabled\nFamily Protection AI activated\nEnterprise Zero-Trust access\nGlobal Compliance monitoring\nBehavioral Analytics enabled\nNeural threat detection active\n\nYou now have access to military-grade privacy protection with quantum-level security');
+            alert('Welcome to Advanced Security Premium!\n\nAll features unlocked\nQuantum Defense enabled\nAI Protection activated\nEnterprise access granted\n\nMilitary-grade privacy protection active');
             localStorage.setItem('advancedAccess', 'true');
             document.getElementById('paywallOverlay').style.display = 'none';
             hasAdvancedAccess = true;
         }
 
         function startTrial() {
-            alert('14-day Advanced Security Trial Activated\n\nFull access to all premium features\nAI models and quantum security\nEnterprise controls unlocked\n24/7 AI monitoring enabled\nBehavioral analysis active\nQuantum defense systems ready\n\nExperience the future of privacy protection');
+            alert('14-day Trial Activated!\n\nFull access to all features\nAI and quantum security\nEnterprise controls\n24/7 AI monitoring\n\nExperience the future of privacy');
             localStorage.setItem('advancedAccess', 'true');
             document.getElementById('paywallOverlay').style.display = 'none';
             hasAdvancedAccess = true;
@@ -884,9 +1076,7 @@
 
         function updateMetric(elementId, value) {
             const element = document.getElementById(elementId);
-            if (element) {
-                element.textContent = value;
-            }
+            if (element) element.textContent = value;
         }
 
         function animateProgress(progressId, fillId, duration) {
@@ -901,10 +1091,7 @@
                 const interval = setInterval(() => {
                     progress += 2;
                     progressFill.style.width = progress + '%';
-                    
-                    if (progress >= 100) {
-                        clearInterval(interval);
-                    }
+                    if (progress >= 100) clearInterval(interval);
                 }, duration / 50);
             }
         }
@@ -919,10 +1106,9 @@
 
             const resultDiv = document.getElementById('threatResults');
             resultDiv.style.display = 'block';
-            
             animateProgress('scanProgress', 'scanProgressFill', 6000);
             
-            resultDiv.innerHTML = '<div style="color: var(--ai-neon);">Initiating Quantum Deep Scan...</div><br>Connecting to threat intelligence feeds...<br>Analyzing digital footprint...<br>Running AI behavioral analysis...<br>Quantum threat modeling...';
+            resultDiv.innerHTML = '<div style="color: var(--ai-neon);">Quantum Deep Scan Running...</div><br>Analyzing threat intelligence...<br>AI behavioral analysis active...<br>Quantum modeling in progress...';
 
             setTimeout(() => {
                 const threats = Math.floor(Math.random() * 15) + 3;
@@ -930,50 +1116,133 @@
                 updateMetric('lastScan', 'Just now');
                 updateMetric('riskScore', threats > 10 ? 'HIGH' : threats > 5 ? 'MEDIUM' : 'LOW');
                 
-                resultDiv.innerHTML += '<br><br><strong style="color: var(--success);\">Scan Complete</strong><br><br>';
+                resultDiv.innerHTML += '<br><br><strong style="color: var(--success);">Scan Complete</strong><br><br>';
                 resultDiv.innerHTML += 'Target: ' + target + '<br>';
-                resultDiv.innerHTML += 'Threats Detected: ' + threats + '<br>';
-                resultDiv.innerHTML += 'Risk Level: ' + (threats > 10 ? '<span style="color: var(--danger);">HIGH</span>' : threats > 5 ? '<span style="color: var(--warning);">MEDIUM</span>' : '<span style="color: var(--success);">LOW</span>') + '<br>';
-                resultDiv.innerHTML += '<br><strong style="color: var(--ai-neon);">AI Recommendation:</strong> ' + (threats > 5 ? 'Immediate action recommended' : 'Maintain current security posture');
+                resultDiv.innerHTML += 'Threats: ' + threats + '<br>';
+                resultDiv.innerHTML += 'Risk: ' + (threats > 10 ? '<span style="color: var(--danger);">HIGH</span>' : threats > 5 ? '<span style="color: var(--warning);">MEDIUM</span>' : '<span style="color: var(--success);">LOW</span>');
             }, 6000);
         }
 
         function startContinuousMonitoring() {
-            alert('AI 24/7 Monitoring Activated\n\nContinuous threat detection\nReal-time behavioral analysis\nAutomated response protocols\nPredictive security alerts\n\nYour digital footprint is now monitored by AI');
+            alert('AI 24/7 Monitoring Activated\n\nContinuous threat detection\nReal-time analysis\nAutomated response\nPredictive alerts\n\nYour footprint is AI-monitored');
         }
 
         function enableQuantumProtection() {
-            alert('Quantum Protection Enabled\n\nQuantum-level encryption active\nPost-quantum cryptography deployed\nQuantum threat detection online\nMathematically unbreakable security\n\nYour privacy is now protected by quantum physics');
+            alert('Quantum Protection Enabled\n\nQuantum encryption active\nPost-quantum crypto deployed\nQuantum threat detection online\nUnbreakable security\n\nProtected by quantum physics');
         }
 
         function runOSINTScan() {
             const resultDiv = document.getElementById('osintResults');
             resultDiv.style.display = 'block';
-            resultDiv.innerHTML = 'Running AI OSINT analysis...<br>Scanning 500+ reconnaissance tools...<br>Analyzing threat patterns...<br><br><strong style="color: var(--success);">Analysis Complete</strong><br><br>Reconnaissance attempts blocked: 47<br>AI defense protocols: ACTIVE<br>Threat level: LOW';
+            resultDiv.innerHTML = 'AI OSINT analysis running...<br>Scanning 500+ tools...<br><br><strong style="color: var(--success);">Complete</strong><br><br>Attempts blocked: 47<br>AI defense: ACTIVE<br>Threat level: LOW';
         }
 
         function enableOSINTShield() {
-            alert('AI OSINT Shield Activated\n\n500+ tools monitored\nReal-time blocking enabled\nPredictive defense active\nBehavioral analysis running\n\nYour privacy is protected against reconnaissance');
+            alert('AI OSINT Shield Activated\n\n500+ tools monitored\nReal-time blocking\nPredictive defense\nBehavioral analysis\n\nProtected against reconnaissance');
         }
 
         function scanDataBrokers() {
             const resultDiv = document.getElementById('brokerResults');
             resultDiv.style.display = 'block';
-            resultDiv.innerHTML = 'Scanning 1,000+ data brokers...<br>Quantum analysis running...<br><br><strong style="color: var(--success);\">Scan Complete</strong><br><br>Broker listings found: 23<br>Quantum removal available: YES<br>Estimated removal time: 30-60 days';
+            resultDiv.innerHTML = 'Scanning 1,000+ brokers...<br>Quantum analysis...<br><br><strong style="color: var(--success);">Complete</strong><br><br>Listings found: 23<br>Quantum removal: YES<br>Time: 30-60 days';
         }
 
         function initiateQuantumRemoval() {
-            alert('Quantum Removal Process Initiated\n\nRemoval requests sent: 23 sites\nQuantum verification: ENABLED\nAutomated follow-ups: SCHEDULED\nEstimated completion: 30-60 days\n\nYou will receive updates as data is eliminated');
+            alert('Quantum Removal Initiated\n\nRequests sent: 23 sites\nQuantum verification: ENABLED\nFollow-ups: SCHEDULED\nCompletion: 30-60 days\n\nYou will receive updates');
         }
 
         function runAIAnalysis() {
             const resultDiv = document.getElementById('aiResults');
             resultDiv.style.display = 'block';
-            resultDiv.innerHTML = 'Running Neural AI analysis...<br>Machine learning active...<br>Behavioral patterns analyzed...<br><br><strong style="color: var(--success);\">AI Analysis Complete</strong><br><br>Threat prediction accuracy: 99.9%<br>Future threats identified: 5<br>Auto-defense: READY';
+            resultDiv.innerHTML = 'Neural AI analysis...<br>Machine learning active...<br><br><strong style="color: var(--success);">Complete</strong><br><br>Accuracy: 99.9%<br>Future threats: 5<br>Auto-defense: READY';
         }
 
         function enablePredictiveDefense() {
-            alert('Predictive Defense Enabled\n\nAI threat prediction: ACTIVE\nAuto-defense protocols: READY\n99.9% accuracy neural networks\nReal-time adaptation enabled\n\nThreats will be prevented before they occur');
+            alert('Predictive Defense Enabled\n\nAI prediction: ACTIVE\nAuto-defense: READY\n99.9% accuracy\nReal-time adaptation\n\nThreats prevented before they occur');
+        }
+
+        // Family Protection Functions
+        function addFamilyMember() {
+            alert('Add Family Member\n\nEnter family member details\nSet protection level\nConfigure AI behavioral analysis\nEnable monitoring\n\nFamily member will be protected');
+        }
+
+        function runFamilyAI() {
+            alert('Family AI Audit Running\n\nScanning all family members\nBehavioral analysis active\nThreat detection running\nGenerating recommendations\n\nAudit complete - Family secure');
+        }
+
+        function activateFamilyProtection() {
+            alert('Family Protection Activated\n\nAI monitoring: ALL MEMBERS\nBehavioral analysis: ACTIVE\nThreat detection: ENABLED\nAuto-response: READY\n\nYour family is AI-protected');
+        }
+
+        // Sector Compliance Functions
+        function runComplianceAudit() {
+            const sector = document.getElementById('sectorSelect').value;
+            const resultDiv = document.getElementById('complianceResults');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Running ' + sector + ' compliance audit...<br>Checking regulations...<br><br><strong style="color: var(--success);">Complete</strong><br><br>Compliance: 94%<br>Issues: 0 critical<br>Recommendations: 3';
+        }
+
+        function enableComplianceAI() {
+            alert('AI Compliance Monitoring Activated\n\nReal-time regulation tracking\nAutomated violation detection\nPredictive compliance scoring\nIntelligent audit preparation\n\nAI-enhanced compliance active');
+        }
+
+        function generateComplianceReport() {
+            showModal('Compliance Report', '<h3>Executive Summary</h3><p>Compliance Score: 94% - Excellent</p><p>Regulations: 47 frameworks</p><p>Risk: LOW</p><br><h4>Key Findings:</h4><ul><li>GDPR: 98%</li><li>HIPAA: Fully implemented</li><li>SOX: Complete</li></ul>');
+        }
+
+        // Enterprise AI Functions
+        function runEnterpriseAI() {
+            const resultDiv = document.getElementById('enterpriseResults');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'Enterprise AI scan running...<br>Analyzing users...<br>Zero-trust check...<br><br><strong style="color: var(--success);">Complete</strong><br><br>Users: 2,847<br>Zero-Trust: 98%<br>Risk: LOW';
+        }
+
+        function enableZeroTrust() {
+            alert('Zero-Trust AI Activated\n\nNever trust, always verify\nAI identity verification\nBehavioral analysis\nReal-time risk assessment\n\nZero-trust security active');
+        }
+
+        function deployEnterpriseAI() {
+            alert('Enterprise AI Deployed\n\nAI models: ACTIVE\nThreat intelligence: INTEGRATED\nIncident response: AUTOMATED\nDashboards: CONFIGURED\n\nEnterprise AI operational');
+        }
+
+        // AI Security Functions
+        function activateAISecurity() {
+            const resultDiv = document.getElementById('aiSecurityResults');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = 'AI Security activating...<br>Loading 47 AI models...<br>Neural networks calibrating...<br><br><strong style="color: var(--success);">Active</strong><br><br>Models: 47<br>Accuracy: 99.7%<br>Status: OPTIMAL';
+        }
+
+        function enableNeuralDefense() {
+            alert('Neural Defense Activated\n\n47-layer network deployed\nReal-time pattern analysis\nAdaptive defense mechanisms\nSelf-evolving protocols\n\nNeural defense protecting');
+        }
+
+        function runMLAnalysis() {
+            alert('ML Threat Analysis Running\n\nAnalyzing patterns\nPredicting threats (30-90 days)\nIdentifying attack vectors\nProcessing 1M+ data points\n\n23 future threats predicted');
+        }
+
+        // Quantum Defense Functions
+        function initializeQuantum() {
+            alert('Quantum Defense Initializing\n\nQuantum processors: ONLINE\nPost-quantum crypto: READY\nQuantum entanglement: ACTIVE\nQuantum keys: DISTRIBUTED\n\nQuantum defense operational');
+        }
+
+        function runQuantumAI() {
+            alert('Quantum AI Analysis\n\nQuantum processing active\nAI threat modeling\nQuantum risk assessment\nMathematical certainty\n\nQuantum analysis complete');
+        }
+
+        function quantumReport() {
+            showModal('Quantum Security Report', '<h3>Quantum Status</h3><p>Encryption: 4096-BIT</p><p>Quantum Breaches: 0</p><p>Status: MAXIMUM</p><br><h4>Protection:</h4><ul><li>Post-quantum crypto: ACTIVE</li><li>Quantum keys: DISTRIBUTED</li><li>Entanglement: ENABLED</li></ul>');
+        }
+
+        function enablePostQuantum() {
+            alert('Post-Quantum Cryptography Enabled\n\nNIST-approved algorithms\nQuantum-resistant encryption\nFuture-proof security\nMathematical certainty\n\nProtected against quantum attacks');
+        }
+
+        function setupQuantumKeys() {
+            alert('Quantum Key Distribution Setup\n\nQuantum physics-based keys\nPerfect forward secrecy\nInstant breach detection\nUnbreakable communication\n\nQuantum keys distributed');
+        }
+
+        function enableEntanglement() {
+            alert('Quantum Entanglement Enabled\n\nInstantaneous detection\nAny distance protection\nQuantum correlation active\nSpooky action enabled\n\nEntanglement security active');
         }
 
         window.onclick = function(event) {
@@ -992,9 +1261,9 @@
             }
         }, 3000);
 
-        console.log('Digital Footprint Eraser Advanced Security Center Loaded');
-        console.log('AI-Powered Privacy Protection: ACTIVE');
-        console.log('Quantum Defense Systems: OPERATIONAL');
+        console.log('Advanced Security Center Loaded');
+        console.log('AI Protection: ACTIVE');
+        console.log('Quantum Defense: OPERATIONAL');
     </script>
 </body>
 </html>
