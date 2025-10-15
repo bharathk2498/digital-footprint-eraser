@@ -1207,8 +1207,18 @@
                 tab.classList.remove('active');
             });
             
-            document.getElementById(tabName + 'Tab').classList.add('active');
-            event.target.classList.add('active');
+            const selectedTab = document.getElementById(tabName + 'Tab');
+            if (selectedTab) {
+                selectedTab.classList.add('active');
+            }
+            
+            const allButtons = document.querySelectorAll('.nav-tab');
+            allButtons.forEach(button => {
+                const onclickAttr = button.getAttribute('onclick');
+                if (onclickAttr && onclickAttr.includes("'" + tabName + "'")) {
+                    button.classList.add('active');
+                }
+            });
         }
 
         function showModal(title, content) {
@@ -1280,9 +1290,9 @@
                 resultDiv.innerHTML += 'Internet Archive Pages: ' + archives + '<br>';
                 resultDiv.innerHTML += 'CDN Caches Found: ' + caches + '<br>';
                 resultDiv.innerHTML += 'AI Dataset Matches: ' + datasets + '<br>';
-                resultDiv.innerHTML += 'Google Cache Snapshots: ' + Math.floor(Math.random() * 40) + 20 + '<br>';
-                resultDiv.innerHTML += 'Academic Repository Hits: ' + Math.floor(Math.random() * 15) + 3 + '<br>';
-                resultDiv.innerHTML += 'Breach Archive Matches: ' + Math.floor(Math.random() * 8) + 1 + '<br><br>';
+                resultDiv.innerHTML += 'Google Cache Snapshots: ' + (Math.floor(Math.random() * 40) + 20) + '<br>';
+                resultDiv.innerHTML += 'Academic Repository Hits: ' + (Math.floor(Math.random() * 15) + 3) + '<br>';
+                resultDiv.innerHTML += 'Breach Archive Matches: ' + (Math.floor(Math.random() * 8) + 1) + '<br><br>';
                 resultDiv.innerHTML += '<strong style="color: var(--temporal-gold);">Temporal Footprint Analysis Complete</strong><br>';
                 resultDiv.innerHTML += 'Recommendation: Initiate comprehensive historical erasure process';
                 
